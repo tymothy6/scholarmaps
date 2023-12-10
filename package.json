@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
@@ -24,6 +26,7 @@
     "@radix-ui/react-navigation-menu": "^1.1.4",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-radio-group": "^1.1.3",
+    "@radix-ui/react-scroll-area": "^1.0.5",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
@@ -46,13 +49,23 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@storybook/addon-essentials": "^7.6.4",
+    "@storybook/addon-interactions": "^7.6.4",
+    "@storybook/addon-links": "^7.6.4",
+    "@storybook/addon-onboarding": "^1.0.9",
+    "@storybook/blocks": "^7.6.4",
+    "@storybook/nextjs": "^7.6.4",
+    "@storybook/react": "^7.6.4",
+    "@storybook/test": "^7.6.4",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.0.3",
+    "eslint-plugin-storybook": "^0.6.15",
     "postcss": "^8",
+    "storybook": "^7.6.4",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }
