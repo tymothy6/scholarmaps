@@ -1,7 +1,7 @@
 import '../src/app/globals.css';
 import type { Preview } from "@storybook/react";
 
-import { withThemeByClassName } from "@storybook/addon-themes";
+import { withThemeByDataAttribute } from "@storybook/addon-themes";
 
 const preview: Preview = {
   parameters: {
@@ -15,17 +15,25 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    layout: 'centered',
+    docs: {
+      toc: {
+        title: 'On this page',
+        disable: false,
+      }
+    },
   },
-
-  decorators: [
-    withThemeByClassName({
-      themes: {
-          // nameOfTheme: 'classNameForTheme',
-          light: 'light',
-          dark: 'dark',
-      },
-      defaultTheme: 'light',
-  })]
 };
 
 export default preview;
+
+export const decorators = [
+  withThemeByDataAttribute({
+    themes: {
+      light: 'light',
+      dark: 'dark',
+    },
+    defaultTheme: 'light',
+    attributeName: 'data-mode',
+  }),
+];
