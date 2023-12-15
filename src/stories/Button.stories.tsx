@@ -4,9 +4,27 @@ import { Button, ButtonProps } from '@/components/ui/button';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import { Loader2, Mail } from 'lucide-react';
 
+/**
+ * Displays a button or a component that looks like a button.
+ */
 const meta = {
     title: 'ui/Button',
     component: Button,
+    argTypes: {
+        variant: {
+            options: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'],
+            control: { type: 'select' },
+        },
+        size: {
+            options: ['default', 'sm', 'lg', 'icon'],
+            control: { type: 'radio' },
+        },
+        // asChild: {
+        //     table: {
+        //         disable: true,
+        //     },
+        // },
+    },
 } satisfies Meta<ButtonProps>
 
 export default meta;
