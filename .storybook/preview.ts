@@ -19,8 +19,8 @@ const preview: Preview = {
     docs: {
       toc: {
         title: 'On this page',
-        disable: false,
-      }
+        disable: true,
+      },
     },
   },
 };

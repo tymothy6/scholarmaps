@@ -14,10 +14,20 @@ const meta = {
         variant: {
             options: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'],
             control: { type: 'select' },
+            description: 'The variant of the button.',
+            defaultValue: { summary: 'default' },
         },
         size: {
             options: ['default', 'sm', 'lg', 'icon'],
             control: { type: 'radio' },
+            description: 'The size of the button.',
+            defaultValue: { summary: 'default' },
+        },
+        disabled: {
+            options: [true, false],
+            control: { type: 'boolean' },
+            description: 'Whether the button is disabled.',
+            defaultValue: { summary: false },
         },
         // asChild: {
         //     table: {
@@ -25,6 +35,10 @@ const meta = {
         //     },
         // },
     },
+    args: {
+        variant: 'default',
+        size: 'default',
+    }
 } satisfies Meta<ButtonProps>
 
 export default meta;
