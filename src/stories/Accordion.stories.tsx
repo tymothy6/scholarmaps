@@ -6,6 +6,9 @@ import {
     AccordionTrigger,
  } from '@/components/ui/accordion';
 
+/**
+ * A vertically stacked set of interactive headings that each reveal an associated section of content.
+ */
 const meta = {
     title: 'ui/Accordion',
     component: Accordion,
