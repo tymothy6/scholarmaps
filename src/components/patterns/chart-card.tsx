@@ -103,7 +103,7 @@ export function CardsMetric() {
                 }}
                 style={
                   {
-                    stroke: "var(--primary)",
+                    stroke: "#71717a",
                     opacity: 0.25,
                   } as React.CSSProperties
                 }
@@ -118,7 +118,7 @@ export function CardsMetric() {
                 }}
                 style={
                   {
-                    stroke: "var(--primary)",
+                    stroke: "#71717a",
                   } as React.CSSProperties
                 }
               />
