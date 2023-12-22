@@ -40,7 +40,7 @@ const data = [
   },
 ]
 
-export function CardsMetric() {
+export function LineChartCard() {
   const { theme } = useTheme()
 
   return (
