@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import AuthImage from '../public/auth-image.jpg'
+import AuthImage from '../../public/auth-image.jpg'
 
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
@@ -29,10 +29,11 @@ export default function AuthPage() {
           <Image 
             src={AuthImage}
             alt="Scholar Maps auth image"
-            className="inset-0"
+            fill
+            className="object-cover inset-0"
           />
-          <div className="absolute inset-0 bg-zinc-900" />
-          <div className="relative z-20 flex items-center text-lg font-medium">
+          {/* <div className="absolute inset-0 bg-zinc-900" /> */}
+          <div className="relative z-20 flex items-center text-xl font-medium">
             Scholar Maps
           </div>
         </div>
