@@ -7,6 +7,8 @@ import AuthImage from '../../public/auth-image.jpg'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 
+import { LoginAuthForm } from '@/components/auth/login-auth'
+
 export const metadata: Metadata = {
   title: "Login",
   description: "Login to Scholar Maps",
@@ -46,6 +48,7 @@ export default function AuthPage() {
               <p className="text-sm text-muted-foreground">
                 Enter your email below to create your account
               </p>
+              <LoginAuthForm />
             </div>
 
             <p className="px-8 text-center text-sm text-muted-foreground">
