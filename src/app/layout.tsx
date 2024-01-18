@@ -8,7 +8,7 @@ import NextAuthProvider from '@/components/session-provider'
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
 export const metadata: Metadata = {
-  title: 'ScholarMaps',
+  title: 'Scholar Maps',
   description: 'Full-stack literature search & visualization with Semantic Scholar.',
 }
 
