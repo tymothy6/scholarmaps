@@ -4,6 +4,10 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
+
 import { signIn, useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 
@@ -11,26 +15,43 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Form,
+  FormControl,
+  FormLabel,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form"
 
 
 import { Loader2Icon } from "lucide-react"
 import { GitHubLogoIcon } from "@radix-ui/react-icons"
 import { FaGoogle } from "react-icons/fa";
 
-
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const userAuthFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters long",
+  }),
+})
 
 export function RegisterAuth({ className, ...props }: UserAuthFormProps) {
   const router = useRouter();
-  const [data, setData] = React.useState<{ email: string, password: string }>({
-    email: "",
-    password:"",
-  })
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault()
-    setIsLoading(true)
+  const registerForm = useForm<z.infer<typeof userAuthFormSchema>>({
+    resolver: zodResolver(userAuthFormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
+
+  async function onSubmit(values: z.infer<typeof userAuthFormSchema>) {
+    setIsLoading(true);
 
     try {
       await fetch('/api/register', {
@@ -38,7 +59,7 @@ export function RegisterAuth({ className, ...props }: UserAuthFormProps) {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(values),
       });
       toast.success('Registration successful!');
       router.push('/login');
@@ -46,44 +67,41 @@ export function RegisterAuth({ className, ...props }: UserAuthFormProps) {
       console.error(error);
       toast.error('Error! Please try again.');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <form onSubmit={onSubmit}>
-        <div className="grid gap-2">
-          <div className="grid gap-2">
-            <Label className="sr-only" htmlFor="email">
-              Email
-            </Label>
-            <Input
-              id="email"
-              placeholder="name@example.com"
-              type="email"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
-              required
-              disabled={isLoading}
-              value={data.email}
-              onChange={e => setData({ ...data, email: e.target.value })}
-            />
-            <Label className="sr-only" htmlFor="password">
-              Password
-            </Label>
-            <Input
-              id="password"
-              placeholder="Password"
-              type="password"
-              autoCapitalize="none"
-              autoCorrect="off"
-              required
-              disabled={isLoading}
-              value={data.password}
-              onChange={e => setData({ ...data, password: e.target.value })}
-            />
+      <Form {...registerForm}>
+        <form onSubmit={registerForm.handleSubmit(onSubmit)} className="grid gap-2">
+          <div className="grid gap-0">
+          <FormField 
+            control={registerForm.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="sr-only">Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="name@example.com" type="email" disabled={isLoading} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+              )}
+          />
+          <FormField 
+            control={registerForm.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="sr-only">Password</FormLabel>
+                <FormControl>
+                  <Input placeholder="Password" type="password" disabled={isLoading} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+              )}
+          />
           </div>
           <Button disabled={isLoading}>
             {isLoading && (
@@ -91,8 +109,8 @@ export function RegisterAuth({ className, ...props }: UserAuthFormProps) {
             )}
             Continue with Email
           </Button>
-        </div>
-      </form>
+        </form>
+      </Form>
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
@@ -128,11 +146,15 @@ export function RegisterAuth({ className, ...props }: UserAuthFormProps) {
 export function LoginAuth({ className, ...props }: UserAuthFormProps) {
   const session = useSession();
   const router = useRouter();
-  const [data, setData] = React.useState<{ email: string, password: string }>({
-    email: "", 
-    password: "",
-  })
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+
+  const loginForm = useForm<z.infer<typeof userAuthFormSchema>>({
+    resolver: zodResolver(userAuthFormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  })
 
   React.useEffect(() => {
     if (session?.status === 'authenticated') {
@@ -140,54 +162,53 @@ export function LoginAuth({ className, ...props }: UserAuthFormProps) {
     }
   }, [session])
 
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault()
-    setIsLoading(true)
+  async function onSubmit(values: z.infer<typeof userAuthFormSchema>) {
+    setIsLoading(true);
 
     try {
-    signIn('credentials', {...data, redirect: false})
+      const result = await signIn('credentials', {...values, redirect: false});
+      if (!result || !result.ok) {
+        throw new Error('Login failed');
+      }
     } catch (error) {
-      console.error(error);
-      toast.error('There was an error during login. Please try again.');
+      console.error('Error:', error);
+      toast.error('Login failed. Please check your credentials & try again.');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <form onSubmit={onSubmit}>
-        <div className="grid gap-2">
-          <div className="grid gap-2">
-            <Label className="sr-only" htmlFor="email">
-              Email
-            </Label>
-            <Input
-              id="email"
-              placeholder="name@example.com"
-              type="email"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
-              required
-              disabled={isLoading}
-              value={data.email}
-              onChange={e => setData({ ...data, email: e.target.value })}
-            />
-            <Label className="sr-only" htmlFor="password">
-              Password
-            </Label>
-            <Input
-              id="password"
-              placeholder="Password"
-              type="password"
-              autoCapitalize="none"
-              autoCorrect="off"
-              required
-              disabled={isLoading}
-              value={data.password}
-              onChange={e => setData({ ...data, password: e.target.value })}
-            />
+      <Form {...loginForm}>
+        <form onSubmit={loginForm.handleSubmit(onSubmit)} className="grid gap-2">
+          <div className="grid gap-0">
+          <FormField 
+            control={loginForm.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="sr-only">Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="name@example.com" type="email" disabled={isLoading} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+              )}
+          />
+          <FormField 
+            control={loginForm.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="sr-only">Password</FormLabel>
+                <FormControl>
+                  <Input placeholder="Password" type="password" disabled={isLoading} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+              )}
+          />
           </div>
           <Button disabled={isLoading}>
             {isLoading && (
@@ -195,8 +216,8 @@ export function LoginAuth({ className, ...props }: UserAuthFormProps) {
             )}
             Continue with Email
           </Button>
-        </div>
-      </form>
+        </form>
+      </Form>
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />

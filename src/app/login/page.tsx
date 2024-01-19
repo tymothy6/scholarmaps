@@ -47,7 +47,7 @@ export default function Login() {
                 Sign in to your account
               </h1>
               <p className="text-sm text-muted-foreground">
-                Welcome back! Ready to get started?
+                Welcome back. Ready to get started?
               </p>
               <LoginAuth />
             </div>
