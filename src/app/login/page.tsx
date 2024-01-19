@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function Login() {
   return (
     <main>
-      <div className="container relative hidden h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="container relative h-[100vh] flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
           href="/register"
           className={cn(
@@ -32,10 +32,11 @@ export default function Login() {
             src={AuthImage}
             alt="Scholar Maps auth image"
             fill
+            sizes="(max-width: 1200px) 50vw"
             className="object-cover"
           />
           {/* <div className="absolute inset-0 bg-zinc-900" /> */}
-          <div className="relative z-20 flex items-center text-xl font-medium">
+          <div className="relative z-20 flex items-center text-2xl font-medium">
             Scholar Maps
           </div>
         </div>
@@ -46,7 +47,7 @@ export default function Login() {
                 Sign in to your account
               </h1>
               <p className="text-sm text-muted-foreground">
-                Enter your credentials below to continue.
+                Welcome back! Ready to get started?
               </p>
               <LoginAuth />
             </div>

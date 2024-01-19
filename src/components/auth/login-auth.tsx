@@ -4,11 +4,14 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-import { signIn } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+
 
 import { Loader2Icon } from "lucide-react"
 import { GitHubLogoIcon } from "@radix-ui/react-icons"
@@ -18,6 +21,7 @@ import { FaGoogle } from "react-icons/fa";
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function RegisterAuth({ className, ...props }: UserAuthFormProps) {
+  const router = useRouter();
   const [data, setData] = React.useState<{ email: string, password: string }>({
     email: "",
     password:"",
@@ -36,8 +40,11 @@ export function RegisterAuth({ className, ...props }: UserAuthFormProps) {
         },
         body: JSON.stringify(data),
       });
+      toast.success('Registration successful!');
+      router.push('/login');
     } catch (error) {
       console.error(error);
+      toast.error('Error! Please try again.');
     } finally {
       setIsLoading(false)
     }
@@ -119,11 +126,19 @@ export function RegisterAuth({ className, ...props }: UserAuthFormProps) {
 }
 
 export function LoginAuth({ className, ...props }: UserAuthFormProps) {
+  const session = useSession();
+  const router = useRouter();
   const [data, setData] = React.useState<{ email: string, password: string }>({
-    email: "",
-    password:"",
+    email: "", 
+    password: "",
   })
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+
+  React.useEffect(() => {
+    if (session?.status === 'authenticated') {
+      router.push('/')
+    }
+  }, [session])
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault()
@@ -133,6 +148,7 @@ export function LoginAuth({ className, ...props }: UserAuthFormProps) {
     signIn('credentials', {...data, redirect: false})
     } catch (error) {
       console.error(error);
+      toast.error('There was an error during login. Please try again.');
     } finally {
       setIsLoading(false)
     }

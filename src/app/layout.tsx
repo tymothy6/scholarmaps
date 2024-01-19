@@ -4,6 +4,7 @@ import './globals.css'
 
 import { ThemeProvider } from '@/components/theme-provider'
 import NextAuthProvider from '@/components/session-provider'
+import { Toaster } from '@/components/ui/sonner'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
@@ -29,6 +30,7 @@ export default function RootLayout({
             >{children}
           </ThemeProvider>
         </NextAuthProvider>
+        <Toaster richColors />
       </body>
     </html>
   )
