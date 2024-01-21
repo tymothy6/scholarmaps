@@ -1,6 +1,7 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+import { Sidebar } from '@/components/patterns/sidebar'
 import { LogoutAuth } from '@/components/auth/logout-auth'
 
 export default async function Home() {
@@ -8,6 +9,7 @@ export default async function Home() {
 
     return (
         <section>
+            <Sidebar />
             <h1>Home</h1>
             <p>Hi {session?.user?.email ?? 'stranger'}!</p>
             <h2>Server Side Rendered Session Data:</h2>
