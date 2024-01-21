@@ -1,3 +1,5 @@
+"use client"
+
 import { useTheme } from "next-themes"
 import { Line, LineChart, ResponsiveContainer, Tooltip } from "recharts"
 
@@ -46,9 +48,9 @@ export function LineChartCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Exercise Minutes</CardTitle>
+        <CardTitle>Research minutes</CardTitle>
         <CardDescription>
-          Your exercise minutes are ahead of where you normally are.
+          Your research minutes are ahead of where you normally are.
         </CardDescription>
       </CardHeader>
       <CardContent className="pb-4">
