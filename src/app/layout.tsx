@@ -9,7 +9,10 @@ import { Toaster } from '@/components/ui/sonner'
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
 export const metadata: Metadata = {
-  title: 'Scholar Maps',
+  title: {
+    template: '%s | Scholar Maps',
+    default: 'Scholar Maps',
+  },
   description: 'Full-stack literature search & visualization with Semantic Scholar.',
 }
 
