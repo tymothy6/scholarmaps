@@ -50,7 +50,7 @@ export function LineChartCard() {
       <CardHeader>
         <CardTitle>Research minutes</CardTitle>
         <CardDescription>
-          Your research minutes are ahead of where you normally are.
+          Your research minutes are ahead of where they normally are.
         </CardDescription>
       </CardHeader>
       <CardContent className="pb-4">

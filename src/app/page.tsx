@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
-import { Sidebar } from '@/components/patterns/sidebar'
+import { SidebarWithHeader } from '@/components/patterns/sidebar'
 import { LineChartCard } from '@/components/patterns/chart-card'
 import { LogoutAuth } from '@/components/auth/logout-auth'
 
@@ -9,10 +9,10 @@ export default async function Home() {
     const session = await getServerSession(authOptions)
 
     return (
-        <main className="flex gap-2">
-            <Sidebar />
+        <main className="flex flex-col gap-2">
+            <SidebarWithHeader />
             <section>
-                <h1>Home</h1>
+                <h1 className="text-2xl font-semibold">Home</h1>
                 <p>Hi {session?.user?.email ?? 'stranger'}!</p>
                 <h2>Server Side Rendered Session Data:</h2>
                 <pre>{JSON.stringify(session)}</pre>
