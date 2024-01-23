@@ -1,7 +1,11 @@
 "use client"
 
+import * as React from "react"
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,18 +15,23 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { Popover } from "@/components/ui/popover";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+
 
 import { 
+  BoxIcon,
   HomeIcon, 
   SearchIcon, 
   FolderOpenIcon, 
@@ -38,11 +47,25 @@ import {
 
 export function SidebarWithHeader () {
   const session = useSession();
+  const router = useRouter();
+
+  function onLogout () {
+    signOut();
+    router.push('/login');
+  }
+
+  // Protect the route
+  React.useEffect(() => {
+    if (session?.status === 'unauthenticated') {
+      router.push('/login')
+    }
+  }, [session])
 
     return (
-      <div className="flex">
+      <div className="fixed top-0 flex w-full">
         <aside className="hidden lg:flex lg:flex-col lg:justify-between bg-slate-950 w-64 h-[100vh] border-r p-4">
         <div className="flex flex-col justify-start gap-2">
+          <BoxIcon className="ml-2 mt-2 h-8 w-8 text-slate-200" />
         <nav className="mt-16">
           <ul className="space-y-2">
             <li>
@@ -130,27 +153,124 @@ export function SidebarWithHeader () {
           <span className="text-slate-400 group-hover:text-gray-200 font-medium">Settings</span>
         </Button>
         </aside>
-        <header>
-          <div className="flex items-center w-full p-2 justify-between">
+        <header className="w-full">
+          <div className="flex items-center w-full p-4 bg-background shadow-sm border-b justify-between">
             <div className="flex gap-2 w-full">
-              <Button variant="ghost" size="icon" className="block lg:hidden border-none">
-                <MenuIcon className="h-6 w-6" />
-              </Button>
+              <Sheet>
+                <SheetTrigger className="block lg:hidden">
+                  <MenuIcon className="h-6 w-6" />
+                </SheetTrigger>
+                <SheetContent side="left" className="w-64 bg-slate-950">
+                <div>
+                <div className="flex flex-col justify-start gap-2">
+                <nav className="mt-16">
+                  <ul className="space-y-2">
+                    <li>
+                      <Link
+                        className="flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900"
+                        href="/"
+                      >
+                        <HomeIcon className="w-5 h-5 text-slate-200 hover:text-slate-200" />
+                        <span className="text-slate-200 text-[15px] font-medium">Dashboard</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900"
+                        href="#"
+                      >
+                        <SearchIcon className="w-5 h-5 text-slate-400 group-hover:text-slate-200" />
+                        <span className="text-slate-400 group-hover:text-gray-200 text-[15px] font-medium">Search</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900"
+                        href="#"
+                      >
+                        <FolderOpenIcon className="w-5 h-5 text-slate-400 group-hover:text-slate-200" />
+                        <span className="text-slate-400 group-hover:text-gray-200 text-[15px] font-medium">Projects</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900"
+                        href="#"
+                      >
+                        <FileBarChart className="w-5 h-5 text-slate-400 group-hover:text-slate-200" />
+                        <span className="text-slate-400 group-hover:text-gray-200 text-[15px] font-medium">Reports</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900"
+                        href="#"
+                      >
+                        <UsersIcon className="w-5 h-5 text-slate-400 group-hover:text-slate-200" />
+                        <span className="text-slate-400 group-hover:text-gray-200 text-[15px] font-medium">Team</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </nav>
+                <nav className="mt-8">
+                  <h3 className="text-[13px] text-slate-400 font-medium tracking-wide pl-3 pb-2">Your teams</h3>
+                  <ul className="space-y-2">
+                    <li>
+                      <Link
+                        className="group flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-900"
+                        href="#"
+                      >
+                        <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[10px] font-mono">T</kbd>
+                        <span className="text-slate-400 group-hover:text-gray-200 text-sm font-medium">Tailwind Labs</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="group flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-900"
+                        href="#"
+                      >
+                        <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[10px] font-mono">A</kbd>
+                        <span className="text-slate-400 group-hover:text-gray-200 text-sm font-medium">AstraZeneca</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        className="group flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-900"
+                        href="#"
+                      >
+                        <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[10px] font-mono">N</kbd>
+                        <span className="text-slate-400 group-hover:text-gray-200 text-sm font-medium">Novartis</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </nav>
+                </div>
+                </div>
+                </SheetContent>
+              </Sheet>
               <Separator orientation="vertical" className="block lg:hidden" />
-              <Input placeholder="Search" />
+              <Input placeholder="Search..." />
             </div>
             <div className="flex gap-4 items-center ml-2">
-              <Button variant="ghost" size="icon" className="border-none">
-                <BellIcon className="h-4 w-4 text-muted-foreground" />
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex justify-center items-center h-9 w-9 hover:bg-slate-100 rounded">
+                  <BellIcon className="h-4 w-4 text-muted-foreground" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>On</DropdownMenuItem>
+                  <DropdownMenuItem>Off</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Separator orientation="vertical" className="h-6" />
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
               <Avatar className="h-8 w-8">
                 <AvatarImage src={session?.data?.user?.image ?? ''} />
-                <AvatarFallback>S</AvatarFallback>
+                <AvatarFallback>T</AvatarFallback>
               </Avatar>
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center">
+                <DropdownMenuTrigger className="flex items-center p-2 mr-2">
                   <span className="text-sm font-medium">{session?.data?.user?.email}</span>
                   <ChevronDownIcon className="ml-2 h-4 w-4" />
                 </DropdownMenuTrigger>
@@ -167,10 +287,9 @@ export function SidebarWithHeader () {
                     </DropdownMenuItem>
                   <DropdownMenuItem disabled>API</DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => onLogout()}>
                     <LogOutIcon className="mr-2 h-4 w-4" />
                     <span>Logout</span>
-                  <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

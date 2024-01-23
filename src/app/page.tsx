@@ -11,11 +11,13 @@ export default async function Home() {
     return (
         <main className="flex flex-col gap-2">
             <SidebarWithHeader />
-            <section>
-                <h1 className="text-2xl font-semibold">Home</h1>
-                <p>Hi {session?.user?.email ?? 'stranger'}!</p>
+            <section className="p-4 absolute top-16 lg:left-60 lg:p-8 flex flex-col gap-2">
+                <h1 className="text-2xl font-semibold">Dashboard</h1>
                 <h2>Server Side Rendered Session Data:</h2>
                 <pre>{JSON.stringify(session)}</pre>
+                <LineChartCard />
+                <LineChartCard />
+                <LineChartCard />
                 <LineChartCard />
                 <div className="p-4">
                     <LogoutAuth />
