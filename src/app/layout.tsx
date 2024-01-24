@@ -27,13 +27,13 @@ export default function RootLayout({
         <NextAuthProvider>
           <ThemeProvider
               attribute="class"
-              defaultTheme="system"
+              defaultTheme="light"
               enableSystem
               disableTransitionOnChange
             >{children}
           </ThemeProvider>
         </NextAuthProvider>
-        <Toaster richColors />
+        <Toaster richColors position="top-center" />
       </body>
     </html>
   )

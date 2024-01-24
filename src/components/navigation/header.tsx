@@ -7,6 +7,7 @@ import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
   Avatar,
@@ -19,6 +20,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuGroup,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
+  DropdownMenuSubContent,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -32,6 +38,7 @@ import {
   BoxIcon,
   HomeIcon, 
   SearchIcon, 
+  CreditCardIcon,
   FolderOpenIcon, 
   FileBarChart, 
   UsersIcon, 
@@ -40,8 +47,17 @@ import {
   BellIcon, 
   ChevronDownIcon,
   LogOutIcon,
-  LifeBuoyIcon
+  LifeBuoyIcon,
+  CloudIcon,
+  ArrowRightFromLineIcon,
+  UserPlusIcon,
+  MailIcon,
+  MessageSquareIcon,
+  PlusCircleIcon,
+  PlusIcon
 } from "lucide-react";
+
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 export function PageHeader () {
     const session = useSession();
@@ -164,8 +180,10 @@ export function PageHeader () {
             </div>
             <div className="flex gap-4 w-full items-center justify-between ml-2">
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex justify-center items-center h-9 w-9 hover:bg-slate-100 rounded">
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
                   <BellIcon className="h-4 w-4 text-muted-foreground" />
+                  </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuLabel>Notifications</DropdownMenuLabel>
@@ -174,27 +192,84 @@ export function PageHeader () {
                   <DropdownMenuItem>Off</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <div className="flex gap-2 w-max items-center justify-end">
-              <Avatar className="h-8 w-8">
+              <div className="flex gap-1 w-max items-center justify-end">
+              <Avatar className="h-8 w-8 mr-2">
                 <AvatarImage src={session?.data?.user?.image ?? ''} />
-                <AvatarFallback>T</AvatarFallback>
+                <AvatarFallback>
+                {session?.data?.user?.email ? session.data.user.email[0].toUpperCase(): 'SM'}
+                </AvatarFallback>
               </Avatar>
+              <Separator orientation="vertical" className="h-6"/>
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center p-2">
+                <DropdownMenuTrigger asChild>
+                <Button variant="ghost">
                   <span className="text-sm font-medium">{session?.data?.user?.email}</span>
                   <ChevronDownIcon className="ml-2 h-4 w-4" />
+                </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent>
                   <DropdownMenuLabel>Profile</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
                     <SettingsIcon className="mr-2 h-4 w-4" />
                     <span>Settings</span>
-                    </DropdownMenuItem>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <CreditCardIcon className="mr-2 h-4 w-4" />
+                    <span>Billing</span>
+                  </DropdownMenuItem>
                   <DropdownMenuItem>
                     <LifeBuoyIcon className="mr-2 h-4 w-4" />
                     <span>Support</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                        <UsersIcon className="mr-2 h-4 w-4" />
+                        <span>Team</span>
                     </DropdownMenuItem>
+                    <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>
+                        <UserPlusIcon className="mr-2 h-4 w-4" />
+                        <span>Invite users</span>
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                            <DropdownMenuItem>
+                            <MailIcon className="mr-2 h-4 w-4" />
+                            <span>Email</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                            <MessageSquareIcon className="mr-2 h-4 w-4" />
+                            <span>Message</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem>
+                            <PlusCircleIcon className="mr-2 h-4 w-4" />
+                            <span>More...</span>
+                            </DropdownMenuItem>
+                        </DropdownMenuSubContent>
+                        </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                    <DropdownMenuItem>
+                        <PlusIcon className="mr-2 h-4 w-4" />
+                        <span>New Team</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <CloudIcon className="mr-2 h-4 w-4" />
+                    <span>Remote access</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <ArrowRightFromLineIcon className="mr-2 h-4 w-4" />
+                    <span>Export data</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <GitHubLogoIcon className="mr-2 h-4 w-4" />
+                    <span>GitHub</span>
+                  </DropdownMenuItem>
                   <DropdownMenuItem disabled>API</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onSelect={() => onLogout()}>
