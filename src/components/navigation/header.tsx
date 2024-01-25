@@ -83,8 +83,10 @@ export function PageHeader () {
           <div className="flex items-center justify-between w-full p-4 bg-background shadow-sm border-b">
             <div className="flex gap-2 w-full">
               <Sheet>
-                <SheetTrigger className="block lg:hidden">
+                <SheetTrigger className="block lg:hidden" asChild>
+                  <Button variant="ghost" className="py-0 px-1.5">
                   <MenuIcon className="h-6 w-6" />
+                  </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="w-64 bg-slate-950">
                 <div>
@@ -181,7 +183,7 @@ export function PageHeader () {
             <div className="flex gap-4 w-full items-center justify-between ml-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
+                  <Button variant="ghost" size="icon" className="data-[state=open]:bg-accent">
                   <BellIcon className="h-4 w-4 text-muted-foreground" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -202,7 +204,7 @@ export function PageHeader () {
               <Separator orientation="vertical" className="h-6"/>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                <Button variant="ghost">
+                <Button variant="ghost" className="data-[state=open]:bg-accent">
                   <span className="text-sm font-medium">{session?.data?.user?.email}</span>
                   <ChevronDownIcon className="ml-2 h-4 w-4" />
                 </Button>

@@ -98,7 +98,16 @@ export function Sidebar () {
                 href="#"
               >
                 <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[10px] font-mono">T</kbd>
-                <span className="text-slate-400 group-hover:text-gray-200 text-sm font-medium">Tailwind Labs</span>
+                <span className="text-slate-400 group-hover:text-gray-200 text-sm font-medium">Tailwind Bio</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="group flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-900"
+                href="#"
+              >
+                <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[10px] font-mono">V</kbd>
+                <span className="text-slate-400 group-hover:text-gray-200 text-sm font-medium">Vercel Labs</span>
               </Link>
             </li>
             <li>
@@ -124,7 +133,7 @@ export function Sidebar () {
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="group flex justify-start items-center gap-3 py-2 px-3 rounded hover:bg-gray-900">
+          <Button variant="ghost" className="group flex justify-start items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 data-[state=open]:bg-gray-900">
             <SettingsIcon className="w-5 h-5 text-slate-400 group-hover:text-slate-200" />
             <span className="text-slate-400 group-hover:text-gray-200 font-medium">Settings</span>
           </Button>

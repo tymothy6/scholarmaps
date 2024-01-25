@@ -5,6 +5,7 @@ import * as React from "react"
 import {
   ColumnDef,
   SortingState,
+  VisibilityState,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -22,6 +23,7 @@ import {
 } from "@/components/ui/table"
 
 import { DataTablePagination } from "@/components/patterns/table-pagination"
+import { DataTableViewOptions } from "@/components/patterns/table-column-toggle"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -33,6 +35,9 @@ export function DashboardResultTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = React.useState({})
+
   const table = useReactTable({
     data,
     columns,
@@ -40,8 +45,12 @@ export function DashboardResultTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
+      columnVisibility,
+      rowSelection,
     }
   })
 
@@ -91,8 +100,9 @@ export function DashboardResultTable<TData, TValue>({
         </TableBody>
       </Table>
     </div>
-        <div className="p-2">
+        <div className="flex justify-between items-center p-2 w-full">
             <DataTablePagination table={table} />
+            <DataTableViewOptions table={table} />
         </div>
     </div>
   )
