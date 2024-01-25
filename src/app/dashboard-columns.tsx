@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { toast } from "sonner"
 
-import { MoreHorizontalIcon } from "lucide-react"
+import { ChevronsUpDownIcon, MoreHorizontalIcon } from "lucide-react"
 
 // This type is used to define the shape of the data
 export type DashboardResult = {
@@ -32,7 +32,19 @@ async function copyToClipboard(text: string) {
 export const columns: ColumnDef<DashboardResult>[] = [
   {
     accessorKey: "publication",
-    header: () => <div className="p-3">Publication</div>,
+    header: ({ column }) => {
+        return (
+            <div className="p-2">
+                <Button variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Publication
+                    <span className="sr-only">Toggle sorting</span>
+                    <ChevronsUpDownIcon className="ml-1 h-4 w-4" />
+                </Button>
+            </div>
+        )
+    },
     cell: ({ row }) => <div className="font-medium p-2">{row.getValue("publication") as string}</div>,
   },
   {
@@ -47,8 +59,20 @@ export const columns: ColumnDef<DashboardResult>[] = [
   },
   {
     accessorKey: "year",
-    header: () => <div className="text-right p-2">Year</div>,
-    cell: ({ row }) => <div className="text-right p-2">{row.getValue("year") as number}</div>,
+    header: ({ column }) => {
+        return (
+            <div className="p-2">
+                <Button variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Year
+                    <span className="sr-only">Toggle sorting</span>
+                    <ChevronsUpDownIcon className="ml-1 h-4 w-4" />
+                </Button>
+            </div>
+        )
+    },
+    cell: ({ row }) => <div className="text-center p-2">{row.getValue("year") as number}</div>,
   },
   {
     id: "actions",
@@ -84,7 +108,6 @@ export const columns: ColumnDef<DashboardResult>[] = [
             </DropdownMenu>
         )
     }
-
   }
 ]
 
