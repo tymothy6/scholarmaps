@@ -14,18 +14,31 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { toast } from "sonner"
 
-// Make any column header sortable & hideable
+// Reusable component to make any column header sortable & hideable
 import { DataTableColumnHeader } from "@/components/patterns/table-column-header"
 
 import { MoreHorizontalIcon } from "lucide-react"
 
-// This type needs to match the shape of the data returned from the Semantic Scholar API
-export type DashboardResult = {
-  id: string
-  year: number
-  publication: string
-  author: string[]
-  journal: string
+// This type matches the shape of the data returned from the Semantic Scholar (S2) Academic Graph API
+export type DashboardPaperResult = {
+  paperId: string // A unique (string) identifier for this paper
+  url: string // URL on the S2 website
+  title: string 
+  year: number // Year of publication
+  authors: Array<{
+    authorId: string
+    name: string
+  }> // Up to 500 will be returned
+  abstract: string // Due to legal reasons, may be missing for some papers
+  tldr: string // Auto-generated short summary of the paper from the SciTLDR model
+  referenceCount: number // Total number of papers referenced by the paper
+  citationCount: number // Total number of citations S2 has found for this paper
+  influentialCitationCount: number 
+  publicationTypes: string[] // Journal Article, Conference, Review, etc
+  journal: {
+    name: string;
+  }
+
 }
 
 async function copyToClipboard(text: string) {
@@ -37,7 +50,7 @@ function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every(item => typeof item === 'string');
 }
   
-export const columns: ColumnDef<DashboardResult>[] = [
+export const columns: ColumnDef<DashboardPaperResult>[] = [
   {
     id: "select",
     header: ({ table }) => {
@@ -140,18 +153,18 @@ export const columns: ColumnDef<DashboardResult>[] = [
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuItem
-                        onClick={() => copyToClipboard(result.publication)}
+                        onClick={() => copyToClipboard(result.paperId)}
                     >
                         Copy accession
                     </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => alert(`Editing ${result.publication}`)}>
+                    <DropdownMenuItem onSelect={() => alert(`Editing ${result.title}`)}>
                         Edit
                     </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => alert(`Sharing ${result.publication}`)}>
+                    <DropdownMenuItem onSelect={() => alert(`Sharing ${result.title}`)}>
                         Share
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onSelect={() => alert(`Deleting ${result.publication}`)}>
+                    <DropdownMenuItem onSelect={() => alert(`Deleting ${result.title}`)}>
                         Delete
                     </DropdownMenuItem>
                 </DropdownMenuContent>

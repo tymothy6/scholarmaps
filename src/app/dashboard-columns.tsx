@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { toast } from "sonner"
 
+// Reusable component to make any column header sortable & hideable
 import { DataTableColumnHeader } from "@/components/patterns/table-column-header"
 
 import { MoreHorizontalIcon } from "lucide-react"
