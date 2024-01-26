@@ -1,5 +1,9 @@
 "use client"
 
+import * as React from "react"
+
+import { useMediaQuery } from "@/lib/use-media-query"
+
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
@@ -12,33 +16,62 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+  DialogFooter,
+} from "@/components/ui/dialog"
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
 import { toast } from "sonner"
 
 // Reusable component to make any column header sortable & hideable
 import { DataTableColumnHeader } from "@/components/patterns/table-column-header"
 
-import { MoreHorizontalIcon } from "lucide-react"
+import { InfoIcon, MoreHorizontalIcon } from "lucide-react"
 
-// This type matches the shape of the data returned from the Semantic Scholar (S2) Academic Graph API
+// This type is based on the shape of the data returned from the Semantic Scholar (S2) Academic Graph API
 export type DashboardPaperResult = {
-  paperId: string // A unique (string) identifier for this paper
+  paperId: string // A unique identifier for the paper
   url: string // URL on the S2 website
   title: string 
   year: number // Year of publication
   authors: Array<{
     authorId: string
-    name: string
-  }> // Up to 500 will be returned
+    name: string // 
+  }> // An array of objects, up to 500 authors will be returned
   abstract: string // Due to legal reasons, may be missing for some papers
-  tldr: string // Auto-generated short summary of the paper from the SciTLDR model
+  tldr: {
+    model: string;
+    text: string; // Auto-generated short summary of the paper from the SciTLDR model
+  } 
   referenceCount: number // Total number of papers referenced by the paper
   citationCount: number // Total number of citations S2 has found for this paper
   influentialCitationCount: number 
   publicationTypes: string[] // Journal Article, Conference, Review, etc
   journal: {
     name: string;
+    pages?: string;
+    volume?: string;
   }
-
 }
 
 async function copyToClipboard(text: string) {
@@ -46,9 +79,21 @@ async function copyToClipboard(text: string) {
   toast.success("Copied to clipboard");
 }
 
-function isStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every(item => typeof item === 'string');
-}
+// Type guard functions
+function isJournalObject(value: unknown): value is { name: string; pages?: string; volume?: string } {
+    const obj = value as { name: string; pages?: string; volume?: string };
+    return typeof obj === 'object' && obj !== null &&
+           'name' in obj && typeof obj.name === 'string' &&
+           (!('pages' in obj) || (typeof obj.pages === 'string')) &&
+           (!('volume' in obj) || (typeof obj.volume === 'string'));
+  }
+
+function isTldrObject(value: unknown): value is { model: string; text: string } {
+    const obj = value as { model: string; text: string; };
+    return typeof obj === 'object' && obj !== null &&
+           'model' in obj && typeof obj.model === 'string' &&
+            'text' in obj && typeof obj.text === 'string';
+  }
   
 export const columns: ColumnDef<DashboardPaperResult>[] = [
   {
@@ -82,33 +127,46 @@ export const columns: ColumnDef<DashboardPaperResult>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "publication",
+    accessorKey: "title",
     header: ({ column }) => {
         return (
             <div className="px-4 py-2">
-                <DataTableColumnHeader column={column} title="Publication" />
+                <DataTableColumnHeader column={column} title="Title" />
             </div>
         )
     },
     cell: ({ row }) => {
-        const publication = row.getValue("publication");
+        const title = row.getValue("title");
+        const tldr = row.getValue("tldr");
         return (
             <div className="font-medium p-2">
-                {typeof publication === 'string' ? publication : 'N/A'}
+                <HoverCard>
+                    <HoverCardTrigger asChild>
+                        <Button variant="link">{typeof title === 'string' ? title : 'N/A'}</Button>
+                    </HoverCardTrigger>
+                    <HoverCardContent className="sm:w-40 lg:w-80">
+                        <div className="text-sm">
+                            {isTldrObject(tldr) ? tldr.text : 'Failed to load summary'}
+                        </div>
+                    </HoverCardContent>
+                </HoverCard>
             </div>
         )
     },
   },
   {
-    accessorKey: "author",
-    header: () => <div className="p-2">Author</div>,
+    accessorKey: "authors",
+    header: () => <div className="p-2">Authors</div>,
     cell: ({ row }) => {
-        const author = row.getValue("author");
-        return (
-            <div className="p-2">
-                {isStringArray(author) ? author.join(", ") : 'N/A'}
-            </div>
-        )
+        const authors = row.getValue("authors");
+        if (Array.isArray(authors)) {
+            return (
+                <div className="p-2">
+                    {authors.map(author => author.name).join(", ")}
+                </div>
+            );
+        }
+        return <div className="p-2">N/A</div>;
     }
   },
   {
@@ -117,7 +175,7 @@ export const columns: ColumnDef<DashboardPaperResult>[] = [
     cell: ({ row }) => {
         const journal = row.getValue("journal");
         return <div className="p-2">
-            {typeof journal === 'string' ? journal : 'N/A'}
+            {isJournalObject(journal) ? journal.name : 'N/A'}
         </div>;
     }
   },
@@ -135,6 +193,59 @@ export const columns: ColumnDef<DashboardPaperResult>[] = [
         return <div className="text-right p-2">
             {typeof year === 'number' ? year : 'N/A'}
         </div>;
+    }
+  },
+  {
+    accessorKey: "details",
+    cell: ({ row }) => {
+        const abstract = row.getValue("abstract");
+        const [open, setOpen] = React.useState(false);
+        const isDesktop = useMediaQuery("(min-width: 768px)");
+
+        if (isDesktop) {
+            return (
+                <Dialog open={open} onOpenChange={setOpen}>
+                    <DialogTrigger asChild>
+                        <Button variant="outline">
+                            <InfoIcon className="h-4 w-4 mr-2" />
+                            <span className="sm:block">Abstract</span>
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                        <DialogHeader>
+                            <DialogTitle>Details</DialogTitle>
+                            <DialogDescription>{typeof abstract === 'string' ? abstract : 'Failed to load abstract'}</DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter className="sm:justify-end">
+                            <DialogClose asChild>
+                                <Button variant="secondary">Close</Button>
+                            </DialogClose>
+                        </DialogFooter>
+                    </DialogContent>"
+                </Dialog>
+            )
+        }
+
+        return (
+            <Drawer open={open} onOpenChange={setOpen}>
+                <DrawerTrigger asChild>
+                    <Button variant="outline">
+                        <InfoIcon className="h-4 w-4" />
+                    </Button>
+                </DrawerTrigger>
+                <DrawerContent>
+                    <DrawerHeader>
+                        <DrawerTitle>Details</DrawerTitle>
+                        <DrawerDescription>{typeof abstract === 'string' ? abstract : 'Failed to load abstract'}</DrawerDescription>
+                    </DrawerHeader>
+                    <DrawerFooter>
+                        <DrawerClose asChild>
+                            <Button variant="secondary">Close</Button>
+                        </DrawerClose>
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
+        )
     }
   },
   {
