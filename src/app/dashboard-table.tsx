@@ -22,6 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+// Components for pagination controls and toggling column visibility
 import { DataTablePagination } from "@/components/patterns/table-pagination"
 import { DataTableViewOptions } from "@/components/patterns/table-column-toggle"
 
