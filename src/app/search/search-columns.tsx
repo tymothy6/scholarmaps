@@ -49,7 +49,7 @@ import { DataTableColumnHeader } from "@/components/patterns/table-column-header
 import { InfoIcon, MoreHorizontalIcon } from "lucide-react"
 
 // This type is based on the shape of the data returned from the Semantic Scholar (S2) Academic Graph API
-export type DashboardPaperResult = {
+export type SearchPaperResult = {
   paperId: string // A unique identifier for the paper
   url: string // URL on the S2 website
   title: string 
@@ -99,7 +99,7 @@ function isTldrObject(value: unknown): value is { model: string; text: string } 
             'text' in obj && typeof obj.text === 'string';
   }
   
-export const columns: ColumnDef<DashboardPaperResult>[] = [
+export const columns: ColumnDef<SearchPaperResult>[] = [
   {
     id: "select",
     header: ({ table }) => {
