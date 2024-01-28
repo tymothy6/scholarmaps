@@ -206,6 +206,7 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
   },
   {
     accessorKey: "abstract",
+    header: () => <div className="p-2">Abstract</div>,
     cell: ({ row }) => {
         const abstract = row.getValue("abstract");
         const [open, setOpen] = React.useState(false);

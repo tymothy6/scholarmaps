@@ -1,3 +1,4 @@
+import { NextRequest } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
@@ -9,15 +10,30 @@ import { PageHeader } from '@/components/navigation/header'
 import { SearchPaperResult, columns } from './search-columns'
 import { SearchResultTable } from './search-table'
 
-async function getSearchResults(): Promise<SearchPaperResult[]> {
-    const response = await fetch('/api/search')
+async function getSearchResults(searchQuery: string): Promise<SearchPaperResult[]> {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const queryParams = new URLSearchParams({ query: searchQuery });
+    const url = `${baseUrl}/api/search?${queryParams.toString()}`;
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+        throw new Error(response.statusText)
+    }
+
     const data = await response.json()
     return data
 }
 
-export default async function Search() {
-    const session = await getServerSession(authOptions)
-    const data = await getSearchResults()
+export default async function Search( request: NextRequest ) {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const fullUrl = new URL(request.url, baseUrl);
+
+    const searchQuery = fullUrl.searchParams.get('query') || '';
+    let data: SearchPaperResult[] = [];
+
+    if (searchQuery) {
+        data = await getSearchResults(searchQuery);
+    }
     
     return (
         <main className="flex flex-col gap-2">

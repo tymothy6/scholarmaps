@@ -64,6 +64,17 @@ export function PageHeader () {
     const router = useRouter();
     const pathname = usePathname();
 
+    const [searchQuery, setSearchQuery] = React.useState<string>('');
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(e.target.value);
+    }
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      router.push(`/search?query=${searchQuery}`);
+    }
+
     const isActive = (path: string) => pathname === path;
 
     function onLogout () {
@@ -178,7 +189,17 @@ export function PageHeader () {
                 </SheetContent>
               </Sheet>
               <Separator orientation="vertical" className="block lg:hidden" />
-              <Input placeholder="Search..." />
+              <form onSubmit={handleSubmit} className="flex gap-1 w-full">
+                <Input 
+                type="search"
+                value={searchQuery}
+                onChange={handleInputChange}
+                placeholder="Search for papers..." 
+                />
+                <Button variant="default" size="icon" type="submit">
+                  <SearchIcon className="h-4 w-4" />
+                </Button>
+              </form>
             </div>
             <div className="flex gap-4 w-full items-center justify-between ml-2">
               <DropdownMenu>
