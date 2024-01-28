@@ -72,7 +72,7 @@ export function PageHeader () {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      router.push(`/search?query=${searchQuery}`);
+      window.location.href = `/search?query=${searchQuery}`;
     }
 
     const isActive = (path: string) => pathname === path;
@@ -189,14 +189,14 @@ export function PageHeader () {
                 </SheetContent>
               </Sheet>
               <Separator orientation="vertical" className="block lg:hidden" />
-              <form onSubmit={handleSubmit} className="flex gap-1 w-full">
+              <form onSubmit={handleSubmit} className="flex gap-2 w-full">
                 <Input 
                 type="search"
                 value={searchQuery}
                 onChange={handleInputChange}
                 placeholder="Search for papers..." 
                 />
-                <Button variant="default" size="icon" type="submit">
+                <Button variant="secondary" size="icon" type="submit">
                   <SearchIcon className="h-4 w-4" />
                 </Button>
               </form>

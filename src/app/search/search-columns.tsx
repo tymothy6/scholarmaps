@@ -46,32 +46,31 @@ import { toast } from "sonner"
 // Reusable component to make any column header sortable & hideable
 import { DataTableColumnHeader } from "@/components/patterns/table-column-header"
 
-import { InfoIcon, MoreHorizontalIcon } from "lucide-react"
+import { InfoIcon, MoreHorizontalIcon, BookMarkedIcon, LayersIcon } from "lucide-react"
 
 // This type is based on the shape of the data returned from the Semantic Scholar (S2) Academic Graph API
 export type SearchPaperResult = {
   paperId: string // A unique identifier for the paper
   url: string // URL on the S2 website
   title: string 
-  year: number // Year of publication
-  authors: Array<{
-    authorId: string
-    name: string // 
-  }> // An array of objects, up to 500 authors will be returned
   abstract: string // Due to legal reasons, may be missing for some papers
+  year: number // Year of publication
+  referenceCount: number // Total number of papers referenced by the paper
+  citationCount: number // Total number of citations S2 has found for this paper
+  influentialCitationCount: number 
   tldr: {
     model: string;
     text: string; // Auto-generated short summary of the paper from the SciTLDR model
   } 
-  referenceCount: number // Total number of papers referenced by the paper
-  citationCount: number // Total number of citations S2 has found for this paper
-  influentialCitationCount: number 
-  publicationTypes: string[] // Journal Article, Conference, Review, etc
   journal: {
     name: string;
     pages?: string;
     volume?: string;
   }
+  authors: Array<{
+    authorId: string
+    name: string // 
+  }> // up to 500 authors will be returned
 }
 
 async function copyToClipboard(text: string) {
@@ -141,18 +140,18 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
     },
     cell: ({ row }) => {
         const title = row.getValue("title");
-        const publicationType = row.getValue("publicationTypes");
         const tldr = row.getValue("tldr");
         return (
-            <div className="font-medium p-2">
+            <div className="p-2">
                 <HoverCard>
                     <HoverCardTrigger asChild>
-                        <Button variant="link">{typeof title === 'string' ? title : 'N/A'}</Button>
+                        <Button variant="link" className="w-max">
+                            <span className="w-72 truncate text-left">{typeof title === 'string' ? title : 'N/A'}</span>
+                        </Button>
                     </HoverCardTrigger>
                     <HoverCardContent className="sm:w-40 lg:w-80">
                         <div className="space-y-1">
                             <h4 className="text-sm font-semibold">{typeof title === 'string' ? title : 'N/A'}</h4>
-                            <p className="text-sm">{isStringArray(publicationType) ? publicationType.join(", ") : 'N/A'}</p>
                             <p className="text-sm">
                                 {isTldrObject(tldr) ? tldr.text : 'No tl;dr available :('}
                             </p>
@@ -164,28 +163,34 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
     },
   },
   {
+    accessorKey: "journal",
+    header: ({ column }) => {
+        return (
+            <div className="px-4 py-2">
+                <DataTableColumnHeader column={column} title="Journal" />
+            </div>
+        )
+    },
+    cell: ({ row }) => {
+        const journal = row.getValue("journal");
+        return <div className="p-2">
+            {isJournalObject(journal) ? journal.name : 'N/A'}
+        </div>;
+    }
+  },
+  {
     accessorKey: "authors",
     header: () => <div className="p-2">Authors</div>,
     cell: ({ row }) => {
         const authors = row.getValue("authors");
         if (Array.isArray(authors)) {
             return (
-                <div className="p-2">
-                    {authors.map(author => author.name).join(", ")}
+                <div className="p-2 w-[200px]">
+                    <p className="truncate">{authors.map(author => author.name).join(", ")}</p>
                 </div>
             );
         }
         return <div className="p-2">N/A</div>;
-    }
-  },
-  {
-    accessorKey: "journal",
-    header: () => <div className="p-2">Journal</div>,
-    cell: ({ row }) => {
-        const journal = row.getValue("journal");
-        return <div className="p-2">
-            {isJournalObject(journal) ? journal.name : 'N/A'}
-        </div>;
     }
   },
   {
@@ -223,15 +228,15 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
                         <DialogHeader>
-                            <DialogTitle>Details</DialogTitle>
-                            <DialogDescription>{typeof abstract === 'string' ? abstract : 'Failed to load abstract'}</DialogDescription>
+                            <DialogTitle>Abstract</DialogTitle>
                         </DialogHeader>
+                        <DialogDescription>{typeof abstract === 'string' ? abstract : 'Failed to load abstract'}</DialogDescription>
                         <DialogFooter className="sm:justify-end">
                             <DialogClose asChild>
                                 <Button variant="secondary">Close</Button>
                             </DialogClose>
                         </DialogFooter>
-                    </DialogContent>"
+                    </DialogContent>
                 </Dialog>
             )
         }
@@ -245,7 +250,7 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                 </DrawerTrigger>
                 <DrawerContent>
                     <DrawerHeader>
-                        <DrawerTitle>Details</DrawerTitle>
+                        <DrawerTitle>Abstract</DrawerTitle>
                         <DrawerDescription>{typeof abstract === 'string' ? abstract : 'Failed to load abstract'}</DrawerDescription>
                     </DrawerHeader>
                     <DrawerFooter>
@@ -259,18 +264,14 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
     }
   },
   {
-    id: "references",
-    header: () => <div className="p-2">References</div>,
-    cell: ({ row }) => {
-        const referenceCount = row.getValue("referenceCount");
-        return <div className="text-right p-2">
-            {typeof referenceCount === 'number' ? referenceCount : 'N/A'}
-        </div>;
-    }
-  },
-  {
     id: "citations",
-    header: () => <div className="p-2">Citations</div>,
+    header: ({ column }) => {
+        return (
+            <div className="px-4 py-2">
+                <DataTableColumnHeader column={column} title="Citations" />
+            </div>
+        )
+    },
     cell: ({ row }) => {
         const citationCount = row.getValue("citationCount");
         return <div className="text-right p-2">

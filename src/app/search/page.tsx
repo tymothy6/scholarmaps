@@ -10,29 +10,42 @@ import { PageHeader } from '@/components/navigation/header'
 import { SearchPaperResult, columns } from './search-columns'
 import { SearchResultTable } from './search-table'
 
-async function getSearchResults(searchQuery: string): Promise<SearchPaperResult[]> {
+interface SearchResponse { total: number; offset: number; next: number; data: SearchPaperResult[]; }
+
+async function getSearchResults(searchQuery: string): Promise<SearchResponse> {
+    console.log('getSearchResults searchQuery:', searchQuery);  // log 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const queryParams = new URLSearchParams({ query: searchQuery });
     const url = `${baseUrl}/api/search?${queryParams.toString()}`;
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-        throw new Error(response.statusText)
-    }
 
-    const data = await response.json()
-    return data
+    try {
+        console.log('getSearchResults making fetch request to:', url); // log
+        const response = await fetch(url);
+
+        console.log('getSearchResults response status:', response.status); // log
+
+        if (!response.ok) {
+            throw new Error(`API responded with status code ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log('getSearchResults data:', data); // log
+        return data;
+    } catch (error) {
+        console.error('Error fetching search results:', error);
+        return { total: 0, offset: 0, next: 0, data: [] };
+    }
 }
 
-export default async function Search( request: NextRequest ) {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const fullUrl = new URL(request.url, baseUrl);
+interface SearchProps { searchParams: {[key: string]: string | undefined } }
 
-    const searchQuery = fullUrl.searchParams.get('query') || '';
-    let data: SearchPaperResult[] = [];
+export default async function Search( { searchParams }: SearchProps ) {
+    const searchQuery = searchParams['query'] || '';
+    let results: SearchPaperResult[] = [];
 
     if (searchQuery) {
-        data = await getSearchResults(searchQuery);
+        const response = await getSearchResults(searchQuery);
+        results = response.data;
     }
     
     return (
@@ -40,10 +53,10 @@ export default async function Search( request: NextRequest ) {
             <Sidebar />
             <PageHeader />
             <section className="p-4 absolute top-16 lg:left-[16.666%] lg:p-8 flex flex-col gap-2 w-full lg:w-5/6">
-                <h1 className="text-2xl font-semibold lg:font-bold mb-2">Search</h1>
-                <div className="grid gap-4">
+                <h1 className="text-2xl font-semibold lg:font-bold mb-2">Results</h1>
+                <div className="grid gap-4 w-full">
                 <Card>
-                    <SearchResultTable columns={columns} data={data} />
+                    <SearchResultTable columns={columns} data={results} />
                 </Card>
                 </div>
             </section>
