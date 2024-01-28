@@ -33,6 +33,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import { toast } from "sonner"
 
 import { 
   BoxIcon,
@@ -54,7 +55,8 @@ import {
   MailIcon,
   MessageSquareIcon,
   PlusCircleIcon,
-  PlusIcon
+  PlusIcon,
+  Loader2Icon,
 } from "lucide-react";
 
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
@@ -65,14 +67,25 @@ export function PageHeader () {
     const pathname = usePathname();
 
     const [searchQuery, setSearchQuery] = React.useState<string>('');
+    const [isSearchLoading, setIsSearchLoading] = React.useState<boolean>(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setSearchQuery(e.target.value);
     }
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      setIsSearchLoading(true);
       e.preventDefault();
+
+      try {
       window.location.href = `/search?query=${searchQuery}`;
+      } catch (error) {
+        console.error('Error submitting search query:', error);
+        toast.error('Error submitting search query. Please try again.');
+      } finally {
+        setIsSearchLoading(false);
+      }
+      
     }
 
     const isActive = (path: string) => pathname === path;
@@ -82,7 +95,7 @@ export function PageHeader () {
         router.push('/login');
       }
     
-      // Protect the route
+      // Show the route only if the user is logged in
       React.useEffect(() => {
         if (session?.status === 'unauthenticated') {
           router.push('/login')
@@ -194,10 +207,11 @@ export function PageHeader () {
                 type="search"
                 value={searchQuery}
                 onChange={handleInputChange}
-                placeholder="Search for papers..." 
+                placeholder="Search for papers..."
+                disabled={isSearchLoading} 
                 />
-                <Button variant="secondary" size="icon" type="submit">
-                  <SearchIcon className="h-4 w-4" />
+                <Button variant="secondary" size="icon" type="submit" disabled={isSearchLoading}>
+                  {isSearchLoading ? <Loader2Icon className="h-4 w-4 animate-spin" /> : <SearchIcon className="h-4 w-4" />}
                 </Button>
               </form>
             </div>

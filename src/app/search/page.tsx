@@ -13,23 +13,18 @@ import { SearchResultTable } from './search-table'
 interface SearchResponse { total: number; offset: number; next: number; data: SearchPaperResult[]; }
 
 async function getSearchResults(searchQuery: string): Promise<SearchResponse> {
-    console.log('getSearchResults searchQuery:', searchQuery);  // log 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const queryParams = new URLSearchParams({ query: searchQuery });
     const url = `${baseUrl}/api/search?${queryParams.toString()}`;
 
     try {
-        console.log('getSearchResults making fetch request to:', url); // log
         const response = await fetch(url);
-
-        console.log('getSearchResults response status:', response.status); // log
 
         if (!response.ok) {
             throw new Error(`API responded with status code ${response.status}: ${response.statusText}`);
         }
 
         const data = await response.json();
-        console.log('getSearchResults data:', data); // log
         return data;
     } catch (error) {
         console.error('Error fetching search results:', error);

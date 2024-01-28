@@ -6,6 +6,7 @@ import { useMediaQuery } from "@/lib/use-media-query"
 
 import { ColumnDef } from "@tanstack/react-table"
 
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -41,6 +42,13 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { 
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { toast } from "sonner"
 
 // Reusable component to make any column header sortable & hideable
@@ -87,10 +95,6 @@ function isJournalObject(value: unknown): value is { name: string; pages?: strin
            (!('volume' in obj) || (typeof obj.volume === 'string'));
   }
 
-function isStringArray(value: unknown): value is string[] {
-    return Array.isArray(value) && value.every(item => typeof item === 'string');
-  }
-
 function isTldrObject(value: unknown): value is { model: string; text: string } {
     const obj = value as { model: string; text: string; };
     return typeof obj === 'object' && obj !== null &&
@@ -130,10 +134,17 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "tldr",
+    enableSorting: false,
+    enableHiding: false,
+    header: () => null,
+    cell: () => null,
+  },
+  {
     accessorKey: "title",
     header: ({ column }) => {
         return (
-            <div className="px-4 py-2">
+            <div className="px-6 py-2">
                 <DataTableColumnHeader column={column} title="Title" />
             </div>
         )
@@ -149,12 +160,13 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                             <span className="w-72 truncate text-left">{typeof title === 'string' ? title : 'N/A'}</span>
                         </Button>
                     </HoverCardTrigger>
-                    <HoverCardContent className="sm:w-40 lg:w-80">
+                    <HoverCardContent className="w-40 lg:w-80">
                         <div className="space-y-1">
                             <h4 className="text-sm font-semibold">{typeof title === 'string' ? title : 'N/A'}</h4>
-                            <p className="text-sm">
-                                {isTldrObject(tldr) ? tldr.text : 'No tl;dr available :('}
-                            </p>
+                                <p className="text-sm">
+                                <Badge variant="secondary" className="mr-2">tl;dr</Badge>
+                                    {isTldrObject(tldr) ? tldr.text : 'No tl;dr available :('}
+                                </p>
                         </div>
                     </HoverCardContent>
                 </HoverCard>
@@ -173,7 +185,7 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
     },
     cell: ({ row }) => {
         const journal = row.getValue("journal");
-        return <div className="p-2">
+        return <div className="px-4 py-2 text-left">
             {isJournalObject(journal) ? journal.name : 'N/A'}
         </div>;
     }
@@ -185,9 +197,20 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
         const authors = row.getValue("authors");
         if (Array.isArray(authors)) {
             return (
-                <div className="p-2 w-[200px]">
-                    <p className="truncate">{authors.map(author => author.name).join(", ")}</p>
-                </div>
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger>
+                        <div className="p-2 w-[200px]">
+                          <p className="text-left truncate">{authors.map(author => author.name).join(", ")}</p>
+                        </div>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-[200px] lg:max-w-[400px]">
+                          <p className="text-sm">
+                            {authors.map(author => author.name).join(", ")}
+                          </p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             );
         }
         return <div className="p-2">N/A</div>;
@@ -204,7 +227,7 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
     },
     cell: ({ row }) => {
         const year = row.getValue("year");
-        return <div className="text-right p-2">
+        return <div className="p-2">
             {typeof year === 'number' ? year : 'N/A'}
         </div>;
     }
@@ -214,27 +237,38 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
     header: () => <div className="p-2">Abstract</div>,
     cell: ({ row }) => {
         const abstract = row.getValue("abstract");
+        const title = row.getValue("title");
+        const authors = row.getValue("authors");
+
         const [open, setOpen] = React.useState(false);
         const isDesktop = useMediaQuery("(min-width: 768px)");
 
-        if (isDesktop) {
+        if (isDesktop && Array.isArray(authors)) {
             return (
                 <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
-                        <Button variant="outline">
-                            <InfoIcon className="h-4 w-4 mr-2" />
-                            <span className="sm:block">Abstract</span>
+                        <Button variant="outline" className="mx-2">
+                            <InfoIcon className="h-4 w-4" />
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
+                    <DialogContent className="sm:max-w-[600px] sm:max-h-[550px]">
                         <DialogHeader>
-                            <DialogTitle>Abstract</DialogTitle>
+                            <DialogTitle>{typeof title === 'string' ? title : 'N/A'}</DialogTitle>
+                            <ScrollArea className="w-full max-h-[100px]"><DialogDescription className="text-popover-foreground">{authors.map(author => author.name).join(", ")}</DialogDescription>
+                            </ScrollArea>
                         </DialogHeader>
-                        <DialogDescription>{typeof abstract === 'string' ? abstract : 'Failed to load abstract'}</DialogDescription>
+                        <ScrollArea className="w-full max-h-[300px]">
+                        <DialogDescription>
+                            {typeof abstract === 'string' ? abstract : 'Failed to load abstract'}
+                        </DialogDescription>
+                        </ScrollArea>
                         <DialogFooter className="sm:justify-end">
                             <DialogClose asChild>
                                 <Button variant="secondary">Close</Button>
                             </DialogClose>
+                            <Button variant="default" asChild>
+                                <a href="">View</a>
+                            </Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
@@ -251,8 +285,8 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                 <DrawerContent>
                     <DrawerHeader>
                         <DrawerTitle>Abstract</DrawerTitle>
-                        <DrawerDescription>{typeof abstract === 'string' ? abstract : 'Failed to load abstract'}</DrawerDescription>
                     </DrawerHeader>
+                    <DrawerDescription>{typeof abstract === 'string' ? abstract : 'Failed to load abstract'}</DrawerDescription>
                     <DrawerFooter>
                         <DrawerClose asChild>
                             <Button variant="secondary">Close</Button>
@@ -264,17 +298,17 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
     }
   },
   {
-    id: "citations",
+    accessorKey: "citationCount",
     header: ({ column }) => {
         return (
-            <div className="px-4 py-2">
+            <div className="p-2">
                 <DataTableColumnHeader column={column} title="Citations" />
             </div>
         )
     },
     cell: ({ row }) => {
         const citationCount = row.getValue("citationCount");
-        return <div className="text-right p-2">
+        return <div className="text-left pl-4 py-2">
             {typeof citationCount === 'number' ? citationCount : 'N/A'}
         </div>;
     }
@@ -297,10 +331,12 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                     <DropdownMenuItem
                         onClick={() => copyToClipboard(result.paperId)}
                     >
-                        Copy S2 ID
+                        Copy S2 identifier
                     </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => alert(`Editing ${result.title}`)}>
-                        Edit
+                    <DropdownMenuItem 
+                        onClick={() => copyToClipboard(result.url)}
+                    >
+                        Copy S2 URL
                     </DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => alert(`Sharing ${result.title}`)}>
                         Share
