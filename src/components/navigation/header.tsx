@@ -6,6 +6,7 @@ import Link from "next/link"
 
 import { useRouter, usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -57,7 +58,10 @@ import {
   PlusCircleIcon,
   PlusIcon,
   Loader2Icon,
+  MonitorIcon,
 } from "lucide-react";
+
+import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
@@ -65,6 +69,7 @@ export function PageHeader () {
     const session = useSession();
     const router = useRouter();
     const pathname = usePathname();
+    const { setTheme } = useTheme();
 
     const [searchQuery, setSearchQuery] = React.useState<string>('');
     const [isSearchLoading, setIsSearchLoading] = React.useState<boolean>(false);
@@ -197,6 +202,32 @@ export function PageHeader () {
                     </li>
                   </ul>
                 </nav>
+                <div className="mt-8 w-full">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="group flex justify-start items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 data-[state=open]:bg-gray-900">
+                    <SettingsIcon className="w-5 h-5 text-slate-400 group-hover:text-slate-200" />
+                    <span className="text-slate-400 group-hover:text-gray-200 font-medium">Settings</span>
+                  </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>Theme</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => setTheme("light")}>
+                      <SunIcon className="w-4 h-4 mr-2" />
+                      <span>Light</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setTheme("dark")}>
+                      <MoonIcon className="w-4 h-4 mr-2" />
+                      <span>Dark</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setTheme("system")}>
+                      <MonitorIcon className="w-4 h-4 mr-2" />
+                      <span>System</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                </div>
                 </div>
                 </div>
                 </SheetContent>
