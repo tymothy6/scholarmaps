@@ -134,26 +134,20 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "tldr",
-    enableSorting: false,
-    enableHiding: false,
-    header: () => null,
-    cell: () => null,
-  },
-  {
     accessorKey: "title",
     header: ({ column }) => {
         return (
-            <div className="px-6 py-2">
+            <div className="pl-4 pr-6 py-2">
                 <DataTableColumnHeader column={column} title="Title" />
             </div>
         )
     },
     cell: ({ row }) => {
+        const result = row.original;
         const title = row.getValue("title");
-        const tldr = row.getValue("tldr");
+
         return (
-            <div className="p-2">
+            <div className="pl-0 pr-2 py-2">
                 <HoverCard>
                     <HoverCardTrigger asChild>
                         <Button variant="link" className="w-max">
@@ -162,11 +156,13 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                     </HoverCardTrigger>
                     <HoverCardContent className="w-40 lg:w-80">
                         <div className="space-y-1">
-                            <h4 className="text-sm font-semibold">{typeof title === 'string' ? title : 'N/A'}</h4>
-                                <p className="text-sm">
+                            <div className="flex justify-between items-start">
+                                <h4 className="text-sm font-semibold">{typeof title === 'string' ? title : 'N/A'}</h4>
                                 <Badge variant="secondary" className="mr-2">tl;dr</Badge>
-                                    {isTldrObject(tldr) ? tldr.text : 'No tl;dr available :('}
-                                </p>
+                            </div>
+                            <p className="text-sm">
+                                {isTldrObject(result.tldr) ? result.tldr.text : 'No tl;dr available :('}
+                            </p>
                         </div>
                     </HoverCardContent>
                 </HoverCard>
@@ -239,6 +235,7 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
         const abstract = row.getValue("abstract");
         const title = row.getValue("title");
         const authors = row.getValue("authors");
+        const result = row.original;
 
         const [open, setOpen] = React.useState(false);
         const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -248,18 +245,20 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                 <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
                         <Button variant="outline" className="mx-2">
+                            <span className="sr-only">View abstract</span>
                             <InfoIcon className="h-4 w-4" />
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[600px] sm:max-h-[550px]">
                         <DialogHeader>
                             <DialogTitle>{typeof title === 'string' ? title : 'N/A'}</DialogTitle>
-                            <ScrollArea className="w-full max-h-[100px]"><DialogDescription className="text-popover-foreground">{authors.map(author => author.name).join(", ")}</DialogDescription>
+                            <ScrollArea className="w-full max-h-[100px]">
+                                <DialogDescription className="text-popover-foreground">{authors.map(author => author.name).join(", ")}</DialogDescription>
                             </ScrollArea>
                         </DialogHeader>
                         <ScrollArea className="w-full max-h-[300px]">
                         <DialogDescription>
-                            {typeof abstract === 'string' ? abstract : 'Failed to load abstract'}
+                            {typeof abstract === 'string' ? abstract : 'Failed to load abstract or abstract not available.'}
                         </DialogDescription>
                         </ScrollArea>
                         <DialogFooter className="sm:justify-end">
@@ -267,7 +266,7 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                                 <Button variant="secondary">Close</Button>
                             </DialogClose>
                             <Button variant="default" asChild>
-                                <a href="">View</a>
+                                <a href={result.url} target="_blank" rel="noopener noreferrer">View source</a>
                             </Button>
                         </DialogFooter>
                     </DialogContent>
@@ -291,6 +290,9 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                         <DrawerClose asChild>
                             <Button variant="secondary">Close</Button>
                         </DrawerClose>
+                        <Button variant="default" asChild>
+                                <a href="">View source</a>
+                        </Button>
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
