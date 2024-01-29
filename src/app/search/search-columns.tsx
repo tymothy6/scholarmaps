@@ -258,7 +258,7 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                         </DialogHeader>
                         <ScrollArea className="w-full max-h-[300px]">
                         <DialogDescription>
-                            {typeof abstract === 'string' ? abstract : 'Failed to load abstract or abstract not available.'}
+                            {typeof abstract === 'string' ? abstract : 'Failed to load abstract from Semantic Scholar.'}
                         </DialogDescription>
                         </ScrollArea>
                         <DialogFooter className="sm:justify-end">
@@ -283,9 +283,11 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                 </DrawerTrigger>
                 <DrawerContent>
                     <DrawerHeader>
-                        <DrawerTitle>Abstract</DrawerTitle>
+                        <DrawerTitle className="text-left">{typeof title === 'string' ? title : 'N/A'}</DrawerTitle>
                     </DrawerHeader>
-                    <DrawerDescription>{typeof abstract === 'string' ? abstract : 'Failed to load abstract'}</DrawerDescription>
+                    <ScrollArea className="w-full px-4 max-h-[300px]">
+                    <DrawerDescription>{typeof abstract === 'string' ? abstract : 'Failed to load abstract from Semantic Scholar.'}</DrawerDescription>
+                    </ScrollArea>
                     <DrawerFooter>
                         <DrawerClose asChild>
                             <Button variant="secondary">Close</Button>

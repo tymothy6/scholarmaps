@@ -215,10 +215,11 @@ export function PageHeader () {
                 </Button>
               </form>
             </div>
-            <div className="flex gap-4 w-full items-center justify-between ml-2">
+            <div className="hidden sm:flex gap-4 w-full items-center justify-between ml-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="data-[state=open]:bg-accent">
+                  <span className="sr-only">Notifications</span>
                   <BellIcon className="h-4 w-4 text-muted-foreground" />
                   </Button>
                 </DropdownMenuTrigger>

@@ -33,7 +33,7 @@ export function DataTableViewOptions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[150px]">
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+        <DropdownMenuLabel>Columns</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table
           .getAllColumns()
@@ -49,11 +49,17 @@ export function DataTableViewOptions<TData>({
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                {column.id}
+                {camelCaseSpacer(column.id)}
               </DropdownMenuCheckboxItem>
             )
           })}
       </DropdownMenuContent>
     </DropdownMenu>
   )
+}
+
+function camelCaseSpacer (str: string) {
+  return str
+    // Insert a space before all caps
+    .replace(/([A-Z])/g, ' $1')
 }
