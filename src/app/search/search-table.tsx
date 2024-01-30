@@ -2,6 +2,8 @@
 
 import * as React from "react"
 
+import { useMediaQuery } from "@/lib/use-media-query"
+
 import {
   ColumnDef,
   SortingState,
@@ -39,6 +41,27 @@ export function SearchResultTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [visibleColumns, setVisibleColumns] = React.useState({
+    select: true,
+    journal: true,
+    authors: true,
+    year: true,
+    abstract: true,
+    actions: true,
+  });
+
+  React.useEffect(() => {
+    setVisibleColumns({
+            select: isDesktop,
+            journal: isDesktop,
+            authors: isDesktop,
+            year: isDesktop,
+            abstract: isDesktop,
+            actions: isDesktop,
+        })
+  }, [isDesktop])
+
   const table = useReactTable({
     data,
     columns,
@@ -54,6 +77,17 @@ export function SearchResultTable<TData, TValue>({
       rowSelection,
     }
   })
+
+  React.useEffect(() => {
+    if (table) {
+      let newVisibility: Record<string, boolean> = {};
+      Object.entries(visibleColumns).forEach(([columnName, isVisible]) => {
+        newVisibility[columnName] = isVisible;
+      });
+
+      table.setColumnVisibility(newVisibility);
+    }
+  }, [table, visibleColumns])
 
   return (
     <div>

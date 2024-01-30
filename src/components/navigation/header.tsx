@@ -118,8 +118,8 @@ export function PageHeader () {
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="w-64 bg-slate-950">
-                <div>
-                <div className="flex flex-col justify-start gap-2">
+                <div className="w-full">
+                <div className="flex flex-col justify-start gap-2 w-full">
                     <BoxIcon className="ml-2 mt-2 h-8 w-8 text-slate-200" />
                 <nav className="mt-16">
                   <ul className="space-y-2">
@@ -205,7 +205,7 @@ export function PageHeader () {
                 <div className="mt-8 w-full">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="group flex justify-start items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 data-[state=open]:bg-gray-900">
+                  <Button variant="ghost" className="w-full group flex justify-start items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 data-[state=open]:bg-gray-900">
                     <SettingsIcon className="w-5 h-5 text-slate-400 group-hover:text-slate-200" />
                     <span className="text-slate-400 group-hover:text-gray-200 font-medium">Settings</span>
                   </Button>
