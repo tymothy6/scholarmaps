@@ -187,8 +187,8 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                 <div className="pl-0 pr-2 py-0">
                     <Drawer open={open} onOpenChange={setOpen} shouldScaleBackground>
                     <DrawerTrigger asChild>
-                        <Button variant="link" className="w-max h-max whitespace-normal focus-visible:ring-0">
-                        <span className="w-48 text-left">{typeof title === 'string' ? title : 'N/A'}</span>
+                        <Button variant="link" className="w-56 h-max whitespace-normal focus-visible:ring-0">
+                        <span className="text-left">{typeof title === 'string' ? title : 'N/A'}</span>
                         </Button>
                     </DrawerTrigger>
                     <DrawerContent className="flex flex-col max-h-[90%]">
@@ -380,7 +380,7 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
     accessorKey: "citationCount",
     header: ({ column }) => {
         return (
-            <div className="flex items-end p-2">
+            <div className="flex justify-end p-2">
                 <DataTableColumnHeader column={column} title="Citations" />
             </div>
         )

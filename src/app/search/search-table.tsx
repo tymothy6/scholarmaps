@@ -22,6 +22,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableFooter,
 } from "@/components/ui/table"
 
 // Components for pagination controls and toggling column visibility
@@ -90,8 +91,8 @@ export function SearchResultTable<TData, TValue>({
   }, [table, visibleColumns])
 
   return (
-    <div>
-    <div className="border-b">
+    <div className="w-full">
+    <div className="w-full border-b">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

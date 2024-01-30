@@ -241,7 +241,7 @@ export function PageHeader () {
                 placeholder="Search for papers..."
                 disabled={isSearchLoading} 
                 />
-                <Button variant="secondary" size="icon" type="submit" disabled={isSearchLoading}>
+                <Button variant="default" size="icon" type="submit" disabled={isSearchLoading} className="px-2">
                   {isSearchLoading ? <Loader2Icon className="h-4 w-4 animate-spin" /> : <SearchIcon className="h-4 w-4" />}
                 </Button>
               </form>
