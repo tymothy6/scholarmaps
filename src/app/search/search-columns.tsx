@@ -145,7 +145,9 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
     cell: ({ row }) => {
         const result = row.original;
         const title = row.getValue("title");
+        const journal = row.getValue("journal");
         const authors = row.getValue("authors");
+        const abstract = row.getValue("abstract");
 
         const [open, setOpen] = React.useState(false);
         const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -155,15 +157,15 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                 <div className="pl-0 pr-2 py-2">
                     <HoverCard>
                         <HoverCardTrigger asChild>
-                            <Button variant="link" className="w-max">
-                                <span className="w-72 truncate text-left">{typeof title === 'string' ? title : 'N/A'}</span>
+                            <Button variant="link" className="w-max whitespace-normal h-max focus-visible:ring-0">
+                                <span className="w-72 text-left">{typeof title === 'string' ? title : 'N/A'}</span>
                             </Button>
                         </HoverCardTrigger>
                         <HoverCardContent className="w-40 lg:w-80">
                             <div className="space-y-1">
                                 <div className="flex justify-between items-start">
                                     <h4 className="text-sm font-semibold">{typeof title === 'string' ? title : 'N/A'}</h4>
-                                    <Badge variant="secondary" className="mr-2">tl;dr</Badge>
+                                    <Badge variant="default" className="mr-2">tl;dr</Badge>
                                 </div>
                                 <p className="text-sm">
                                     {isTldrObject(result.tldr) ? result.tldr.text : 'No tl;dr available :('}
@@ -178,10 +180,10 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
         if (Array.isArray(authors)) {
             return (
                 <div className="pl-0 pr-2 py-2">
-                    <Drawer open={open} onOpenChange={setOpen}>
+                    <Drawer open={open} onOpenChange={setOpen} shouldScaleBackground>
                     <DrawerTrigger asChild>
-                        <Button variant="link" className="w-max">
-                        <span className="w-72 truncate text-left">{typeof title === 'string' ? title : 'N/A'}</span>
+                        <Button variant="link" className="w-max h-max whitespace-normal focus-visible:ring-0">
+                        <span className="w-72 text-left">{typeof title === 'string' ? title : 'N/A'}</span>
                         </Button>
                     </DrawerTrigger>
                     <DrawerContent className="flex flex-col max-h-[90%] overflow-y-auto">
@@ -190,15 +192,41 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                             <p className="text-left text-sm">
                                 {authors.map(author => author.name).join(", ")}
                             </p>
+                            <p className="text-left text-sm font-medium">
+                                {isJournalObject(journal) ? journal.name : 'N/A'} ({typeof result.year === 'number' ? result.year : 'N/A'})
+                            </p>
                         </DrawerHeader>
                         <div className="flex flex-col gap-2 px-4 w-full">
-                        <Badge variant="secondary" className="mr-2 w-max">tl;dr</Badge>
+                        <Badge variant="default" className="mr-2 w-max">tl;dr</Badge>
                         <DrawerDescription>{isTldrObject(result.tldr) ? result.tldr.text : 'No tl;dr available :('}</DrawerDescription>
                         </div>
                         <DrawerFooter>
                             <DrawerClose asChild>
                                 <Button variant="secondary">Close</Button>
                             </DrawerClose>
+                            <Drawer nested={true}>
+                            <DrawerTrigger asChild>
+                                <Button variant="default">
+                                    View abstract
+                                </Button>
+                            </DrawerTrigger>
+                            <DrawerContent className="flex flex-col">
+                                <DrawerHeader>
+                                    <DrawerTitle className="text-left">{typeof title === 'string' ? title : 'N/A'}</DrawerTitle>
+                                </DrawerHeader>
+                                <div className="px-4 max-h-[50vh] overflow-y-scroll">
+                                <DrawerDescription>{typeof abstract === 'string' ? abstract : 'Failed to load abstract from Semantic Scholar.'}</DrawerDescription>
+                                </div>
+                                <DrawerFooter>
+                                    <DrawerClose asChild>
+                                        <Button variant="secondary">Close</Button>
+                                    </DrawerClose>
+                                    <Button variant="default" asChild>
+                                            <a href={result.url} target="_blank" rel="noopener noreferrer">View source</a>
+                                    </Button>
+                                </DrawerFooter>
+                            </DrawerContent>
+                            </Drawer>
                         </DrawerFooter>
                     </DrawerContent>
                 </Drawer>
