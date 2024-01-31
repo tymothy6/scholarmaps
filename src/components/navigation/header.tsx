@@ -238,7 +238,7 @@ export function PageHeader () {
                 type="search"
                 value={searchQuery}
                 onChange={handleInputChange}
-                placeholder="Search for papers..."
+                placeholder="Search Semantic Scholar..."
                 disabled={isSearchLoading} 
                 />
                 <Button variant="default" size="icon" type="submit" disabled={isSearchLoading} className="px-2">

@@ -18,7 +18,7 @@ import {
 
 export function DashboardCards () {
     return (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-4 w-full">
             <Card>
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">Results</CardTitle>

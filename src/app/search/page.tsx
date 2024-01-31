@@ -2,6 +2,8 @@ import { NextRequest } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+import { Suspense } from 'react'
+
 import { Card } from '@/components/ui/card'
 
 import { Sidebar } from '@/components/navigation/sidebar'
@@ -9,6 +11,7 @@ import { PageHeader } from '@/components/navigation/header'
 
 import { SearchPaperResult, columns } from './search-columns'
 import { SearchResultTable } from './search-table'
+import { SearchTableSkeleton } from './search-skeleton'
 
 interface SearchResponse { total: number; offset: number; next: number; data: SearchPaperResult[]; }
 
@@ -38,9 +41,17 @@ export default async function Search( { searchParams }: SearchProps ) {
     const searchQuery = searchParams['query'] || '';
     let results: SearchPaperResult[] = [];
 
-    if (searchQuery) {
-        const response = await getSearchResults(searchQuery);
-        results = response.data;
+    async function SearchResultsCard() {
+        if (searchQuery) {
+            const response = await getSearchResults(searchQuery);
+            results = response.data;
+        }
+
+        return (
+            <Card>
+                <SearchResultTable columns={columns} data={results} />
+            </Card>
+        )
     }
     
     return (
@@ -48,11 +59,11 @@ export default async function Search( { searchParams }: SearchProps ) {
             <Sidebar />
             <PageHeader />
             <section className="p-4 absolute top-16 lg:left-[16.666%] lg:p-8 flex flex-col gap-2 w-full overflow-x-hidden lg:w-5/6">
-                <h1 className="text-xl lg:text-2xl font-semibold lg:font-bold mb-2">Results {searchQuery ? <span>for<span className="ml-2 px-2 py-1 text-lg lg:text-xl border bg-secondary rounded font-mono">{searchQuery}</span></span> : ''}</h1>
+                <h1 className="mt-2 lg:mt-0 text-xl lg:text-2xl font-semibold lg:font-bold mb-2">Results {searchQuery ? <span>for<span className="ml-2 px-2 py-1 text-lg lg:text-xl border bg-secondary rounded font-mono">{searchQuery}</span></span> : ''}</h1>
                 <div className="w-full">
-                <Card>
-                    <SearchResultTable columns={columns} data={results} />
-                </Card>
+                <Suspense fallback={<SearchTableSkeleton />}>
+                   <SearchResultsCard />
+                </Suspense>
                 </div>
             </section>
         </main>
