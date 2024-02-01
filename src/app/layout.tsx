@@ -31,7 +31,7 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              {children}
+            {children}
           </ThemeProvider>
         </NextAuthProvider>
         <Toaster richColors position="top-center" />
