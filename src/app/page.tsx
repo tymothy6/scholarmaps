@@ -23,7 +23,7 @@ export default async function Home() {
                 <div className="grid gap-4 w-full">
                 <DashboardCards />
                 <LineChartCard />
-                <h2 className="text-lg lg:text-xl font-semibold">Bookmarks</h2>
+                <h2 className="hidden sm:block text-lg lg:text-xl font-semibold mt-2">Bookmarks</h2>
                 <Card className="hidden sm:block">
                     <DashboardResultTable columns={columns} data={results} />
                 </Card>

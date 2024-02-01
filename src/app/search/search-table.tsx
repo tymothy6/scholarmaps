@@ -128,7 +128,7 @@ export function SearchResultTable<TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell colSpan={columns.length} className="h-36 text-center">
                 No results.
               </TableCell>
             </TableRow>
@@ -136,7 +136,7 @@ export function SearchResultTable<TData, TValue>({
         </TableBody>
       </Table>
     </div>
-        <div className="flex justify-between items-center p-2 w-full">
+        <div className="flex justify-between items-center px-2 py-4 w-full">
             <DataTablePagination table={table} />
             <DataTableViewOptions table={table} />
         </div>

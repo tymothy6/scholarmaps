@@ -39,9 +39,9 @@ interface SearchProps { searchParams: {[key: string]: string | undefined } }
 
 export default async function Search( { searchParams }: SearchProps ) {
     const searchQuery = searchParams['query'] || '';
-    let results: SearchPaperResult[] = [];
 
     async function SearchResultsCard() {
+        let results: SearchPaperResult[] = [];
         if (searchQuery) {
             const response = await getSearchResults(searchQuery);
             results = response.data;
@@ -49,7 +49,7 @@ export default async function Search( { searchParams }: SearchProps ) {
 
         return (
             <Card>
-                <SearchResultTable columns={columns} data={results} />
+                  <SearchResultTable columns={columns} data={results} />
             </Card>
         )
     }
