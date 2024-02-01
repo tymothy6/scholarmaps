@@ -319,7 +319,7 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
             return (
                 <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
-                        <Button variant="outline" className="mx-2">
+                        <Button variant="outline" className="ml-3">
                             <span className="sr-only">View abstract</span>
                             <InfoIcon className="h-4 w-4" />
                         </Button>

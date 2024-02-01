@@ -1,7 +1,3 @@
-import { NextRequest } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
-
 import { Suspense } from 'react'
 
 import { Card } from '@/components/ui/card'
@@ -12,6 +8,7 @@ import { PageHeader } from '@/components/navigation/header'
 import { SearchPaperResult, columns } from './search-columns'
 import { SearchResultTable } from './search-table'
 import { SearchTableSkeleton } from './search-skeleton'
+
 
 interface SearchResponse { total: number; offset: number; next: number; data: SearchPaperResult[]; }
 
@@ -48,9 +45,7 @@ export default async function Search( { searchParams }: SearchProps ) {
         }
 
         return (
-            <Card>
-                  <SearchResultTable columns={columns} data={results} />
-            </Card>
+            <SearchResultTable columns={columns} data={results} />
         )
     }
     
