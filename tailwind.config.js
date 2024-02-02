@@ -19,7 +19,7 @@ module.exports = {
     extend: {
       fontFamily: {
         hubotSans: ['var(--font-hubot-sans)'],
-        geistSans: ['var(--font-geist-sans)'],
+        sans: ['var(--font-geist-sans)'],
         mono: ['var(--font-geist-mono)'],
       },
       colors: {

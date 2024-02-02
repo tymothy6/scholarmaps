@@ -60,6 +60,10 @@
     @apply font-hubotSans;
   }
 
+  h3 { 
+    @apply font-hubotSans;
+  }
+
   ::selection {
     @apply bg-primary text-primary-foreground;
   }

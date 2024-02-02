@@ -131,7 +131,7 @@ export function PageHeader () {
                   <ul className="space-y-2">
                   <li>
                 <Link
-                    className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/') ? 'bg-gray-900' : ''}`}
+                    className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/') ? 'bg-gray-800' : ''}`}
                     href="/"
                 >
                     <HomeIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/') ? 'text-slate-200' : 'text-slate-400'}`} />
@@ -140,7 +140,7 @@ export function PageHeader () {
                 </li>
                 <li>
                 <Link
-                    className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/search') ? 'bg-gray-900' : ''}`}
+                    className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/search') ? 'bg-gray-800' : ''}`}
                     href="/search"
                 >
                     <SearchIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/search') ? 'text-slate-200' : 'text-slate-400'}`} />
@@ -149,7 +149,7 @@ export function PageHeader () {
                 </li>
                 <li>
                 <Link
-                    className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/projects') ? 'bg-gray-900' : ''}`}
+                    className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/projects') ? 'bg-gray-800' : ''}`}
                     href="/projects"
                 >
                     <FolderOpenIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/projects') ? 'text-slate-200' : 'text-slate-400'}`} />
@@ -158,7 +158,7 @@ export function PageHeader () {
                 </li>
                 <li>
                 <Link
-                    className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/reports') ? 'bg-gray-900' : ''}`}
+                    className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/reports') ? 'bg-gray-800' : ''}`}
                     href="/reports"
                 >
                     <FileBarChart className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/reports') ? 'text-slate-200' : 'text-slate-400'}`} />
@@ -167,7 +167,7 @@ export function PageHeader () {
                 </li>
                 <li>
                 <Link
-                    className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/team') ? 'bg-gray-900' : ''}`}
+                    className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/team') ? 'bg-gray-800' : ''}`}
                     href="/team"
                 >
                     <UsersIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/team') ? 'text-slate-200' : 'text-slate-400'}`} />

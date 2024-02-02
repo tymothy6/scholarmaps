@@ -37,14 +37,14 @@ export function Sidebar () {
   const isActive = (path: string) => pathname === path;
 
     return (
-        <aside className="hidden lg:fixed lg:top-0 lg:flex lg:flex-col lg:justify-between bg-slate-950 dark:bg-slate-200 w-1/6 h-[100vh] border-r p-4">
+        <aside className="hidden lg:z-[10] lg:fixed lg:top-0 lg:flex lg:flex-col lg:justify-between bg-slate-950 dark:bg-slate-200 w-1/6 h-[100vh] border-r p-4">
         <div className="flex flex-col justify-start gap-2">
           <BoxIcon className="ml-2 mt-2 h-8 w-8 text-slate-200" />
         <nav className="mt-16">
           <ul className="space-y-2">
             <li>
               <Link
-                className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/') ? 'bg-gray-900' : ''}`}
+                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/') ? 'bg-slate-800 hover:bg-slate-800' : ''}`}
                 href="/"
               >
                 <HomeIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/') ? 'text-slate-200' : 'text-slate-400'}`} />
@@ -53,7 +53,7 @@ export function Sidebar () {
             </li>
             <li>
               <Link
-                className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/search') ? 'bg-gray-900' : ''}`}
+                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/search') ? 'bg-slate-800 hover:bg-slate-800' : ''}`}
                 href="/search"
               >
                 <SearchIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/search') ? 'text-slate-200' : 'text-slate-400'}`} />
@@ -62,7 +62,7 @@ export function Sidebar () {
             </li>
             <li>
               <Link
-                className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/projects') ? 'bg-gray-900' : ''}`}
+                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/projects') ? 'bg-slate-800 hover:bg-slate-800' : ''}`}
                 href="/projects"
               >
                 <FolderOpenIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/projects') ? 'text-slate-200' : 'text-slate-400'}`} />
@@ -71,7 +71,7 @@ export function Sidebar () {
             </li>
             <li>
               <Link
-                className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/reports') ? 'bg-gray-900' : ''}`}
+                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/reports') ? 'bg-slate-800 hover:bg-slate-800' : ''}`}
                 href="/reports"
               >
                 <FileBarChart className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/reports') ? 'text-slate-200' : 'text-slate-400'}`} />
@@ -80,7 +80,7 @@ export function Sidebar () {
             </li>
             <li>
               <Link
-                className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/team') ? 'bg-gray-900' : ''}`}
+                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/team') ? 'bg-slate-800 hover:bg-slate-800' : ''}`}
                 href="/team"
               >
                 <UsersIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/team') ? 'text-slate-200' : 'text-slate-400'}`} />
@@ -94,7 +94,7 @@ export function Sidebar () {
           <ul className="space-y-2">
             <li>
               <Link
-                className="group flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-900"
+                className="group flex items-center gap-2 py-2 px-3 rounded transition-colors duration-300 hover:bg-slate-900"
                 href="#"
               >
                 <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[10px] font-mono">T</kbd>
@@ -103,7 +103,7 @@ export function Sidebar () {
             </li>
             <li>
               <Link
-                className="group flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-900"
+                className="group flex items-center gap-2 py-2 px-3 rounded transition-colors duration-300 hover:bg-slate-900"
                 href="#"
               >
                 <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[10px] font-mono">V</kbd>
@@ -112,7 +112,7 @@ export function Sidebar () {
             </li>
             <li>
               <Link
-                className="group flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-900"
+                className="group flex items-center gap-2 py-2 px-3 rounded transition-colors duration-300 hover:bg-slate-900"
                 href="#"
               >
                 <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[10px] font-mono">A</kbd>
@@ -121,7 +121,7 @@ export function Sidebar () {
             </li>
             <li>
               <Link
-                className="group flex items-center gap-2 py-2 px-3 rounded hover:bg-gray-900"
+                className="group flex items-center gap-2 py-2 px-3 rounded transition-colors duration-300 hover:bg-slate-900"
                 href="#"
               >
                 <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[10px] font-mono">N</kbd>
@@ -133,7 +133,7 @@ export function Sidebar () {
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="group flex justify-start items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 data-[state=open]:bg-gray-900">
+          <Button variant="ghost" className="group flex justify-start items-center gap-3 py-2 px-3 rounded hover:bg-slate-900 data-[state=open]:bg-slate-900 data-[state=open]:text-slate-200">
             <SettingsIcon className="w-5 h-5 text-slate-400 group-hover:text-slate-200" />
             <span className="text-slate-400 group-hover:text-gray-200 font-medium">Settings</span>
           </Button>

@@ -89,6 +89,10 @@ const filters: Filter[] = [
   {
     value: "journal",
     label: "Journal",
+  },
+  {
+    value: "abstract",
+    label: "Abstract",
   }
 ]
 

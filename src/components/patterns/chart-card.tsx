@@ -101,11 +101,11 @@ export function LineChartCard() {
                 dataKey="average"
                 activeDot={{
                   r: 6,
-                  style: { fill: "#D5D5D5", opacity: 0.25 },
+                  style: { fill: "#cbd5e1", opacity: 0.25 },
                 }}
                 style={
                   {
-                    stroke: "#71717a",
+                    stroke: "#94a3b8",
                     opacity: 0.25,
                   } as React.CSSProperties
                 }
@@ -116,11 +116,11 @@ export function LineChartCard() {
                 strokeWidth={2}
                 activeDot={{
                   r: 8,
-                  style: { fill: "#D5D5D5" },
+                  style: { fill: "#cbd5e1" },
                 }}
                 style={
                   {
-                    stroke: "#71717a",
+                    stroke: "#64748b",
                   } as React.CSSProperties
                 }
               />

@@ -5,7 +5,7 @@ export async function GET(req: NextRequest) {
 
     const queryParams = new URLSearchParams({
         query: searchQuery,
-        limit: '100',
+        limit: '100', // Must be <= 100 for paper relevance search
         fields: 'paperId,url,title,abstract,year,referenceCount,citationCount,influentialCitationCount,tldr,journal,authors,publicationTypes',
     });
 
