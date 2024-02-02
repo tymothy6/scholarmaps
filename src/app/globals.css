@@ -52,6 +52,14 @@
     scroll-behavior: smooth;
   }
 
+  h1 { 
+    @apply font-hubotSans;
+  }
+
+  h2 { 
+    @apply font-hubotSans;
+  }
+
   ::selection {
     @apply bg-primary text-primary-foreground;
   }
@@ -71,7 +79,6 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
-    font-family: "Inter", sans-serif;
   }
 }
 

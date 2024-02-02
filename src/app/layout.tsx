@@ -1,12 +1,18 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import localFont from 'next/font/local'
+import { GeistSans } from 'geist/font/sans'
+import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
 import { ThemeProvider } from '@/components/theme-provider'
 import NextAuthProvider from '@/components/session-provider'
 import { Toaster } from '@/components/ui/sonner'
 
-const inter = Inter({ subsets: ['latin'], display: 'swap' })
+const hubotSans = localFont({
+  src: './Hubot-Sans.woff2',
+  display: 'swap',
+  variable: '--font-hubot-sans',
+})
 
 export const metadata: Metadata = {
   title: {
@@ -22,8 +28,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={`${hubotSans.variable} ${GeistSans.variable} ${GeistMono.variable}`}>
+      <body className={GeistSans.className}>
         <NextAuthProvider>
           <ThemeProvider
               attribute="class"

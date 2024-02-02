@@ -222,11 +222,11 @@ export function SearchResultTable<TData, TValue>({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-          <Button variant="destructive" size="icon">
-            <span className="sr-only">Reset filters</span>
-            <RotateCcwIcon className="h-4 w-4" />
-          </Button>
-          </TooltipTrigger>
+              <Button variant="destructive" size="icon">
+                <span className="sr-only">Reset filters</span>
+                <RotateCcwIcon className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
           <TooltipContent className="text-sm">Reset all filters</TooltipContent>
           </Tooltip>
         </TooltipProvider>
