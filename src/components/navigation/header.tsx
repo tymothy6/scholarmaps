@@ -34,6 +34,12 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipContent,
+  TooltipTrigger, 
+} from "@/components/ui/tooltip"
 import { toast } from "sonner"
 
 import { 
@@ -247,20 +253,27 @@ export function PageHeader () {
               </form>
             </div>
             <div className="hidden sm:flex gap-4 w-full items-center justify-between ml-2">
+              <TooltipProvider>
+                <Tooltip>
               <DropdownMenu>
+                <TooltipTrigger asChild>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="data-[state=open]:bg-accent">
                   <span className="sr-only">Notifications</span>
                   <BellIcon className="h-4 w-4 text-muted-foreground" />
                   </Button>
                 </DropdownMenuTrigger>
+                </TooltipTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuLabel>Notifications</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>On</DropdownMenuItem>
                   <DropdownMenuItem>Off</DropdownMenuItem>
                 </DropdownMenuContent>
+                <TooltipContent className="text-sm">Notifications</TooltipContent>
               </DropdownMenu>
+              </Tooltip>
+              </TooltipProvider>
               <div className="flex gap-1 w-max items-center justify-end">
               <Avatar className="h-8 w-8 mr-2">
                 <AvatarImage src={session?.data?.user?.image ?? ''} />

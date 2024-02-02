@@ -167,8 +167,8 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                             </Button>
                         </HoverCardTrigger>
                         <HoverCardContent className="w-40 lg:w-80">
-                            <div className="space-y-1">
-                                <div className="flex justify-between items-start">
+                            <div className="space-y-2">
+                                <div className="flex gap-2 items-start">
                                     <h4 className="text-sm font-semibold">{typeof title === 'string' ? title : 'N/A'}</h4>
                                     <Badge variant="default" className="mr-2">tl;dr</Badge>
                                 </div>

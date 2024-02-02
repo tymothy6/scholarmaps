@@ -5,7 +5,9 @@ import * as React from "react"
 import { useMediaQuery } from "@/lib/use-media-query"
 
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { 
+  Card
+ } from "@/components/ui/card"
 import { 
   Command,
   CommandEmpty,
@@ -17,7 +19,6 @@ import {
 import { 
   Drawer,
   DrawerContent,
-  DrawerHeader,
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import { 
@@ -26,6 +27,18 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Input } from "@/components/ui/input"
+import { 
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 import {
   ColumnDef,
@@ -52,7 +65,8 @@ import {
 // Components for pagination controls and toggling column visibility
 import { DataTablePagination } from "@/components/patterns/table-pagination"
 import { DataTableViewOptions } from "@/components/patterns/table-column-toggle"
-import { FilterIcon } from "lucide-react"
+
+import { FilterIcon, RotateCcwIcon } from "lucide-react"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -156,16 +170,23 @@ export function SearchResultTable<TData, TValue>({
         className="w-full sm:max-w-sm"
         />
         {isDesktop ? (
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-              <Button variant="secondary" size="default">
-                {selectedFilter ? <span>{selectedFilter.label}</span> : <FilterIcon className="h-4 w-4"/>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[150px] p-0" align="start">
-              <FilterList setOpen={setOpen} setSelectedFilter={setSelectedFilter} />
-            </PopoverContent>
-          </Popover>
+          <TooltipProvider>
+            <Tooltip>
+              <Popover open={open} onOpenChange={setOpen}>
+                <TooltipTrigger asChild>
+                <PopoverTrigger asChild>
+                  <Button variant="secondary" size={selectedFilter ? "default" : "icon"}>
+                    {selectedFilter ? <span>{selectedFilter.label}</span> : <FilterIcon className="h-4 w-4"/>}
+                  </Button>
+                </PopoverTrigger>
+                </TooltipTrigger>
+                <PopoverContent className="w-[150px] p-0" align="start">
+                  <FilterList setOpen={setOpen} setSelectedFilter={setSelectedFilter} />
+                </PopoverContent>
+                <TooltipContent className="text-sm">Filter results</TooltipContent>
+              </Popover>
+            </Tooltip>
+          </TooltipProvider>
         ) : 
         (
           <Drawer open={open} onOpenChange={setOpen}>
@@ -175,15 +196,40 @@ export function SearchResultTable<TData, TValue>({
               </Button>
             </DrawerTrigger>
             <DrawerContent>
-              <DrawerHeader className="justify-start">
-                <h1 className="text-xl font-semibold">Filter results</h1>
-              </DrawerHeader>
-              <div className="border-t">
-                <FilterList setOpen={setOpen} setSelectedFilter={setSelectedFilter} />
-              </div>
+              <Tabs defaultValue="filter" className="w-full p-4">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="filter">
+                    Filter
+                  </TabsTrigger>
+                  <TabsTrigger value="sort">
+                    Sort
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="filter">
+                  <Card className="overflow-hidden">
+                      <FilterList setOpen={setOpen} setSelectedFilter={setSelectedFilter} />
+                  </Card>
+                </TabsContent>
+                <TabsContent value="sort">
+                <Card className="overflow-hidden">
+                    <SortList setOpen={setOpen} setSelectedFilter={setSelectedFilter} />
+                </Card>
+                </TabsContent>
+              </Tabs>
             </DrawerContent>
           </Drawer>
         )}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+          <Button variant="destructive" size="icon">
+            <span className="sr-only">Reset filters</span>
+            <RotateCcwIcon className="h-4 w-4" />
+          </Button>
+          </TooltipTrigger>
+          <TooltipContent className="text-sm">Reset all filters</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
       <Card>
         <div className="w-full">
@@ -251,6 +297,39 @@ function FilterList({
   return (
     <Command>
       <CommandInput placeholder="Filter by..." />
+      <CommandList>
+        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandGroup>
+          {filters.map((filter) => (
+            <CommandItem
+              key={filter.value}
+              value={filter.value}
+              onSelect={(value) => {
+                setSelectedFilter(
+                  filters.find((priority) => priority.value === value) || null
+                )
+                setOpen(false)
+              }}
+            >
+              {filter.label}
+            </CommandItem>
+          ))}
+        </CommandGroup>
+      </CommandList>
+    </Command>
+  )
+}
+
+function SortList({
+  setOpen,
+  setSelectedFilter,
+}: {
+  setOpen: (open: boolean) => void
+  setSelectedFilter: (filter: Filter | null) => void
+}) {
+  return (
+    <Command>
+      <CommandInput placeholder="Sort by..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup>
