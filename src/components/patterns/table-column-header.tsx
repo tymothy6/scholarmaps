@@ -3,6 +3,7 @@ import {
     ArrowUpIcon,
     CaretSortIcon,
     EyeNoneIcon,
+    Cross1Icon,
   } from "@radix-ui/react-icons"
   import { Column } from "@tanstack/react-table"
    
@@ -59,6 +60,15 @@ import {
               <ArrowDownIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
               Desc
             </DropdownMenuItem>
+            {column.getIsSorted() && ( 
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => column.clearSorting()}>
+                  <Cross1Icon className="mr-2 h-3.5 w-3.5 text-destructive" />
+                  <span className="text-destructive">Clear</span>
+                </DropdownMenuItem>
+              </>
+            )}
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
               <EyeNoneIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />

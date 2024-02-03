@@ -104,11 +104,14 @@ export function SearchResultTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
+
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
   const [open, setOpen] = React.useState(false);
-  const [selectedFilter, setSelectedFilter] = React.useState<Filter | null>( null );
+  const defaultFilter = filters[0];
+  const [selectedFilter, setSelectedFilter] = React.useState<Filter | null>(defaultFilter); // the default filter is the first one
+
 
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [visibleColumns, setVisibleColumns] = React.useState({
@@ -166,11 +169,12 @@ export function SearchResultTable<TData, TValue>({
       <div className="flex items-center py-4 gap-2">
         <Input
         placeholder="Filter results"
-        value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-        onChange={(event) =>
-          table.getColumn("title")?.setFilterValue(event.target.value)
-          
-        }
+        value={(selectedFilter ? table.getColumn(selectedFilter.value)?.getFilterValue() : '') as string}
+        onChange={(event) => {
+          if (selectedFilter) {
+            table.getColumn(selectedFilter.value)?.setFilterValue(event.target.value)
+          }
+        }}
         className="w-full sm:max-w-sm"
         />
         {isDesktop ? (
@@ -180,7 +184,7 @@ export function SearchResultTable<TData, TValue>({
                 <TooltipTrigger asChild>
                 <PopoverTrigger asChild>
                   <Button variant="secondary" size={selectedFilter ? "default" : "icon"}>
-                    {selectedFilter ? <span>{selectedFilter.label}</span> : <FilterIcon className="h-4 w-4"/>}
+                    {selectedFilter ? <span>{selectedFilter.label}<FilterIcon className="inline ml-2 h-4 w-4"/></span> : <FilterIcon className="h-4 w-4"/>}
                   </Button>
                 </PopoverTrigger>
                 </TooltipTrigger>
@@ -310,7 +314,7 @@ function FilterList({
               value={filter.value}
               onSelect={(value) => {
                 setSelectedFilter(
-                  filters.find((priority) => priority.value === value) || null
+                  filters.find((filter) => filter.value === value) || null
                 )
                 setOpen(false)
               }}

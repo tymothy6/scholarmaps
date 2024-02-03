@@ -44,7 +44,7 @@ export function Sidebar () {
           <ul className="space-y-2">
             <li>
               <Link
-                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/') ? 'bg-slate-800 hover:bg-slate-800' : ''}`}
+                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
                 href="/"
               >
                 <HomeIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/') ? 'text-slate-200' : 'text-slate-400'}`} />
@@ -53,7 +53,7 @@ export function Sidebar () {
             </li>
             <li>
               <Link
-                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/search') ? 'bg-slate-800 hover:bg-slate-800' : ''}`}
+                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/search') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
                 href="/search"
               >
                 <SearchIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/search') ? 'text-slate-200' : 'text-slate-400'}`} />
@@ -62,7 +62,7 @@ export function Sidebar () {
             </li>
             <li>
               <Link
-                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/projects') ? 'bg-slate-800 hover:bg-slate-800' : ''}`}
+                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/projects') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
                 href="/projects"
               >
                 <FolderOpenIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/projects') ? 'text-slate-200' : 'text-slate-400'}`} />
@@ -71,7 +71,7 @@ export function Sidebar () {
             </li>
             <li>
               <Link
-                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/reports') ? 'bg-slate-800 hover:bg-slate-800' : ''}`}
+                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/reports') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
                 href="/reports"
               >
                 <FileBarChart className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/reports') ? 'text-slate-200' : 'text-slate-400'}`} />
@@ -80,7 +80,7 @@ export function Sidebar () {
             </li>
             <li>
               <Link
-                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/team') ? 'bg-slate-800 hover:bg-slate-800' : ''}`}
+                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/team') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
                 href="/team"
               >
                 <UsersIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/team') ? 'text-slate-200' : 'text-slate-400'}`} />

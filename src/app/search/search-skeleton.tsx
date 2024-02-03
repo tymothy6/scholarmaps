@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card"
 
 export function SearchTableSkeleton () {
     return (
-        <Card>
+        <Card className="mt-2">
             <div className="flex sm:hidden flex-col gap-2 w-full">
                 <div className="flex sm:hidden items-center p-4 justify-between w-full border-b">
                     <Skeleton className="h-4 w-32" />
