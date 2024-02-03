@@ -39,6 +39,9 @@ export default function Login() {
           <div className="relative z-20 flex items-center text-2xl font-medium">
             Scholar Maps
           </div>
+          <div className="absolute bottom-12 z-20 flex items-center text-lg font-medium">
+            Discover connections between papers & save time during literature search
+          </div>
         </div>
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">

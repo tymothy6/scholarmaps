@@ -111,7 +111,7 @@ export function PageHeader () {
         if (session?.status === 'unauthenticated') {
           router.push('/login')
         }
-      }, [session])
+      }, [session, router])
 
     return (
         <header className="fixed top-0 left-0 z-[49] w-full lg:w-5/6 lg:left-[16.666%] h-max">

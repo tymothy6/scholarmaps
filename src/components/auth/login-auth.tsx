@@ -159,7 +159,7 @@ export function LoginAuth({ className, ...props }: UserAuthFormProps) {
     if (session?.status === 'authenticated') {
       router.push('/')
     }
-  }, [session])
+  }, [session, router])
 
   async function onSubmit(values: z.infer<typeof userAuthFormSchema>) {
     setIsLoading(true);

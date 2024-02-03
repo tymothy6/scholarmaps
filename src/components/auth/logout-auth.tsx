@@ -18,7 +18,7 @@ export function LogoutAuth() {
         if (session?.status === 'unauthenticated') {
           router.push('/login')
         }
-      }, [session])
+      }, [session, router])
 
     return (
         <div className="grid gap-2">

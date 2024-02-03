@@ -230,7 +230,7 @@ export const columns: ColumnDef<DashboardPaperResult>[] = [
                                 <Button variant="secondary">Close</Button>
                             </DialogClose>
                         </DialogFooter>
-                    </DialogContent>"
+                    </DialogContent>
                 </Dialog>
             )
         }
