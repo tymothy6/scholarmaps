@@ -40,7 +40,7 @@ export default function Login() {
             Scholar Maps
           </div>
           <div className="absolute bottom-12 z-20 flex items-center text-lg font-medium">
-            Discover connections between papers & save time during literature search
+            Discover new connections between papers & save time on literature search
           </div>
         </div>
         <div className="lg:p-8">
