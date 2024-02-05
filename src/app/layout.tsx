@@ -8,6 +8,9 @@ import { ThemeProvider } from '@/components/theme-provider'
 import NextAuthProvider from '@/components/session-provider'
 import { Toaster } from '@/components/ui/sonner'
 
+import { Sidebar } from '@/components/navigation/sidebar'
+import { PageHeader } from '@/components/navigation/header'
+
 const hubotSans = localFont({
   src: './Hubot-Sans.woff2',
   display: 'swap',
@@ -37,7 +40,9 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-            {children}
+              <Sidebar />
+              <PageHeader />
+              {children}
           </ThemeProvider>
         </NextAuthProvider>
         <Toaster richColors position="top-center" />

@@ -12,7 +12,7 @@ import {
 import { 
     BookIcon,
     NewspaperIcon,
-    WaypointsIcon,
+    RouteIcon,
     UsersIcon
 } from "lucide-react";
 
@@ -31,8 +31,8 @@ export function DashboardCards () {
                     </Card>
                     <Card>
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                        <CardTitle className="text-sm font-semibold">Graphs</CardTitle>
-                        <WaypointsIcon className="w-6 h-6" />
+                        <CardTitle className="text-sm font-semibold">Maps</CardTitle>
+                        <RouteIcon className="w-6 h-6" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-mono font-bold">567</div>

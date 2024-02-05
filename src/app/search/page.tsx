@@ -1,14 +1,14 @@
 import { Suspense } from 'react'
 
-import { Card } from '@/components/ui/card'
-
-import { Sidebar } from '@/components/navigation/sidebar'
-import { PageHeader } from '@/components/navigation/header'
-
 import { SearchPaperResult, columns } from './search-columns'
 import { SearchResultTable } from './search-table'
 import { SearchTableSkeleton } from './search-skeleton'
 
+export async function generateMetadata({ searchParams }: { searchParams: {[key: string]: string | undefined } }) {
+    const title = searchParams['query'] ? `Results for ${searchParams['query']}` : 'Search';
+    const description = 'Search for papers in the Semantic Scholar research corpus';
+    return { title, description };
+}
 
 interface SearchResponse { total: number; offset: number; next: number; data: SearchPaperResult[]; }
 
@@ -51,8 +51,6 @@ export default async function Search( { searchParams }: SearchProps ) {
     
     return (
         <main className="flex flex-col gap-2 w-full">
-            <Sidebar />
-            <PageHeader />
             <section className="bg-background p-4 absolute top-16 lg:left-[16.666%] lg:p-8 flex flex-col gap-2 w-full overflow-x-hidden lg:w-5/6">
                 <h1 className="mt-2 lg:mt-0 text-xl lg:text-2xl font-semibold lg:font-bold">Results {searchQuery ? <span>for<span className="ml-2 px-2 py-1 text-lg lg:text-xl border bg-secondary rounded font-mono">{searchQuery}</span></span> : ''}</h1>
                 <div className="w-full">

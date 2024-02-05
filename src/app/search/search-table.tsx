@@ -193,7 +193,7 @@ export function SearchResultTable<TData, TValue>({
                 <TooltipTrigger asChild>
                 <PopoverTrigger asChild>
                   <Button variant="secondary" size={selectedFilter ? "default" : "icon"}>
-                    {selectedFilter ? <span>{selectedFilter.label}<FilterIcon className="inline ml-2 h-4 w-4"/></span> : <FilterIcon className="h-4 w-4"/>}
+                    {selectedFilter ? <span><FilterIcon className="inline mr-2 h-4 w-4"/>{selectedFilter.label}</span> : <FilterIcon className="h-4 w-4"/>}
                   </Button>
                 </PopoverTrigger>
                 </TooltipTrigger>

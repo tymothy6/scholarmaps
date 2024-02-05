@@ -163,8 +163,10 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                 <div className="pl-0 pr-2 py-2">
                     <HoverCard>
                         <HoverCardTrigger asChild>
-                            <Button variant="link" className="w-max whitespace-normal h-max focus-visible:ring-0">
+                            <Button variant="link" className="w-max whitespace-normal h-max focus-visible:ring-0" asChild>
+                                <a href={result.url} target="_blank" rel="noopener noreferrer">
                                 <span className="w-72 text-left">{typeof title === 'string' ? title : 'N/A'}</span>
+                                </a>
                             </Button>
                         </HoverCardTrigger>
                         <HoverCardContent className="w-40 lg:w-80">

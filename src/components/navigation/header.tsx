@@ -46,8 +46,7 @@ import {
   BoxIcon,
   HomeIcon, 
   SearchIcon, 
-  CreditCardIcon,
-  FolderOpenIcon, 
+  CreditCardIcon, 
   FileBarChart, 
   UsersIcon, 
   SettingsIcon, 
@@ -65,6 +64,7 @@ import {
   PlusIcon,
   Loader2Icon,
   MonitorIcon,
+  RouteIcon,
 } from "lucide-react";
 
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
@@ -149,11 +149,11 @@ export function PageHeader () {
                 </li>
                 <li>
                 <Link
-                    className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/projects') ? 'bg-gray-800' : ''}`}
-                    href="/projects"
+                    className={`group flex items-center gap-3 py-2 px-3 rounded hover:bg-gray-900 ${isActive('/map') ? 'bg-gray-800' : ''}`}
+                    href="/map"
                 >
-                    <FolderOpenIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/projects') ? 'text-slate-200' : 'text-slate-400'}`} />
-                    <span className={`group-hover:text-gray-200 ${isActive('/projects') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium`}>Projects</span>
+                    <RouteIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/map') ? 'text-slate-200' : 'text-slate-400'}`} />
+                    <span className={`group-hover:text-gray-200 ${isActive('/map') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium`}>Map</span>
                 </Link>
                 </li>
                 <li>

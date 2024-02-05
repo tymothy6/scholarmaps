@@ -21,7 +21,7 @@ import {
   BoxIcon,
   HomeIcon, 
   SearchIcon, 
-  FolderOpenIcon, 
+  RouteIcon, 
   FileBarChart, 
   UsersIcon, 
   SettingsIcon,
@@ -62,11 +62,11 @@ export function Sidebar () {
             </li>
             <li>
               <Link
-                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/projects') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
-                href="/projects"
+                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/map') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
+                href="/map"
               >
-                <FolderOpenIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/projects') ? 'text-slate-200' : 'text-slate-400'}`} />
-                <span className={`group-hover:text-gray-200 ${isActive('/projects') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium`}>Projects</span>
+                <RouteIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/map') ? 'text-slate-200' : 'text-slate-400'}`} />
+                <span className={`group-hover:text-gray-200 ${isActive('/map') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium`}>Map</span>
               </Link>
             </li>
             <li>
