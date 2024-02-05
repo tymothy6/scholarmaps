@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 
 import { LoginAuth } from '@/components/auth/login-auth'
+import { LoginTestimonialCarousel } from '@/components/patterns/login-carousel'
 
 export const metadata: Metadata = {
   title: "Login",
@@ -36,12 +37,11 @@ export default function Login() {
             className="object-cover"
           />
           {/* <div className="absolute inset-0 bg-zinc-900" /> */}
-          <div className="relative z-20 flex items-center text-2xl font-medium">
+          <div className="relative z-20 flex items-center text-2xl font-hubotSans font-medium">
             Scholar Maps
           </div>
-          <div className="absolute bottom-12 z-20 flex items-center text-lg font-medium">
-            Discover new connections between papers & save time on literature search
-          </div>
+          <LoginTestimonialCarousel className="absolute bottom-24 max-w-xl ml-16"/>
+
         </div>
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
