@@ -16,6 +16,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
+  import { 
+    Tooltip,
+    TooltipTrigger,
+    TooltipProvider,
+    TooltipContent,
+  } from "@/components/ui/tooltip"
    
   interface DataTableColumnHeaderProps<TData, TValue>
     extends React.HTMLAttributes<HTMLDivElement> {
@@ -34,7 +40,10 @@ import {
    
     return (
       <div className={cn("flex items-center space-x-2", className)}>
-        <DropdownMenu>
+        <TooltipProvider>
+          <Tooltip>
+          <DropdownMenu>
+          <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
@@ -51,6 +60,7 @@ import {
               )}
             </Button>
           </DropdownMenuTrigger>
+          </TooltipTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
               <ArrowUpIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
@@ -63,9 +73,9 @@ import {
             {column.getIsSorted() && ( 
               <>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => column.clearSorting()}>
-                  <Cross1Icon className="mr-2 h-3.5 w-3.5 text-destructive" />
-                  <span className="text-destructive">Clear</span>
+                <DropdownMenuItem onClick={() => column.clearSorting()} className="group focus:bg-destructive">
+                  <Cross1Icon className="mr-2 h-3.5 w-3.5 text-destructive transition-colors group-focus:text-destructive-foreground" />
+                  <span className="text-destructive transition-colors group-focus:text-destructive-foreground">Reset</span>
                 </DropdownMenuItem>
               </>
             )}
@@ -75,7 +85,10 @@ import {
               Hide
             </DropdownMenuItem>
           </DropdownMenuContent>
+          <TooltipContent className="text-sm">Sort column</TooltipContent>
         </DropdownMenu>
+        </Tooltip>
+        </TooltipProvider>
       </div>
     )
   }

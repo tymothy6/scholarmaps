@@ -77,6 +77,7 @@ type Filter = {
   value: string
   label: string
 }
+
 const filters: Filter[] = [
   {
     value: "title",
@@ -104,11 +105,11 @@ export function SearchResultTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
-
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
   const [open, setOpen] = React.useState(false);
+
   const defaultFilter = filters[0];
   const [selectedFilter, setSelectedFilter] = React.useState<Filter | null>(defaultFilter); // the default filter is the first one
 
@@ -164,15 +165,23 @@ export function SearchResultTable<TData, TValue>({
     }
   }, [table, visibleColumns])
 
+  const handleResetFilters = () => {
+    setColumnFilters([]); 
+    setSelectedFilter(defaultFilter);
+    if (defaultFilter) {
+      table.getColumn(defaultFilter.value)?.setFilterValue('');
+    }
+  };
+
   return (
     <div>
       <div className="flex items-center py-4 gap-2">
         <Input
         placeholder="Filter results"
-        value={(selectedFilter ? table.getColumn(selectedFilter.value)?.getFilterValue() : '') as string}
+        value={selectedFilter ? (table.getColumn(selectedFilter.value)?.getFilterValue() as string) ?? "" : ""}
         onChange={(event) => {
           if (selectedFilter) {
-            table.getColumn(selectedFilter.value)?.setFilterValue(event.target.value)
+            table.getColumn(selectedFilter.value)?.setFilterValue(event.target.value);
           }
         }}
         className="w-full sm:max-w-sm"
@@ -230,10 +239,12 @@ export function SearchResultTable<TData, TValue>({
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="destructive" size="icon">
+              { table.getColumn("title")?.getFilterValue() ?
+              <Button variant="destructive" size="icon" onClick={() => handleResetFilters()}>
                 <span className="sr-only">Reset filters</span>
                 <RotateCcwIcon className="h-4 w-4" />
               </Button>
+              : null }
             </TooltipTrigger>
           <TooltipContent className="text-sm">Reset all filters</TooltipContent>
           </Tooltip>

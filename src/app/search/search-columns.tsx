@@ -407,7 +407,7 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
         return <div className="text-right pr-8 sm:pl-4 py-2">
             <TooltipProvider>
                 <Tooltip>
-                    <TooltipTrigger>
+                    <TooltipTrigger className="flex transition-colors p-2 rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
                     {typeof citationCount === 'number' ? citationCount : 'N/A'}
                     </TooltipTrigger>
                     <TooltipContent side="bottom" className="text-sm w-max-12">
