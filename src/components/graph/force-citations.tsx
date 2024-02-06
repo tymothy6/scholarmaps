@@ -28,11 +28,33 @@ const sampleData = {
 }
 
 export function CitationGraph() {
+    const [dimensions, setDimensions] = React.useState({ width: 300, height: 600 });
+    const graphRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        const handleResize = (entries: ResizeObserverEntry[]) => {
+            for (let entry of entries) {
+                const { width, height } = entry.contentRect;
+                setDimensions({ width, height });
+            }
+        };
+    
+        const observer = new ResizeObserver(handleResize);
+    
+        if (graphRef.current) {
+            observer.observe(graphRef.current);
+        }
+    
+        return () => observer.disconnect();
+    }, []);
+
     return (
-        <Card>
+        <Card ref={graphRef} className="w-full h-full min-w-0">
             <ForceGraph2D
                 graphData={sampleData}
                 nodeAutoColorBy="id"
+                width={dimensions.width}
+                height={dimensions.height}
             />
         </Card>
     )

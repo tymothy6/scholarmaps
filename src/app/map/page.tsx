@@ -17,7 +17,7 @@ export default async function Home() {
                 <h1 className="mt-2 lg:mt-0 text-xl lg:text-2xl font-semibold lg:font-bold mb-2">Map</h1>
                 <div className="grid gap-4 w-full">
 
-                <h2 className="hidden sm:block text-lg lg:text-xl font-semibold mt-2">Citation graph</h2>
+                <h2 className="text-lg lg:text-xl font-semibold mt-2">Citation graph</h2>
                     <CitationGraph />
                 </div>
                 <div className="p-4">
