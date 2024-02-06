@@ -28,9 +28,9 @@ export function LoginTestimonialCarousel({ className }: { className?: string}) {
             }),
         ]}
         >
-            <CarouselContent className="-ml-4">
-                <CarouselItem className="pl-4">
-                    <Card className="p-4">
+            <CarouselContent className="-ml-2">
+                <CarouselItem className="pl-2">
+                    <Card className="p-4 max-w-md 2xl:max-w-xl">
                     <div className="flex flex-col items-start justify-center space-y-2">
                         <p className="text-left text-lg font-medium">
                         &quot;Scholar Maps has been a game changer for me. I&apos;ve been able to find papers that I wouldn&apos;t have found otherwise.&quot;
@@ -41,8 +41,8 @@ export function LoginTestimonialCarousel({ className }: { className?: string}) {
                     </div>
                     </Card>
                 </CarouselItem>
-                <CarouselItem className="pl-4"> 
-                <Card className="p-4">
+                <CarouselItem className="pl-2"> 
+                <Card className="p-4 max-w-md 2xl:max-w-xl">
                     <div className="flex flex-col items-start justify-center space-y-2">
                         <p className="text-left text-lg font-medium">
                         &quot;Scholar Maps has saved me countless hours of time. I&apos;ve recommended it to all my trainees.&quot;
@@ -53,8 +53,8 @@ export function LoginTestimonialCarousel({ className }: { className?: string}) {
                     </div>
                     </Card>
                 </CarouselItem>
-                <CarouselItem className="pl-4">
-                <Card className="p-4">
+                <CarouselItem className="pl-2">
+                <Card className="p-4 max-w-md 2xl:max-w-xl">
                     <div className="flex flex-col items-start justify-center space-y-2">
                         <p className="text-left text-lg font-medium">
                         &quot;The mobile app is great. I can find papers on the go and save them for later.&quot;

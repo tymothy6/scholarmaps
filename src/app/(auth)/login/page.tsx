@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import AuthImage from '../../../public/auth-image.jpg'
+import AuthImage from '../../../../public/auth-image.jpg'
 
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
@@ -40,7 +40,7 @@ export default function Login() {
           <div className="relative z-20 flex items-center text-2xl font-hubotSans font-medium">
             Scholar Maps
           </div>
-          <LoginTestimonialCarousel className="absolute bottom-24 max-w-xl ml-16"/>
+          <LoginTestimonialCarousel className="absolute bottom-24 lg:ml-4 2xl:ml-16"/>
 
         </div>
         <div className="lg:p-8">

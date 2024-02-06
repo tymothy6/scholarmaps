@@ -18,12 +18,30 @@ const sampleData = {
           "name": "name2",
           "val": 10 
         },
+        { 
+          "id": "id3",
+          "name": "name3",
+          "val": 12 
+        },
+        { 
+          "id": "id4",
+          "name": "name4",
+          "val": 24
+        },
     ],
     "links": [
         {
             "source": "id1",
             "target": "id2"
         },
+        {
+            "source": "id2",
+            "target": "id3"
+        },
+        {
+            "source": "id3",
+            "target": "id1"
+        }
     ]
 }
 

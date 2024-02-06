@@ -50,15 +50,13 @@ export default async function Search( { searchParams }: SearchProps ) {
     }
     
     return (
-        <main className="flex flex-col gap-2 w-full">
-            <section className="bg-background p-4 absolute top-16 lg:left-[16.666%] lg:p-8 flex flex-col gap-2 w-full overflow-x-hidden lg:w-5/6">
-                <h1 className="mt-2 lg:mt-0 text-xl lg:text-2xl font-semibold lg:font-bold">Results {searchQuery ? <span>for<span className="ml-2 px-2 py-1 text-lg lg:text-xl border bg-secondary rounded font-mono">{searchQuery}</span></span> : ''}</h1>
-                <div className="w-full">
+        <section className="bg-background p-4 absolute top-16 lg:left-[16.666%] lg:p-8 flex flex-col gap-2 w-full overflow-x-hidden lg:w-5/6">
+            <h1 className="mt-2 lg:mt-0 text-xl lg:text-2xl font-semibold lg:font-bold">Results {searchQuery ? <span>for<span className="ml-2 px-2 py-1 text-lg lg:text-xl border bg-secondary rounded font-mono">{searchQuery}</span></span> : ''}</h1>
+            <div className="w-full">
                 <Suspense fallback={<SearchTableSkeleton />}>
                    <SearchResultsCard />
                 </Suspense>
-                </div>
-            </section>
-        </main>
+            </div>
+        </section>
     )
 }
