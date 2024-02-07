@@ -45,7 +45,7 @@ const sampleData = {
     ]
 }
 
-export function CitationGraph() {
+export default function CitationGraph() {
     const [dimensions, setDimensions] = React.useState({ width: 300, height: 600 });
     const graphRef = React.useRef<HTMLDivElement>(null);
 
