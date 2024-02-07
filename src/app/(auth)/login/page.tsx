@@ -36,11 +36,11 @@ export default function Login() {
             sizes="(max-width: 1200px) 50vw"
             className="object-cover"
           />
-          {/* <div className="absolute inset-0 bg-zinc-900" /> */}
-          <div className="relative z-20 flex items-center text-2xl font-hubotSans font-medium">
+          <div className="w-full h-full z-20 flex flex-col justify-between items-start text-2xl font-hubotSans font-medium">
             Scholar Maps
+            <LoginTestimonialCarousel className="w-full flex items-center justify-center" />
           </div>
-          <LoginTestimonialCarousel className="absolute bottom-24 lg:ml-4 2xl:ml-16"/>
+
 
         </div>
         <div className="lg:p-8">
