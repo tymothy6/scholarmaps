@@ -5,7 +5,6 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 import Autoplay from "embla-carousel-autoplay"
 
-import { Card } from "@/components/ui/card"
 import {
     Carousel,
     CarouselContent,
@@ -52,7 +51,7 @@ export function LoginTestimonialCarousel({ className }: { className?: string}) {
                 <CarouselItem className="pl-2">
                     <div className="flex flex-col items-start justify-center space-y-2">
                         <p className="text-left text-lg font-medium">
-                        &quot;The mobile app is great. I can find papers on the go and save them for later.&quot;
+                        &quot;The ability to access Scholar Maps on mobile is what drew me to the app. I can find papers on the go and save them for later.&quot;
                         </p>
                         <p className="ml-4 text-left text-sm text-slate-200">
                             - Alice Zhang, PhD

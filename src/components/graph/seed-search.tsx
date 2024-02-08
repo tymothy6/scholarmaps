@@ -40,11 +40,21 @@ export function PaperSeedSearch ({ className, ...props }: PaperSeedSearchProps) 
         },
     })
 
-    function onSubmit (paperId: z.infer<typeof seedSearchSchema>) {
+    async function onSubmit (paperId: z.infer<typeof seedSearchSchema>) {
         setIsLoading(true);
 
         try { 
-            window.location.href = `/map?paperId=${paperId}`;
+            console.log('Submitting seed paper:', paperId);
+            const promise = () => new Promise((resolve) => setTimeout(() => resolve({ name: 'Sonner' }), 2000));
+
+            toast.promise(promise, {
+            loading: 'Generating citation graph...',
+            success: (paperId) => {
+                return `${paperId} graph loaded!`;
+            },
+            error: 'Error',
+            });
+
             // match paper name to paperId
             // get citations 
         } catch (error) {
@@ -58,7 +68,7 @@ export function PaperSeedSearch ({ className, ...props }: PaperSeedSearchProps) 
     return (
         <Card className={cn("w-max p-4", className)} {...props}>
             <Form {...seedSearchForm}>
-              <form onSubmit={seedSearchForm.handleSubmit(onSubmit)} className="flex flex-col space-y-2 items-center w-full">
+              <form onSubmit={seedSearchForm.handleSubmit(onSubmit)} className="flex flex-col space-y-4 items-center w-full">
                 <FormField
                   control={seedSearchForm.control}
                   name="paperId"
@@ -66,7 +76,7 @@ export function PaperSeedSearch ({ className, ...props }: PaperSeedSearchProps) 
                     <FormItem>
                         <FormLabel className="sr-only">Semantic Scholar paper ID</FormLabel>
                         <FormControl>
-                            <Input placeholder="Enter a Semantic Scholar paper ID" type="search" disabled={isLoading} {...field} className="w-72"/>
+                            <Input placeholder="DOI, Semantic Scholar ID, title..." type="search" disabled={isLoading} {...field} className="w-72"/>
                         </FormControl>
                         <FormMessage />
                     </FormItem>
