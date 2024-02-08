@@ -16,8 +16,6 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel"
 
-import { FileTextIcon } from "lucide-react"
-
 // Static assets
 import arxivLogo from "../../../public/arxiv_logo.png"
 import doiLogo from "../../../public/doi_logo.png"
@@ -44,7 +42,7 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
             >
                 <CarouselContent className="-ml-4">
                     <CarouselItem className="pl-4 md:basis-1/2 lg:basis-1/3">
-                        <Card className="h-36 p-4 flex flex-col gap-2 items-center">
+                        <Card className="h-32 p-4 flex flex-col gap-2 items-center">
                             <Image
                             src={doiLogo}
                             width={32}
@@ -52,11 +50,11 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                             alt="DOI logo"
                             />
                             <h2 className="font-semibold">DOI</h2>
-                            <p className="text-sm text-muted-foreground">10.1038/nature12373</p>
+                            <p className="italic text-sm text-muted-foreground">10.1038/nature12373</p>
                         </Card>
                     </CarouselItem>
                     <CarouselItem className="pl-4 md:basis-1/2 lg:basis-1/3">
-                        <Card className="h-36 p-4 flex flex-col gap-2 items-center">
+                        <Card className="h-32 p-4 flex flex-col gap-2 items-center">
                             <Image
                             src={pubmedLogo}
                             width={32}
@@ -64,11 +62,11 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                             alt="PubMed logo"
                             />
                             <h2 className="font-semibold">PubMed</h2>
-                            <p className="text-sm text-muted-foreground">23883930</p>
+                            <p className="italic text-sm text-muted-foreground">23883930</p>
                         </Card>
                     </CarouselItem>
                     <CarouselItem className="pl-4 md:basis-1/2 lg:basis-1/3">
-                        <Card className="h-36 p-4 flex flex-col gap-2 items-center">
+                        <Card className="h-32 p-4 flex flex-col gap-2 items-center">
                             <Image
                             src={arxivLogo}
                             width={32}
@@ -76,11 +74,11 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                             alt="Uppercase X"
                             />
                             <h2 className="font-semibold">arXiv</h2>
-                            <p className="text-sm text-muted-foreground">1403.7138</p>
+                            <p className="italic text-sm text-muted-foreground">1403.7138</p>
                         </Card>
                     </CarouselItem>
                     <CarouselItem className="pl-4 md:basis-1/2 lg:basis-1/3">
-                        <Card className="h-36 p-4 flex flex-col gap-2 items-center">
+                        <Card className="h-32 p-4 flex flex-col gap-2 items-center">
                             <Image
                             src={s2Logo}
                             width={32}
@@ -88,7 +86,7 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                             alt="Semantic Scholar logo"
                             />
                             <h2 className="font-semibold">Semantic Scholar</h2>
-                            <p className="text-sm text-muted-foreground">256194545</p>
+                            <p className="italic text-sm text-muted-foreground">256194545</p>
                         </Card>
                     </CarouselItem>
                 </CarouselContent>
