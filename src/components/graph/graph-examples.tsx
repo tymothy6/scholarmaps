@@ -15,28 +15,29 @@ import {
 
 export function CitationGraphExamples() {
     return (
-        <div className="w-full flex items-center space-x-4 justify-center">
-            <Card className="basis-1/3">
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-center">
+            <h3 className="col-span-3 text-sm text-center md:text-base font-medium">Or explore with a sample graph</h3>
+            <Card className="col-span-1 h-full">
                 <CardContent>
                 <div className="w-full my-4 h-36 bg-muted rounded" />
-                <CardDescription>
-                <h2 className="text-sm text-foreground font-medium">Science mapping software tools: Review, analysis, and cooperative study among tools (Cobo, 2011)</h2>
+                <CardDescription className="text-sm text-foreground font-medium">
+                    Science mapping software tools: Review, analysis, and cooperative study among tools (Cobo, 2011)
                 </CardDescription>
                 </CardContent>
             </Card>
-            <Card>
-                <CardContent className="basis-1/3">
+            <Card className="col-span-1 h-full">
+                <CardContent>
                 <div className="w-full my-4 h-36 bg-muted rounded" />
-                <CardDescription>
-                <h2 className="text-sm text-foreground font-medium">DeepFruits: A Fruit Detection System Using Deep Neural Networks (Sa, 2016)</h2>
+                <CardDescription className="text-sm text-foreground font-medium">
+                    DeepFruits: A Fruit Detection System Using Deep Neural Networks (Sa, 2016)
                 </CardDescription>
                 </CardContent>
             </Card>
-            <Card>
-                <CardContent className="basis-1/3">
+            <Card className="col-span-1 h-full">
+                <CardContent>
                 <div className="w-full my-4 h-36 bg-muted rounded" />
-                <CardDescription>
-                <h2 className="text-sm text-foreground font-medium">Gender Equality and Intrastate Armed Conflict (Melander, 2005)</h2>
+                <CardDescription className="text-sm text-foreground font-medium">
+                    Gender Equality and Intrastate Armed Conflict (Melander, 2005)
                 </CardDescription>
                 </CardContent>
             </Card>

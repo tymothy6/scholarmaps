@@ -1,4 +1,3 @@
-import { Metadata } from 'next'
 
 import dynamic from 'next/dynamic'
 
@@ -9,10 +8,35 @@ import { PaperSeedSearch } from '@/components/graph/seed-search'
 
 const CitationGraph = dynamic(() => import('@/components/graph/force-citations'), { ssr: false })
 
-export const metadata: Metadata = {
-    title: "Map",
-    description: "Explore connections between literature with Scholar Maps.",
-  }
+export async function generateMetadata( { searchParams }: { searchParams: {[key: string]: string | undefined } } ) {
+    const title = searchParams['paperId'] ? `Map for ${searchParams['paperId']}` : 'Map';
+    const description = 'Map connected papers in the Semantic Scholar research corpus';
+    return { title, description };
+}
+
+type PaperCitationResult = {
+    contexts: string[];
+    intents: string[];
+    contextsWithIntent: [{ 
+        context: string; 
+        intents: string[]; 
+    }];
+    isInfluential: boolean;
+    citingPaper: { 
+        paperId: string;
+        url: string;
+        title: string;
+        year: number;
+        referenceCount: number;
+        citationCount: number;
+        influentialCitationCount: number;
+        journal: string;
+        authors: string[];
+        publicationTypes: string[];
+    }
+}
+
+interface PaperCitationResponse { total: number; offset: number; next: number; data: PaperCitationResult[]; }
 
 export default function Map() {
     return (
@@ -29,11 +53,11 @@ export default function Map() {
                 </div>
                 <CitationGraphExamples />
             </div>
-            <div className="grid gap-4 w-full">
+            {/* <div className="grid gap-4 w-full">
                 <h2 className="text-lg lg:text-xl font-semibold mt-2">Citation graph</h2>
                 <CitationGraph />
                 <FAQButton />
-            </div>
+            </div> */}
         </section>
     )
 }

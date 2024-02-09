@@ -46,18 +46,18 @@ export function PaperSeedSearch ({ className, ...props }: PaperSeedSearchProps) 
         console.log('Submitting input:', values);
 
         try { 
-            const promise = () => new Promise((resolve) => setTimeout(() => resolve({ name: 'Sonner' }), 2000));
+            const paperId = values.paperId;
+            const promise = () => new Promise<{ paperId: string }>((resolve) => setTimeout(() => resolve({ paperId }), 2000));
 
             toast.promise(promise, {
-            loading: 'Generating citation graph...',
-            success: (paperId) => {
-                return `${paperId} graph loaded!`;
-            },
-            error: 'Error',
+                loading: 'Generating citation graph...',
+                success: (values: { paperId: string }) => {
+                    return `${values.paperId} graph loaded!`;
+                },
+                error: 'Error',
             });
 
-            // match paper name to paperId
-            // get citations 
+            window.location.href = `/map?paperId=${paperId}`;
         } catch (error) {
             console.error('Error submitting seed paper:', error);
             toast.error('Error submitting seed paper. Please try again.');
