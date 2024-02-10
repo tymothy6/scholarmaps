@@ -44,7 +44,10 @@ export function PaperSeedSearch ({ className, ...props }: PaperSeedSearchProps) 
         setIsLoading(true);
 
         console.log('Submitting input:', values);
-
+        // In addition to S2 paper IDs, this function should also be able to handle other identifiers
+        // and paper titles
+        // Citations API supports many types of IDs, including URLs: https://api.semanticscholar.org/api-docs/#tag/Paper-Data/operation/get_graph_get_paper_citations
+        // For paper titles, we first need to submit a query to paper relevance search endpoint
         try { 
             const paperId = values.paperId;
             const promise = () => new Promise<{ paperId: string }>((resolve) => setTimeout(() => resolve({ paperId }), 2000));
@@ -77,7 +80,7 @@ export function PaperSeedSearch ({ className, ...props }: PaperSeedSearchProps) 
                     <FormItem>
                         <FormLabel className="sr-only">Paper identifier</FormLabel>
                         <FormControl>
-                            <Input placeholder="DOI, Semantic Scholar ID, title..." type="search" disabled={isLoading} {...field} className="w-48 md:w-72"/>
+                            <Input placeholder="DOI, URL, paper ID, title..." type="search" disabled={isLoading} {...field} className="w-48 md:w-72"/>
                         </FormControl>
                         <FormMessage />
                     </FormItem>

@@ -14,7 +14,7 @@ export async function generateMetadata( { searchParams }: { searchParams: {[key:
     return { title, description };
 }
 
-type PaperCitationResult = {
+export type PaperCitationResult = {
     contexts: string[];
     intents: string[];
     contextsWithIntent: [{ 

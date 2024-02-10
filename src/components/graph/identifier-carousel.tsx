@@ -42,7 +42,7 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
             >
                 <CarouselContent className="-ml-4">
                     <CarouselItem className="pl-4 md:basis-1/2 lg:basis-1/3">
-                        <Card className="h-32 p-4 flex flex-col gap-2 items-center">
+                        <Card className="h-32 p-4 flex flex-col gap-2 items-center shadow-none">
                             <Image
                             src={doiLogo}
                             width={32}
@@ -54,7 +54,7 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                         </Card>
                     </CarouselItem>
                     <CarouselItem className="pl-4 md:basis-1/2 lg:basis-1/3">
-                        <Card className="h-32 p-4 flex flex-col gap-2 items-center">
+                        <Card className="h-32 p-4 flex flex-col gap-2 items-center shadow-none">
                             <Image
                             src={pubmedLogo}
                             width={32}
@@ -66,7 +66,7 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                         </Card>
                     </CarouselItem>
                     <CarouselItem className="pl-4 md:basis-1/2 lg:basis-1/3">
-                        <Card className="h-32 p-4 flex flex-col gap-2 items-center">
+                        <Card className="h-32 p-4 flex flex-col gap-2 items-center shadow-none">
                             <Image
                             src={arxivLogo}
                             width={32}
@@ -78,7 +78,7 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                         </Card>
                     </CarouselItem>
                     <CarouselItem className="pl-4 md:basis-1/2 lg:basis-1/3">
-                        <Card className="h-32 p-4 flex flex-col gap-2 items-center">
+                        <Card className="h-32 p-4 flex flex-col gap-2 items-center shadow-none">
                             <Image
                             src={s2Logo}
                             width={32}
