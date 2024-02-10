@@ -21,7 +21,7 @@ async function getSearchResults(searchQuery: string): Promise<SearchResponse> {
         const response = await fetch(url);
 
         if (!response.ok) {
-            throw new Error(`API responded with status code ${response.status}: ${response.statusText}`);
+            throw new Error(`Relevance API responded with status code ${response.status}: ${response.statusText}`);
         }
 
         const data = await response.json();
@@ -32,7 +32,7 @@ async function getSearchResults(searchQuery: string): Promise<SearchResponse> {
     }
 }
 
-interface SearchProps { searchParams: {[key: string]: string | undefined } }
+interface SearchProps { searchParams: { [key: string]: string | undefined } }
 
 export default async function Search( { searchParams }: SearchProps ) {
     const searchQuery = searchParams['query'] || '';

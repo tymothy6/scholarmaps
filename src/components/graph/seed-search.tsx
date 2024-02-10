@@ -80,7 +80,7 @@ export function PaperSeedSearch ({ className, ...props }: PaperSeedSearchProps) 
                     <FormItem>
                         <FormLabel className="sr-only">Paper identifier</FormLabel>
                         <FormControl>
-                            <Input placeholder="DOI, URL, paper ID, title..." type="search" disabled={isLoading} {...field} className="w-48 md:w-72"/>
+                            <Input placeholder="Paper ID, DOI, URL, title..." type="search" disabled={isLoading} {...field} className="w-48 md:w-72"/>
                         </FormControl>
                         <FormMessage />
                     </FormItem>

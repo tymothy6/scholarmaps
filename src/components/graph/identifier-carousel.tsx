@@ -7,6 +7,7 @@ import Image from "next/image"
 import { cn } from "@/lib/utils"
 import Autoplay from "embla-carousel-autoplay"
 
+import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import {
     Carousel,
@@ -15,6 +16,11 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card"
 
 // Static assets
 import arxivLogo from "../../../public/arxiv_logo.png"
@@ -26,7 +32,25 @@ import s2Logo from "../../../public/s2_logo.png"
 
 export function PaperIdentifierCarousel({ className }: { className?: string}) {
     return (
-        <div className={cn(className)}>
+        <div className={cn("flex flex-col space-y-4 items-center w-full md:mx-auto", className)}>
+            <h3 className="text-sm md:text-base font-medium">Scholar Maps supports the following 
+            <HoverCard>
+                <HoverCardTrigger className="ml-1 underline underline-offset-2 cursor-pointer">identifiers:</HoverCardTrigger>
+                <HoverCardContent>
+                <div className="space-y-1">
+                    <h4 className="text-sm font-semibold">Identifiers</h4>
+                    <p className="text-sm">
+                    Semantic Scholar (and Corpus), DOI, arXiv, Microsoft Academic Graph, PubMed/Medline, PubMed Central, Assoc. for Computational Linguistics
+                    </p>
+                    <div className="flex items-center pt-2">
+                    <span className="text-xs text-muted-foreground">
+                        Updated Feb 2024
+                    </span>
+                    </div>
+                </div>
+                </HoverCardContent>
+            </HoverCard>
+            </h3>
             <Carousel
             className="w-[50vw]"
             opts={{
