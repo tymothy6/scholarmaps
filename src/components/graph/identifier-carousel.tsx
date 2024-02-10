@@ -5,9 +5,11 @@ import * as React from "react"
 import Image from "next/image"
 
 import { cn } from "@/lib/utils"
+
+import { useTheme } from "next-themes"
+
 import Autoplay from "embla-carousel-autoplay"
 
-import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import {
     Carousel,
@@ -24,13 +26,17 @@ import {
 
 // Static assets
 import arxivLogo from "../../../public/arxiv_logo.png"
+import arxivLogoInverted from "../../../public/arxiv_logo_inverted.png"
 import doiLogo from "../../../public/doi_logo.png"
+import doiLogoInverted from "../../../public/doi_logo_inverted.png"
 import pubmedLogo from "../../../public/pubmed_logo.png"
+import pubmedLogoInverted from "../../../public/pubmed_logo_inverted.png"
 import s2Logo from "../../../public/s2_logo.png"
-
-
+import s2LogoInverted from "../../../public/s2_logo_inverted.png"
 
 export function PaperIdentifierCarousel({ className }: { className?: string}) {
+    const { resolvedTheme } = useTheme();
+
     return (
         <div className={cn("flex flex-col space-y-4 items-center w-full md:mx-auto", className)}>
             <h3 className="text-sm md:text-base font-medium">Scholar Maps supports the following 
@@ -68,7 +74,7 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                     <CarouselItem className="pl-4 md:basis-1/2 lg:basis-1/3">
                         <Card className="h-32 p-4 flex flex-col gap-2 items-center shadow-none">
                             <Image
-                            src={doiLogo}
+                            src={resolvedTheme === 'dark' ? doiLogoInverted : doiLogo}
                             width={32}
                             height={32}
                             alt="DOI logo"
@@ -80,7 +86,7 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                     <CarouselItem className="pl-4 md:basis-1/2 lg:basis-1/3">
                         <Card className="h-32 p-4 flex flex-col gap-2 items-center shadow-none">
                             <Image
-                            src={pubmedLogo}
+                            src={resolvedTheme === 'dark' ? pubmedLogoInverted : pubmedLogo}
                             width={32}
                             height={32}
                             alt="PubMed logo"
@@ -92,7 +98,7 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                     <CarouselItem className="pl-4 md:basis-1/2 lg:basis-1/3">
                         <Card className="h-32 p-4 flex flex-col gap-2 items-center shadow-none">
                             <Image
-                            src={arxivLogo}
+                            src={resolvedTheme === 'dark' ? arxivLogoInverted : arxivLogo}
                             width={32}
                             height={32}
                             alt="Uppercase X"
@@ -104,7 +110,7 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                     <CarouselItem className="pl-4 md:basis-1/2 lg:basis-1/3">
                         <Card className="h-32 p-4 flex flex-col gap-2 items-center shadow-none">
                             <Image
-                            src={s2Logo}
+                            src={resolvedTheme === 'dark' ? s2LogoInverted : s2Logo}
                             width={32}
                             height={32}
                             alt="Semantic Scholar logo"
