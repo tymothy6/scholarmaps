@@ -20,7 +20,7 @@ import {
   import { MoreHorizontalIcon } from "lucide-react"
 
   // Import type from map/page.tsx or move here
-  import { PaperCitationResult } from "./page"
+  import { PaperCitationResult } from "../page"
 
   async function copyToClipboard(text: string) {
     await navigator.clipboard.writeText(text);
