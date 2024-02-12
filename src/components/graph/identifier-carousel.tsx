@@ -44,7 +44,6 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                 <HoverCardTrigger className="ml-1 underline underline-offset-2 cursor-pointer">identifiers:</HoverCardTrigger>
                 <HoverCardContent>
                 <div className="space-y-1">
-                    <h4 className="text-sm font-semibold">Identifiers</h4>
                     <p className="text-sm">
                     Semantic Scholar (and Corpus), DOI, arXiv, Microsoft Academic Graph, PubMed/Medline, PubMed Central, Assoc. for Computational Linguistics
                     </p>

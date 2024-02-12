@@ -13,7 +13,7 @@ import { LogoutAuth } from '@/components/auth/logout-auth'
 
 export const metadata: Metadata = {
     title: "Dashboard",
-    description: "Overview of your Scholar Maps account",
+    description: "Overview of your Scholar Maps activity",
   }
 
 export default async function Home() {

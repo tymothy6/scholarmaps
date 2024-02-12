@@ -1,13 +1,12 @@
-import dynamic from 'next/dynamic'
+import { Metadata } from 'next'
 
 import { PaperIdentifierCarousel } from '@/components/graph/identifier-carousel'
 import { CitationGraphExamples } from '@/components/graph/graph-examples'
 import { PaperSeedSearch } from '@/components/graph/seed-search'
 
-export function generateMetadata( { searchParams }: { searchParams: {[key: string]: string | undefined } } ) {
-    const title = searchParams['paperId'] ? `Map for ${searchParams['paperId']}` : 'Map';
-    const description = 'Map connected papers in the Semantic Scholar research corpus';
-    return { title, description };
+export const metadata: Metadata = {
+    title: "Map",
+    description: "Map connected papers in the Semantic Scholar research corpus",
 }
 
 export type PaperCitationResult = {
@@ -37,7 +36,7 @@ interface PaperCitationResponse { total: number; offset: number; next: number; d
 export async function getPaperCitations(searchPaperId: string): Promise<PaperCitationResponse> {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'; // development
     const queryParams = new URLSearchParams({ paperId: searchPaperId });
-    const url = `${baseUrl}/api/search?${queryParams.toString()}`;
+    const url = `${baseUrl}/api/citations?${queryParams.toString()}`;
 
     try {
         const response = await fetch(url);
@@ -56,8 +55,6 @@ export async function getPaperCitations(searchPaperId: string): Promise<PaperCit
 interface SearchProps { searchParams: { [key: string]: string | undefined } }
 
 export default function Map( { searchParams }: SearchProps) {
-    const searchPaperId = searchParams['paperId'] || '';
-
     return (
         <section className="p-4 absolute top-16 lg:left-[16.666%] lg:p-8 flex flex-col gap-2 w-full lg:w-5/6">
             <h1 className="mt-2 lg:mt-0 text-xl lg:text-2xl font-semibold lg:font-bold mb-2">Map connected papers</h1>

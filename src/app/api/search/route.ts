@@ -19,14 +19,14 @@ export async function GET(req: NextRequest) {
         });
 
         if (!response.ok) {
-            throw new Error(`API responded with status code ${response.status}: ${response.statusText}`);
+            throw new Error(`Paper relevance API responded with status code ${response.status}: ${response.statusText}`);
         }
 
         const data = await response.json();
         return NextResponse.json(data);
     } catch (error) {
         console.error('Error in paper search route handler:', error);
-        return new NextResponse(JSON.stringify({ error: 'Failed to fetch data from API' }), {
+        return new NextResponse(JSON.stringify({ error: 'Failed to fetch data from paper relevance API' }), {
             status: 500,
             headers: {
                 'Content-Type': 'application/json',

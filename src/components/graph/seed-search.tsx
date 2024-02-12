@@ -60,7 +60,7 @@ export function PaperSeedSearch ({ className, ...props }: PaperSeedSearchProps) 
                 error: 'Error',
             });
 
-            window.location.href = `/map?paperId=${paperId}`;
+            window.location.href = `/map/result?paperId=${paperId}`;
         } catch (error) {
             console.error('Error submitting seed paper:', error);
             toast.error('Error submitting seed paper. Please try again.');
