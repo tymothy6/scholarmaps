@@ -84,9 +84,9 @@ export function CitationResultTable<TData, TValue>({
           <div className="flex items-center py-4 gap-2">
           <Input
           placeholder="Filter results"
-          value={(table.getColumn("citingPaper.title")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("citingPaper.title")?.setFilterValue(event.target.value)
+            table.getColumn("title")?.setFilterValue(event.target.value)
           }
           className="w-full sm:max-w-sm"
           />

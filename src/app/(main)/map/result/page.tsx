@@ -19,12 +19,12 @@ export function generateMetadata( { searchParams }: { searchParams: {[key: strin
 interface SearchProps { searchParams: { [key: string]: string | undefined } }
 
 export default async function Results({ searchParams }: SearchProps ) {
-    const searchPaperId = searchParams['paperId'] || '';
+    const paperId = searchParams['paperId'] || '';
 
     async function PaperCitationResultsCard() { 
         let results: PaperCitationResult[] = [];
-        if (searchPaperId) {
-            const response = await getPaperCitations(searchPaperId);
+        if (paperId) {
+            const response = await getPaperCitations(paperId);
             results = response.data;
         }
 
@@ -36,7 +36,7 @@ export default async function Results({ searchParams }: SearchProps ) {
     return (
         <section className="p-4 absolute top-16 lg:left-[16.666%] lg:p-8 flex flex-col gap-2 w-full lg:w-5/6">
             <h1 className="mt-2 lg:mt-0 text-xl lg:text-2xl font-semibold lg:font-bold mb-2">Map results</h1>
-            <div className="flex flex-col space-y-8 items-center">
+            <div className="w-full">
                 <Suspense fallback={<SearchTableSkeleton />}>
                     <PaperCitationResultsCard />
                 </Suspense>

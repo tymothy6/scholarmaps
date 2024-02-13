@@ -99,7 +99,13 @@ export function PageHeader () {
       
     }
 
-    const isActive = (path: string) => pathname === path;
+    const isActive = (path: string) => {
+      if (path === '/' && pathname === '/') {
+        return true;
+      }
+  
+      return path !== '/' && pathname.startsWith(path) && (pathname[path.length] === '/' || pathname.length === path.length);
+    };
 
     function onLogout () {
         signOut();

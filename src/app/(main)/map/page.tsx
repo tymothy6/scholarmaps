@@ -25,8 +25,15 @@ export type PaperCitationResult = {
         referenceCount: number;
         citationCount: number;
         influentialCitationCount: number;
-        journal: string;
-        authors: string[];
+        journal: {
+            name: string;
+            pages?: string;
+            volume?: string;
+        }
+        authors: Array<{
+            authorId: string
+            name: string
+        }>
         publicationTypes: string[];
     }
 }

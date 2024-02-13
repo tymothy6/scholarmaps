@@ -12,37 +12,53 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-  } from "@/components/ui/dropdown-menu"
-  import { toast } from "sonner"
+} from "@/components/ui/dropdown-menu"
+import { toast } from "sonner"
 
-  import { DataTableColumnHeader } from "@/components/patterns/table-column-header"
+import { DataTableColumnHeader } from "@/components/patterns/table-column-header"
 
-  import { MoreHorizontalIcon } from "lucide-react"
+import { MoreHorizontalIcon } from "lucide-react"
 
-  // Import type from map/page.tsx or move here
-  import { PaperCitationResult } from "../page"
+// Import type from map/page.tsx or move here
+import { PaperCitationResult } from "../page"
 
-  async function copyToClipboard(text: string) {
+async function copyToClipboard(text: string) {
     await navigator.clipboard.writeText(text);
     toast.success("Copied to clipboard");
-  }
+}
 
-  export const columns: ColumnDef<PaperCitationResult>[] = [
+export const columns: ColumnDef<PaperCitationResult>[] = [
     {
+        id: "title",
         accessorKey: "citingPaper.title",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Title" />
+            <DataTableColumnHeader column={column} title="Title" className="p-2" />
         ), 
+        cell: ({ row }) => {
+            const result = row.original;
+
+            return result.citingPaper.title
+        },
     },
     {
         accessorKey: "citingPaper.journal",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Journal" />
         ),
+        cell: ({ row }) => {
+            const result = row.original;
+
+            return result.citingPaper.journal.name
+        }
     },
     {
         accessorKey: "citingPaper.authors",
         header: () => <div className="flex p-2">Authors</div>,
+        cell: ({ row }) => {
+            const result = row.original;
+
+            return result.citingPaper.authors.map((author) => author.name).join(", ")
+        },
     },
     {
         accessorKey: "citingPaper.year",
@@ -60,12 +76,6 @@ import {
         accessorKey: "citingPaper.citationCount",
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Citations" />
-        ),
-    },
-    {
-        accessorKey: "citingPaper.influentialCitationCount",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Influential Citations" />
         ),
     },
     {

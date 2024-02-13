@@ -34,7 +34,14 @@ export function Sidebar () {
   const pathname = usePathname();
   const { setTheme } = useTheme();
 
-  const isActive = (path: string) => pathname === path;
+  const isActive = (path: string) => {
+    if (path === '/' && pathname === '/') {
+      return true;
+    }
+
+    return path !== '/' && pathname.startsWith(path) && (pathname[path.length] === '/' || pathname.length === path.length);
+  };
+  
 
     return (
         <aside className="hidden lg:z-[10] lg:fixed lg:top-0 lg:flex lg:flex-col lg:justify-between bg-slate-950 dark:bg-slate-200 w-1/6 h-[100vh] border-r p-4">
