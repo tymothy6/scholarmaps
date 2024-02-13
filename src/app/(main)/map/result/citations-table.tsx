@@ -3,9 +3,7 @@
 import * as React from "react"
 
 import { Button } from "@/components/ui/button"
-import { 
-  Card
-} from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { 
   Tooltip,
@@ -22,6 +20,8 @@ import {
     flexRender,
     VisibilityState,
     getCoreRowModel,
+    getFacetedRowModel,
+    getFacetedUniqueValues,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
@@ -37,9 +37,10 @@ import {
     TableRow,
 } from "@/components/ui/table"
 
-// Components for pagination controls and toggling column visibility
+// Reusable table components
 import { DataTablePagination } from "@/components/patterns/table-pagination"
 import { DataTableViewOptions } from "@/components/patterns/table-column-toggle"
+import { DataTableFacetedFilter } from "@/components/patterns/table-faceted-filter"
 
 import { RotateCcwIcon } from "lucide-react"
 
@@ -62,6 +63,8 @@ export function CitationResultTable<TData, TValue>({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        getFacetedRowModel: getFacetedRowModel(),
+        getFacetedUniqueValues: getFacetedUniqueValues(),
         getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
@@ -74,6 +77,8 @@ export function CitationResultTable<TData, TValue>({
             columnVisibility,
         }
     })
+
+    const isFiltered = table.getState().columnFilters.length > 0;
 
     const handleResetFilters = () => {
         setColumnFilters([]); 
@@ -90,19 +95,29 @@ export function CitationResultTable<TData, TValue>({
           }
           className="w-full sm:max-w-sm"
           />
-          <TooltipProvider>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                { table.getColumn("title")?.getFilterValue() ?
-                <Button variant="destructive" size="icon" onClick={() => handleResetFilters()}>
-                    <span className="sr-only">Reset filters</span>
-                    <RotateCcwIcon className="h-4 w-4" />
-                </Button>
-                : null }
-                </TooltipTrigger>
-            <TooltipContent className="text-sm">Reset all filters</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          {table.getColumn("publicationTypes") && (
+            <DataTableFacetedFilter
+              column={table.getColumn("publicationTypes")}
+              title="Publication Type"
+              options={[
+                { label: "Journal Article", value: "JournalArticle" },
+                { label: "Review", value: "Review" },
+              ]}
+            />
+          )}
+          { isFiltered && (
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                    <Button variant="destructive" size="icon" onClick={() => handleResetFilters()}>
+                        <span className="sr-only">Reset filters</span>
+                        <RotateCcwIcon className="h-4 w-4" />
+                    </Button>
+                    </TooltipTrigger>
+                <TooltipContent className="text-sm">Reset filters</TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+          )}
           </div>
           <Card>
             <div className="w-full">

@@ -93,7 +93,7 @@ async function copyToClipboard(text: string) {
 }
 
 // Type guard functions
-function isJournalObject(value: unknown): value is { name: string; pages?: string; volume?: string } {
+export function isJournalObject(value: unknown): value is { name: string; pages?: string; volume?: string } {
     const obj = value as { name: string; pages?: string; volume?: string };
     return typeof obj === 'object' && obj !== null &&
            'name' in obj && typeof obj.name === 'string' &&
@@ -101,7 +101,7 @@ function isJournalObject(value: unknown): value is { name: string; pages?: strin
            (!('volume' in obj) || (typeof obj.volume === 'string'));
   }
 
-function isTldrObject(value: unknown): value is { model: string; text: string } {
+export function isTldrObject(value: unknown): value is { model: string; text: string } {
     const obj = value as { model: string; text: string; };
     return typeof obj === 'object' && obj !== null &&
            'model' in obj && typeof obj.model === 'string' &&
