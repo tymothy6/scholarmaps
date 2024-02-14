@@ -38,7 +38,7 @@ export type PaperCitationResult = {
     }
 }
 
-interface PaperCitationResponse { total: number; offset: number; next: number; data: PaperCitationResult[]; }
+export interface PaperCitationResponse { total: number; offset: number; next: number; data: PaperCitationResult[]; }
 
 export async function getPaperCitations(searchPaperId: string): Promise<PaperCitationResponse> {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'; // development
@@ -52,7 +52,18 @@ export async function getPaperCitations(searchPaperId: string): Promise<PaperCit
         }
 
         const data = await response.json();
-        return data;
+
+        const filteredData = data.data.filter((item: PaperCitationResult) => item.isInfluential);
+
+        const updatedTotal = filteredData.length;
+
+        return {
+            ...data,
+            total: updatedTotal, 
+            data: filteredData,
+        };
+
+
     } catch (error) {
         console.error('Error fetching citation data:', error);
         return { total: 0, offset: 0, next: 0, data: [] }; // return empty data of the same shape

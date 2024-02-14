@@ -75,8 +75,14 @@ export function CitationResultTable<TData, TValue>({
             sorting,
             columnFilters,
             columnVisibility,
-        }
+        },
     })
+
+    // React.useEffect(() => {
+    //     const initialVisibility = { ...columnVisibility };
+    //     initialVisibility['publicationTypes'] = false;
+    //     setColumnVisibility(initialVisibility);
+    // }, []);
 
     const isFiltered = table.getState().columnFilters.length > 0;
 

@@ -31,43 +31,45 @@ async function copyToClipboard(text: string) {
 }
 
 export const columns: ColumnDef<PaperCitationResult>[] = [
-    {
-        id: "publicationTypes",
-        accessorKey: "citingPaper.publicationTypes",
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Type" className="px-4 py-2" />
-        ),
-        cell: ({ row }) => {
-            const publicationTypes = row.getValue("publicationTypes");
+    // {
+    //     id: "publicationTypes",
+    //     accessorKey: "citingPaper.publicationTypes",
+    //     filterFn: (row, value) => {
+    //         const publicationTypes = row.original.citingPaper.publicationTypes;
 
-            if (Array.isArray(publicationTypes)) {
-                return <div className="flex flex-wrap gap-2 items-center justify-start">
-                {publicationTypes && publicationTypes.map((publicationType, index) => (
-                    <Badge key={index} variant="secondary" className="font-hubotSans">
-                    {publicationType.replace(/([A-Z])/g, ' $1').trim()}
-                    </Badge>
-                ))}</div>
-            } else {
-                return <div className="p-2">N/A</div>;
-            }
-        },
-        filterFn: (row, value) => {
-            const publicationTypes = row.original.citingPaper.publicationTypes;
-
-            if (Array.isArray(publicationTypes)) {
-                return publicationTypes.some(publicationType => publicationType.toLowerCase().includes(value.toLowerCase())
-                );
-            }
-            return false;
-        },
-    },
+    //         if (Array.isArray(publicationTypes)) {
+    //             return publicationTypes.some(publicationType => publicationType.toLowerCase().includes(value.toLowerCase())
+    //             );
+    //         }
+    //         return false;
+    //     },
+    //     enableHiding: true,
+    // },
     {
         id: "title",
         accessorKey: "citingPaper.title",
         header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Title" className="py-2" />
+            <DataTableColumnHeader column={column} title="Title" className="px-4 py-2" />
         ), 
-        cell: ({ row }) => <div className="px-4 py-2">{row.getValue("title")}</div>,
+        cell: ({ row }) => {
+            const result = row.original;
+            const title = row.getValue("title");
+            const url = result.citingPaper.url;
+
+            if (typeof title === 'string' && typeof url === 'string') {
+                return (
+                    <div className="flex py-2">
+                        <Button variant="link" className="text-left whitespace-normal w-[300px] h-max" asChild>
+                            <a href={url} target="_blank" rel="noreferrer">
+                            {row.getValue("title")}
+                            </a>
+                        </Button>
+                    </div>
+                );
+            } else {
+                return <div className="p-2">N/A</div>;
+            }
+        },
     },
     {
         id: "journal",
