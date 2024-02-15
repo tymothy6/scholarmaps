@@ -43,6 +43,7 @@ import { DataTableViewOptions } from "@/components/patterns/table-column-toggle"
 import { DataTableFacetedFilter } from "@/components/patterns/table-faceted-filter"
 
 import { RotateCcwIcon } from "lucide-react"
+import { results } from "../../dashboard-columns"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -84,17 +85,19 @@ export function CitationResultTable<TData, TValue>({
     //     setColumnVisibility(initialVisibility);
     // }, []);
 
+    const filteredResults = table.getFilteredRowModel().rows?.length;
+
     const isFiltered = table.getState().columnFilters.length > 0;
 
     const handleResetFilters = () => {
-        setColumnFilters([]); 
+        setColumnFilters([]);
     };
 
     return (
         <div>
           <div className="flex items-center py-4 gap-2">
           <Input
-          placeholder="Filter results"
+          placeholder={`Filter ${filteredResults} results`}
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
@@ -111,7 +114,7 @@ export function CitationResultTable<TData, TValue>({
               ]}
             />
           )}
-          { isFiltered && (
+          {isFiltered && (
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>

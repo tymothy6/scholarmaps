@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PaperCitationResponse, PaperCitationResult } from '@/app/(main)/map/page';
 
-export async function GET(req: NextRequest) {
-    const paperId = req.nextUrl.searchParams.get('paperId') || ''; 
-
-    const queryParams = new URLSearchParams({
-        limit: '1000', // Must be <= 1000 for paper citations search
-        fields: 'url,title,abstract,year,referenceCount,citationCount,influentialCitationCount,journal,authors,publicationTypes',
-    });
-
-    const url = `https://api.semanticscholar.org/graph/v1/paper/${paperId}/citations?${queryParams.toString()}`;
+async function fetchCitations(paperId: string, offset = 0, allCitations: PaperCitationResult[] = []): Promise<PaperCitationResult[]> {
+    const limit = 1000;
+    const fields = 'contexts,intents,contextsWithIntent,isInfluential,url,title,abstract,year,referenceCount,citationCount,influentialCitationCount,journal,authors,publicationTypes';
+    const url = `https://api.semanticscholar.org/graph/v1/paper/${paperId}/citations?limit=${limit}&offset=${offset}&fields=${fields}`;
 
     try {
         const response = await fetch(url, {
@@ -21,9 +17,28 @@ export async function GET(req: NextRequest) {
             throw new Error(`Citations API responded with status code ${response.status}: ${response.statusText}`);
         }
 
-        const data = await response.json();
+        const data: PaperCitationResponse = await response.json();
+        allCitations.push(...data.data);
 
-        return NextResponse.json(data);
+        if (data.data.length === limit) {
+            return await fetchCitations(paperId, offset + limit, allCitations);
+        } else {
+            return allCitations;
+        }
+    } catch (error) {
+        console.error('Error fetching citations:', error);
+        throw error;
+    }
+}
+
+export async function GET(req: NextRequest) {
+    const paperId = req.nextUrl.searchParams.get('paperId') || ''; 
+
+    try {
+        const citations = await fetchCitations(paperId);
+        console.log(`Total citations fetched: ${citations.length}`); // debug
+
+        return NextResponse.json(citations);
     } catch (error) {
         console.error('Error in citations route handler:', error);
         return new NextResponse(JSON.stringify({ error: 'Failed to fetch data from citations API' }), {
@@ -34,3 +49,5 @@ export async function GET(req: NextRequest) {
         });
     }
 }
+
+// https://api.semanticscholar.org/graph/v1/paper/10.1126/science.1106148/citations?fields=isInfluential

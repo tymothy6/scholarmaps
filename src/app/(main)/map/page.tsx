@@ -53,7 +53,9 @@ export async function getPaperCitations(searchPaperId: string): Promise<PaperCit
 
         const data = await response.json();
 
-        const filteredData = data.data.filter((item: PaperCitationResult) => item.isInfluential);
+        console.log('Citation data:', data); // debug
+
+        const filteredData = data.filter((item: PaperCitationResult) => item.isInfluential);
 
         const updatedTotal = filteredData.length;
 

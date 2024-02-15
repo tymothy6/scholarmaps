@@ -173,11 +173,13 @@ export function SearchResultTable<TData, TValue>({
     }
   };
 
+  const filteredResults = table.getFilteredRowModel().rows?.length;
+
   return (
     <div>
       <div className="flex items-center py-4 gap-2">
         <Input
-        placeholder="Filter results"
+        placeholder={`Filter ${filteredResults} results`}
         value={selectedFilter ? (table.getColumn(selectedFilter.value)?.getFilterValue() as string) ?? "" : ""}
         onChange={(event) => {
           if (selectedFilter) {
