@@ -3,7 +3,7 @@ import { PaperCitationResponse, PaperCitationResult } from '@/app/(main)/map/pag
 
 async function fetchCitations(paperId: string, offset = 0, allCitations: PaperCitationResult[] = []): Promise<PaperCitationResult[]> {
     const limit = 1000;
-    const fields = 'contexts,intents,contextsWithIntent,isInfluential,url,title,abstract,year,referenceCount,citationCount,influentialCitationCount,journal,authors,publicationTypes';
+    const fields = 'isInfluential,url,title,abstract,year,referenceCount,citationCount,influentialCitationCount,journal,authors,publicationTypes';
     const url = `https://api.semanticscholar.org/graph/v1/paper/${paperId}/citations?limit=${limit}&offset=${offset}&fields=${fields}`;
 
     try {
@@ -38,7 +38,9 @@ export async function GET(req: NextRequest) {
         const citations = await fetchCitations(paperId);
         console.log(`Total citations fetched: ${citations.length}`); // debug
 
-        return NextResponse.json(citations);
+        const response = NextResponse.json(citations);
+
+        return response;
     } catch (error) {
         console.error('Error in citations route handler:', error);
         return new NextResponse(JSON.stringify({ error: 'Failed to fetch data from citations API' }), {

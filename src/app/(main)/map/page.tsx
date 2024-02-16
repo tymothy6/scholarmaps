@@ -40,8 +40,8 @@ export type PaperCitationResult = {
 
 export interface PaperCitationResponse { total: number; offset: number; next: number; data: PaperCitationResult[]; }
 
-export async function getPaperCitations(searchPaperId: string): Promise<PaperCitationResponse> {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'; // development
+export async function getAllPaperCitations(searchPaperId: string): Promise<PaperCitationResponse> {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const queryParams = new URLSearchParams({ paperId: searchPaperId });
     const url = `${baseUrl}/api/citations?${queryParams.toString()}`;
 
@@ -52,8 +52,25 @@ export async function getPaperCitations(searchPaperId: string): Promise<PaperCit
         }
 
         const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching citation data:', error);
+        return { total: 0, offset: 0, next: 0, data: [] }; 
+    }
+}
 
-        console.log('Citation data:', data); // debug
+export async function getInfluentialPaperCitations(searchPaperId: string): Promise<PaperCitationResponse> {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'; 
+    const queryParams = new URLSearchParams({ paperId: searchPaperId });
+    const url = `${baseUrl}/api/citations?${queryParams.toString()}`;
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Citations API responded with status code ${response.status}: ${response.statusText}`)
+        }
+
+        const data = await response.json();
 
         const filteredData = data.filter((item: PaperCitationResult) => item.isInfluential);
 

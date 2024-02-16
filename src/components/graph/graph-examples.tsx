@@ -16,7 +16,7 @@ import {
 export function CitationGraphExamples() {
     return (
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-center">
-            <h3 className="col-span-3 text-sm text-center md:text-base font-medium">Or explore with a sample graph</h3>
+            <h3 className="col-span-3 text-sm text-center md:text-base font-medium">Or start exploring with a sample graph</h3>
             <Card className="col-span-1 h-full">
                 <CardContent>
                 <div className="w-full my-4 h-36 bg-muted rounded" />

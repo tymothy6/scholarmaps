@@ -58,7 +58,7 @@ export const columns: ColumnDef<PaperCitationResult>[] = [
 
             if (typeof title === 'string' && typeof url === 'string') {
                 return (
-                    <div className="flex py-2">
+                    <div className="flex items-start justify-start py-2">
                         <Button variant="link" className="text-left whitespace-normal w-[300px] h-max" asChild>
                             <a href={url} target="_blank" rel="noreferrer">
                             {row.getValue("title")}

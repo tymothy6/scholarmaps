@@ -1,5 +1,7 @@
 import { Metadata } from 'next'
 
+import { redirect } from 'next/navigation'
+
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
@@ -17,7 +19,11 @@ export const metadata: Metadata = {
   }
 
 export default async function Home() {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+        redirect('/login');
+    }
     
     return (
         <section className="p-4 absolute top-16 lg:left-[16.666%] lg:p-8 flex flex-col gap-2 w-full lg:w-5/6">

@@ -112,12 +112,13 @@ export function PageHeader () {
         router.push('/login');
       }
     
-      // Show the route only if the user is logged in
-      React.useEffect(() => {
-        if (session?.status === 'unauthenticated') {
-          router.push('/login')
-        }
-      }, [session, router])
+      // Use server-side navigation using the redirect function instead 
+      
+      // React.useEffect(() => {
+      //   if (session?.status === 'unauthenticated') {
+      //     router.push('/login')
+      //   }
+      // }, [session, router])
 
     return (
         <header className="fixed top-0 left-0 z-[49] w-full lg:w-5/6 lg:left-[16.666%] h-max">

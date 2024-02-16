@@ -6,6 +6,51 @@ import { ForceGraph2D } from "react-force-graph"
 
 import { Card } from "@/components/ui/card"
 
+export type CitationGraphData = {
+    nodes: Array<{
+        id: string;
+        name: string;
+        val: number;
+    }>;
+    links: Array<{
+        source: string;
+        target: string;
+    }>;
+}
+
+export default function CitationGraph({ graphData }: { graphData: CitationGraphData }) {
+    const [dimensions, setDimensions] = React.useState({ width: 300, height: 600 });
+    const graphRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        const handleResize = (entries: ResizeObserverEntry[]) => {
+            for (let entry of entries) {
+                const { width, height } = entry.contentRect;
+                setDimensions({ width, height });
+            }
+        };
+    
+        const observer = new ResizeObserver(handleResize);
+    
+        if (graphRef.current) {
+            observer.observe(graphRef.current);
+        }
+    
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <Card ref={graphRef} className="w-full h-full min-w-0">
+            <ForceGraph2D
+                graphData={graphData}
+                nodeAutoColorBy="id"
+                width={dimensions.width}
+                height={dimensions.height}
+            />
+        </Card>
+    )
+}
+
 const sampleData = {
     "nodes": [ 
         { 
@@ -43,37 +88,4 @@ const sampleData = {
             "target": "id1"
         }
     ]
-}
-
-export default function CitationGraph() {
-    const [dimensions, setDimensions] = React.useState({ width: 300, height: 600 });
-    const graphRef = React.useRef<HTMLDivElement>(null);
-
-    React.useEffect(() => {
-        const handleResize = (entries: ResizeObserverEntry[]) => {
-            for (let entry of entries) {
-                const { width, height } = entry.contentRect;
-                setDimensions({ width, height });
-            }
-        };
-    
-        const observer = new ResizeObserver(handleResize);
-    
-        if (graphRef.current) {
-            observer.observe(graphRef.current);
-        }
-    
-        return () => observer.disconnect();
-    }, []);
-
-    return (
-        <Card ref={graphRef} className="w-full h-full min-w-0">
-            <ForceGraph2D
-                graphData={sampleData}
-                nodeAutoColorBy="id"
-                width={dimensions.width}
-                height={dimensions.height}
-            />
-        </Card>
-    )
 }
