@@ -22,12 +22,14 @@ interface SearchProps { searchParams: { [key: string]: string | undefined } }
 export default async function Results({ searchParams }: SearchProps ) {
     const paperId = searchParams['paperId'] || '';
 
-    async function getCitationGraphData(paperId: string): Promise<CitationGraphData> {
-        let results: PaperCitationResult[] = [];
+    let results: PaperCitationResult[] = [];
         if (paperId) {
             const response = await getInfluentialPaperCitations(paperId);
             results = response.data;
         }
+
+    // Fetch citations and transform into shape that matches react-force-graph
+    async function getCitationGraphData(): Promise<CitationGraphData> {
 
         try {
             const response = await fetch('/api/graph', {
@@ -56,7 +58,7 @@ export default async function Results({ searchParams }: SearchProps ) {
     }
 
     async function PaperCitationResultsGraph() {
-        const graphData = await getCitationGraphData(paperId);
+        const graphData = await getCitationGraphData();
 
         return (
             <CitationGraph graphData={graphData} />
@@ -64,12 +66,6 @@ export default async function Results({ searchParams }: SearchProps ) {
     }
 
     async function PaperCitationResultsCard() { 
-        let results: PaperCitationResult[] = [];
-        if (paperId) {
-            const response = await getInfluentialPaperCitations(paperId);
-            results = response.data;
-        }
-
         return (
             <CitationResultTable columns={columns} data={results} />
         )
