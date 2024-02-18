@@ -30,9 +30,11 @@ export default async function Results({ searchParams }: SearchProps ) {
 
     // Fetch citations and transform into shape that matches react-force-graph
     async function getCitationGraphData(): Promise<CitationGraphData> {
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+        const url = `${baseUrl}/api/graph`;
 
         try {
-            const response = await fetch('/api/graph', {
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
