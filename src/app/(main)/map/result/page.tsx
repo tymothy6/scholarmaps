@@ -52,7 +52,7 @@ export default async function Results({ searchParams }: SearchProps ) {
             console.error('Error transforming citation data:', error);
             return { 
                 nodes: [
-                { id: paperId, name: 'Seed paper', val: 10 },
+                { id: paperId, name: 'Seed paper', val: 10, year: 2024 },
                 ], 
                 links: [] 
             };
@@ -65,7 +65,7 @@ export default async function Results({ searchParams }: SearchProps ) {
 
 
         return (
-            <CitationGraph graphData={graphData} />
+            <CitationGraph graphData={graphData} originatingPaperId={paperId} />
         )
     }
 
@@ -82,6 +82,9 @@ export default async function Results({ searchParams }: SearchProps ) {
                 <Suspense fallback={<CitationGraphSkeleton />}>
                     <PaperCitationResultsGraph />
                     <FAQButton />
+                    <div className="absolute bottom-4 left-4">
+                        <p className="text-xs text-muted-foreground">CTRL/⌘ click to pan</p>
+                    </div>
                 </Suspense>
             </div>
             <div className="w-full">

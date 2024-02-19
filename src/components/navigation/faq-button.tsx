@@ -31,7 +31,7 @@ import {
 
 export function FAQButton() {
     return (
-        <div className="absolute bottom-6 right-6 lg:bottom-12 lg:right-12">
+        <div className="absolute bottom-6 right-6 lg:bottom-8 lg:right-8">
             <TooltipProvider>
                 <Tooltip>
               <DropdownMenu>
