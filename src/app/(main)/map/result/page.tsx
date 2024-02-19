@@ -61,6 +61,8 @@ export default async function Results({ searchParams }: SearchProps ) {
 
     async function PaperCitationResultsGraph() {
         const graphData = await getCitationGraphData();
+        console.log(JSON.stringify(graphData, null, 2)); // log for debugging
+
 
         return (
             <CitationGraph graphData={graphData} />

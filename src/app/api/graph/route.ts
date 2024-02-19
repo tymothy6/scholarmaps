@@ -2,14 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { PaperCitationResult } from '@/app/(main)/map/page';
 
 function transformGraphData (citations: PaperCitationResult[], originatingPaperId: string) {
+    // First filter step
+    const filteredCitations = citations.filter(citation => citation.citingPaper.citationCount >= 5);
 
-    const nodes = citations.map(citation => ({
+    const nodes = filteredCitations.map(citation => ({
         id: citation.citingPaper.paperId,
         name: citation.citingPaper.title,
-        val: citation.citingPaper.citationCount || 1, 
+        val: citation.citingPaper.citationCount, 
     }));
 
-    const links = citations.map(citation => ({
+    const links = filteredCitations.map(citation => ({
         source: originatingPaperId,
         target: citation.citingPaper.paperId,
     }));
