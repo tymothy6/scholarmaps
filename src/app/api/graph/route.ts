@@ -8,7 +8,7 @@ function transformGraphData (citations: PaperCitationResult[], originatingPaperI
     const nodes = filteredCitations.map(citation => ({
         id: citation.citingPaper.paperId,
         name: citation.citingPaper.title,
-        val: citation.citingPaper.citationCount, 
+        val: citation.citingPaper.influentialCitationCount, 
     }));
 
     const links = filteredCitations.map(citation => ({

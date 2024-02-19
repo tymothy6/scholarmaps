@@ -1,6 +1,18 @@
 import { Skeleton } from  "@/components/ui/skeleton"
 import { Card } from "@/components/ui/card"
 
+import { Loader2Icon } from "lucide-react"
+
+export function CitationGraphSkeleton () {
+    return (
+        <Card className="mt-2 w-full h-[300px] md:h-[600px]">
+            <div className="w-full h-full flex items-center justify-center">
+                <Loader2Icon className="text-primary animate-spin h-6 w-6 md:w-12 md:h-12" />
+            </div>
+        </Card>
+    )
+}
+
 export function SearchTableSkeleton () {
     return (
         <Card className="mt-2">

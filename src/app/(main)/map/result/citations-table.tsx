@@ -106,16 +106,6 @@ export function CitationResultTable<TData, TValue>({
           }
           className="w-full sm:max-w-sm"
           />
-          {table.getColumn("publicationTypes") && (
-            <DataTableFacetedFilter
-              column={table.getColumn("publicationTypes")}
-              title="Publication Type"
-              options={[
-                { label: "Journal Article", value: "JournalArticle" },
-                { label: "Review", value: "Review" },
-              ]}
-            />
-          )}
           {isFiltered && (
             <TooltipProvider>
                 <Tooltip>

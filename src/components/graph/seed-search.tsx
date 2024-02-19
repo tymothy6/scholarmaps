@@ -50,12 +50,12 @@ export function PaperSeedSearch ({ className, ...props }: PaperSeedSearchProps) 
         // For paper titles, we first need to submit a query to paper relevance search endpoint
         try { 
             const paperId = values.paperId;
-            const promise = () => new Promise<{ paperId: string }>((resolve) => setTimeout(() => resolve({ paperId }), 2000));
+            const promise = () => new Promise<{ paperId: string }>((resolve) => setTimeout(() => resolve({ paperId }), 5000));
 
             toast.promise(promise, {
                 loading: 'Generating citation graph...',
                 success: (values: { paperId: string }) => {
-                    return `${values.paperId} graph loaded!`;
+                    return `${values.paperId} submitted as seed paper`;
                 },
                 error: 'Error',
             });
