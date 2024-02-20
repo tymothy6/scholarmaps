@@ -45,6 +45,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@storybook/addon-a11y": "^7.6.5",
     "@tanstack/react-table": "^8.11.7",
+    "@types/d3-scale": "^4.0.8",
     "@types/mdx": "^2.0.10",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",

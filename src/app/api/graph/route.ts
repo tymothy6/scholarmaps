@@ -9,7 +9,8 @@ function transformGraphData (citations: PaperCitationResult[], originatingPaperI
         id: citation.citingPaper.paperId,
         name: citation.citingPaper.title,
         val: citation.citingPaper.influentialCitationCount, 
-        year: citation.citingPaper.year,
+        val2: citation.citingPaper.year,
+        val3: citation.citingPaper.referenceCount,
     }));
 
     const links = filteredCitations.map(citation => ({
@@ -17,11 +18,13 @@ function transformGraphData (citations: PaperCitationResult[], originatingPaperI
         target: citation.citingPaper.paperId,
     }));
 
+    // Submit seed paper ID to relevance search to fetch details to populate this node
     const originatingNode = {
         id: originatingPaperId,
         name: "Seed paper", 
-        val: 10, 
-        year: 2024,
+        val: 5, 
+        val2: 2024,
+        val3: 0,
     };
 
     // Ensure the source paper is only added if it's not already a node

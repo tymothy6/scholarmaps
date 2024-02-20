@@ -5,7 +5,7 @@ import * as React from "react"
 import { useTheme } from "next-themes"
 
 import { ForceGraph2D } from "react-force-graph"
-import { scaleLinear } from "d3-scale"
+import { ScaleLogarithmic, scaleLog } from "d3-scale"
 
 import { Card } from "@/components/ui/card"
 
@@ -14,7 +14,8 @@ export type CitationGraphData = {
         id: string;
         name: string;
         val: number;
-        year: number;
+        val2: number;
+        val3: number;
     }>;
     links: Array<{
         source: string;
@@ -44,54 +45,72 @@ export default function CitationGraph({ graphData, originatingPaperId }: { graph
         return () => observer.disconnect();
     }, []);
 
-    const valToColor = scaleLinear()
-    .domain([1, 5, 75])
-    .range(["white", "lightblue", "lightgreen"]);
+    const valToColor = scaleLog([1, 5, 75], ["white", "steelblue", "lightgreen"]);
 
     return (
-        <Card ref={graphRef} className="w-full h-full min-w-0">
+        <Card ref={graphRef} className="relative w-full h-full min-w-0">
             <ForceGraph2D
                 graphData={graphData}
                 width={dimensions.width}
                 height={dimensions.height}
+                linkColor={() => resolvedTheme === 'dark' ? 'white' : 'lightgray'}
+                linkWidth={2}
                 nodeCanvasObject={(node, ctx, globalScale) => {
-                    // Base node radius
-                    const radius = 5;
-
-                    // Apply color scale for node fill or use a default color for the seed node
-                    const fillColor = valToColor(node.val);
-            
-                    // Determine the border color
-                    const borderColor = 'black'; // Static color; customize as needed
-            
-                    // Calculate border width based on the year
                     const currentYear = 2024;
-                    let borderWidth = Math.max(0, 3 - (currentYear - node.year)); // Subtract the difference from 3, clamped at 0
+                    const yearDiff = currentYear - (node.val2 as number);
+                    const maxRadius = 10;
+                    const radius = Math.max(5, maxRadius - yearDiff * 0.5);
+
+                    const fillColor: string = valToColor(node.val as number) as unknown as string;
             
                     // Draw the node (circle) with a fill
                     ctx.beginPath();
-                    ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
+                    ctx.arc(node.x || 0, node.y || 0, radius, 0, 2 * Math.PI, false);
                     ctx.fillStyle = fillColor; 
                     ctx.fill();
             
                     // Draw the border
+                    const borderWidth = 2;
+                    const borderColor = resolvedTheme === 'dark' ? 'white' : 'black';
+
                     ctx.lineWidth = borderWidth;
                     ctx.strokeStyle = borderColor;
                     ctx.stroke();
                   }}
                   nodePointerAreaPaint={(node, color, ctx) => {
-                    // Optionally define the pointer area for interaction, matching the node's visual size
-                    const radius = 5; // Should match the radius used for drawing
+                    const radius = Math.max(5, 10 - (2024 - node.val2) * 0.5); // For the interaction area
                     ctx.beginPath();
-                    ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
+                    ctx.arc(node.x || 0, node.y || 0, radius, 0, 2 * Math.PI, false);
                     ctx.fillStyle = color;
                     ctx.fill();
                   }}
             />
+            <GraphLegend scale={valToColor} />
         </Card>
     )
 }
 
+function GraphLegend ({ scale }: { scale: ScaleLogarithmic<string, string, never>}) {
+    const legendValues = [1, 5, 75];
+    const legendItems = legendValues.map(value => {
+        const color = scale(value);
+        return (
+            <div key={value} className="flex items-center mb-2">
+                <div className="w-4 h-4 rounded-full mr-2 border" style={{ backgroundColor: color }}></div>
+                <div className="text-xs">{value}</div>
+            </div>
+        )
+    });
+
+    return (
+        <div className="px-4 py-2 border rounded-sm bg-background absolute bottom-10 left-4 ">
+            <h3 className="text-sm font-medium mb-2">Influential citations</h3>
+            {legendItems}
+        </div>
+    )
+}
+
+// Shape of the data
 const sampleData = {
     "nodes": [ 
         { 

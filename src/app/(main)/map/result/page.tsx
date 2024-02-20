@@ -52,7 +52,7 @@ export default async function Results({ searchParams }: SearchProps ) {
             console.error('Error transforming citation data:', error);
             return { 
                 nodes: [
-                { id: paperId, name: 'Seed paper', val: 10, year: 2024 },
+                { id: paperId, name: 'Seed paper', val: 10, val2: 2024, val3: 0 },
                 ], 
                 links: [] 
             };
@@ -61,8 +61,7 @@ export default async function Results({ searchParams }: SearchProps ) {
 
     async function PaperCitationResultsGraph() {
         const graphData = await getCitationGraphData();
-        console.log(JSON.stringify(graphData, null, 2)); // log for debugging
-
+        // console.log(JSON.stringify(graphData, null, 2)); // log for debugging
 
         return (
             <CitationGraph graphData={graphData} originatingPaperId={paperId} />
@@ -83,7 +82,7 @@ export default async function Results({ searchParams }: SearchProps ) {
                     <PaperCitationResultsGraph />
                     <FAQButton />
                     <div className="absolute bottom-4 left-4">
-                        <p className="text-xs text-muted-foreground">CTRL/⌘ click to pan</p>
+                        <p className="text-xs text-muted-foreground">Scroll to zoom | ⌘ click to pan or drag</p>
                     </div>
                 </Suspense>
             </div>
