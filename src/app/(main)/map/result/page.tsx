@@ -54,12 +54,17 @@ export default async function Results({ searchParams }: SearchProps ) {
                 nodes: [
                 { id: paperId, name: 'Seed paper', val: 10, val2: 2024, val3: 0 },
                 ], 
-                links: [] 
+                links: [] ,
+                minReferenceCount: 0,
+                maxReferenceCount: 0,
+                minCitationCount: 0,
+                maxCitationCount: 0,
             };
         }
     }
 
     async function PaperCitationResultsGraph() {
+        // Alternative for memoization to avoid fetching graph data on re-render?
         const graphData = await getCitationGraphData();
         // console.log(JSON.stringify(graphData, null, 2)); // log for debugging
 

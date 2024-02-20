@@ -32,7 +32,16 @@ function transformGraphData (citations: PaperCitationResult[], originatingPaperI
         nodes.push(originatingNode);
     }
 
-    return { nodes, links };
+    // Find min and max values for visualization
+    const referenceCounts = filteredCitations.map(citation => citation.citingPaper.referenceCount);
+    const minReferenceCount = Math.min(...referenceCounts);
+    const maxReferenceCount = Math.max(...referenceCounts);
+
+    const citationCounts = filteredCitations.map(citation => citation.citingPaper.citationCount);
+    const minCitationCount = Math.min(...citationCounts);
+    const maxCitationCount = Math.max(...citationCounts);
+
+    return { nodes, links, minReferenceCount, maxReferenceCount, minCitationCount, maxCitationCount};
 }
 
 export async function POST(req: NextRequest) {
