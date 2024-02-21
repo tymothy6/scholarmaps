@@ -9,6 +9,12 @@ import { ForceGraphProps, ForceGraphMethods } from "react-force-graph-2d"
 import { ScaleLogarithmic, scaleLog, ScaleLinear, scaleLinear } from "d3-scale"
 
 import { Card } from "@/components/ui/card"
+import { 
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+    TooltipProvider,
+} from "@/components/ui/tooltip"
 
 export type CitationGraphData = {
     nodes: Array<{
@@ -31,6 +37,7 @@ export type CitationGraphData = {
 export default function CitationGraph({ graphData, originatingPaperId }: { graphData: CitationGraphData, originatingPaperId: string}) {
     const { resolvedTheme } = useTheme();
     const [dimensions, setDimensions] = React.useState({ width: 300, height: 600 });
+    const [hoverNode, setHoverNode] = React.useState(null);
     const containerRef = React.useRef<HTMLDivElement>(null);
     const fgRef = React.useRef<any>(null);
 
@@ -55,11 +62,15 @@ export default function CitationGraph({ graphData, originatingPaperId }: { graph
     }, []);
 
     React.useEffect(() => {
-        if (fgRef.current) {
-            fgRef.current.d3Force('charge').strength(-20);
-            fgRef.current.zoom(1.2);
+        if (fgRef.current && graphData) {
+            const transitionDuration = 1000;
+            const padding = 20;
+            const nodeFilterFn = (node: any) => true;
+
+            fgRef.current.zoomToFit(transitionDuration, padding, nodeFilterFn);
+            fgRef.current.d3Force('charge').strength(-75);
         }
-    }, [fgRef]);
+    }, [graphData]);
 
     const valToColor = scaleLog([1, 5, 75, 150], ["white", "lightblue", "steelblue", "lightgreen"]);
     const borderWidthScale = scaleLinear([minReferenceCount, maxReferenceCount], [0.5, 3]);
@@ -69,7 +80,9 @@ export default function CitationGraph({ graphData, originatingPaperId }: { graph
             <ForceGraph2D
                 ref={fgRef}
                 graphData={graphData}
-                width={dimensions.width}
+                onNodeHover={(node) => setHoverNode(node)}
+                nodeLabel={() => ''}
+                width={dimensions.width}    
                 height={dimensions.height}
                 linkColor={() => resolvedTheme === 'dark' ? 'gray' : 'lightgray'}
                 linkWidth={1}
@@ -105,6 +118,22 @@ export default function CitationGraph({ graphData, originatingPaperId }: { graph
                     ctx.fill();
                   }}
             />
+            {hoverNode && (
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <div className="absolute top-0 left-0 p-2 bg-background/80 backdrop-blur-sm rounded-sm">
+                                <h3 className="text-sm font-medium">{hoverNode.name}</h3>
+                                <p className="text-xs">Citation count: {hoverNode.val}</p>
+                                <p className="text-xs">Year: {hoverNode.val2}</p>
+                                <p className="text-xs">Reference count: {hoverNode.val3}</p>
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent className="text-sm">Node details</TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+                )
+            }
             <GraphLegend scale={valToColor} />
         </Card>
     )

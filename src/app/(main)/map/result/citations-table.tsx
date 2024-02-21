@@ -14,7 +14,6 @@ import {
 
 import { toast } from 'sonner'
 
-
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -99,7 +98,7 @@ export function CitationResultTable<TData, TValue>({
         <div>
           <div className="flex items-center py-4 gap-2">
           <Input
-          placeholder={`Filter ${filteredResults} results`}
+          placeholder={`Filter ${filteredResults} citations`}
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
