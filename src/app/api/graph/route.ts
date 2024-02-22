@@ -9,8 +9,12 @@ function transformGraphData (citations: PaperCitationResult[], originatingPaperI
         id: citation.citingPaper.paperId,
         name: citation.citingPaper.title,
         val: citation.citingPaper.influentialCitationCount, 
-        val2: citation.citingPaper.year,
-        val3: citation.citingPaper.referenceCount,
+        val2: citation.citingPaper.citationCount,
+        val3: citation.citingPaper.year,
+        val4: citation.citingPaper.referenceCount,
+        val5: citation.citingPaper.publicationTypes,
+        val6: citation.citingPaper.journal.name,
+
     }));
 
     const links = filteredCitations.map(citation => ({
@@ -23,8 +27,11 @@ function transformGraphData (citations: PaperCitationResult[], originatingPaperI
         id: originatingPaperId,
         name: "Seed paper", 
         val: 5, 
-        val2: 2024,
-        val3: 0,
+        val2: 5,
+        val3: 2024,
+        val4: 5,
+        val5: ["Journal Article"],
+        val6: "My favourite journal",
     };
 
     // Ensure the source paper is only added if it's not already a node

@@ -23,6 +23,9 @@ export type CitationGraphData = {
         val: number;
         val2: number;
         val3: number;
+        val4: number;
+        val5: string[];
+        val6: string;
     }>;
     links: Array<{
         source: string;
@@ -41,8 +44,8 @@ export default function CitationGraph({ graphData, originatingPaperId }: { graph
     const containerRef = React.useRef<HTMLDivElement>(null);
     const fgRef = React.useRef<any>(null);
 
-    const minReferenceCount = Math.min(...graphData.nodes.map(node => node.val3));
-    const maxReferenceCount = Math.max(...graphData.nodes.map(node => node.val3));
+    const minCitationCount = Math.min(...graphData.nodes.map(node => node.val2));
+    const maxCitationCount = Math.max(...graphData.nodes.map(node => node.val2));
 
     React.useEffect(() => {
         const handleResize = (entries: ResizeObserverEntry[]) => {
@@ -73,7 +76,7 @@ export default function CitationGraph({ graphData, originatingPaperId }: { graph
     }, [graphData]);
 
     const valToColor = scaleLog([1, 5, 75, 150], ["white", "lightblue", "steelblue", "lightgreen"]);
-    const borderWidthScale = scaleLinear([minReferenceCount, maxReferenceCount], [0.5, 3]);
+    const borderWidthScale = scaleLinear([minCitationCount, maxCitationCount], [0.5, 3]);
 
     return (
         <Card ref={containerRef} className="relative w-full h-full min-w-0">
@@ -88,7 +91,7 @@ export default function CitationGraph({ graphData, originatingPaperId }: { graph
                 linkWidth={1}
                 nodeCanvasObject={(node, ctx, globalScale) => {
                     const currentYear = 2024;
-                    const yearDiff = currentYear - (node.val2 as number);
+                    const yearDiff = currentYear - (node.val3 as number);
                     const maxRadius = 10;
                     const radius = Math.max(5, maxRadius - yearDiff * 0.5);
 
@@ -103,7 +106,7 @@ export default function CitationGraph({ graphData, originatingPaperId }: { graph
                     ctx.fill();
             
                     // Draw the border
-                    const borderWidth = borderWidthScale(node.val3 as number);
+                    const borderWidth = borderWidthScale(node.val2 as number);
                     const borderColor = resolvedTheme === 'dark' ? 'darkgray' : 'black';
 
                     ctx.lineWidth = borderWidth;
@@ -111,7 +114,7 @@ export default function CitationGraph({ graphData, originatingPaperId }: { graph
                     ctx.stroke();
                   }}
                   nodePointerAreaPaint={(node, color, ctx) => {
-                    const radius = Math.max(5, 10 - (2024 - node.val2) * 0.5); // For the interaction area
+                    const radius = Math.max(5, 10 - (2024 - node.val3) * 0.5); // For the interaction area
                     ctx.beginPath();
                     ctx.arc(node.x || 0, node.y || 0, radius, 0, 2 * Math.PI, false);
                     ctx.fillStyle = color;
@@ -122,14 +125,15 @@ export default function CitationGraph({ graphData, originatingPaperId }: { graph
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <div className="absolute top-0 left-0 p-2 bg-background/80 backdrop-blur-sm rounded-sm">
+                            <div className="absolute top-4 left-4 p-2 bg-background/80 rounded-sm">
                                 <h3 className="text-sm font-medium">{hoverNode.name}</h3>
-                                <p className="text-xs">Citation count: {hoverNode.val}</p>
-                                <p className="text-xs">Year: {hoverNode.val2}</p>
-                                <p className="text-xs">Reference count: {hoverNode.val3}</p>
+                                <p className="text-xs">Year: {hoverNode.val3}</p>
+                                <p className="text-xs">Journal: {hoverNode.val6}</p>
+                                <p className="text-xs">Influential citation count: {hoverNode.val}</p>
+                                <p className="text-xs">Citation count: {hoverNode.val2}</p>
+                                <p className="text-xs">Reference count: {hoverNode.val4}</p>
                             </div>
                         </TooltipTrigger>
-                        <TooltipContent className="text-sm">Node details</TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
                 )
