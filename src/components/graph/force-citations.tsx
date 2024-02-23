@@ -8,13 +8,21 @@ import { ForceGraph2D } from "react-force-graph"
 import { ForceGraphProps, ForceGraphMethods } from "react-force-graph-2d"
 import { ScaleLogarithmic, scaleLog, ScaleLinear, scaleLinear } from "d3-scale"
 
+import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { 
     Tooltip,
     TooltipTrigger,
-    TooltipContent,
     TooltipProvider,
 } from "@/components/ui/tooltip"
+import { 
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+} from "@/components/ui/popover"
+
+import { InfoCircledIcon } from "@radix-ui/react-icons"
+
 
 export type CitationGraphData = {
     nodes: Array<{
@@ -37,10 +45,22 @@ export type CitationGraphData = {
     maxCitationCount: number;
 }
 
+interface GraphNode {
+    id: string;
+    name: string;
+    val: number; // Influential citation count
+    val2: number; // Citation count
+    val3: number; // Year
+    val4: number; // Reference count
+    val6: string; // Additional information, adjust type as needed
+    x?: number; // Optional because it might not be set initially
+    y?: number; // Optional for the same reason
+}
+
 export default function CitationGraph({ graphData, originatingPaperId }: { graphData: CitationGraphData, originatingPaperId: string}) {
     const { resolvedTheme } = useTheme();
     const [dimensions, setDimensions] = React.useState({ width: 300, height: 600 });
-    const [hoverNode, setHoverNode] = React.useState(null);
+    const [hoverNode, setHoverNode] = React.useState<GraphNode | null>(null);
     const containerRef = React.useRef<HTMLDivElement>(null);
     const fgRef = React.useRef<any>(null);
 
@@ -66,27 +86,35 @@ export default function CitationGraph({ graphData, originatingPaperId }: { graph
 
     React.useEffect(() => {
         if (fgRef.current && graphData) {
-            const transitionDuration = 1000;
-            const padding = 20;
-            const nodeFilterFn = (node: any) => true;
+            // const transitionDuration = 1000;
+            // const padding = 20;
+            // const nodeFilterFn = (node: any) => true;
 
-            fgRef.current.zoomToFit(transitionDuration, padding, nodeFilterFn);
+            // fgRef.current.zoomToFit(transitionDuration, padding, nodeFilterFn);
             fgRef.current.d3Force('charge').strength(-75);
         }
     }, [graphData]);
 
-    const valToColor = scaleLog([1, 5, 75, 150], ["white", "lightblue", "steelblue", "lightgreen"]);
-    const borderWidthScale = scaleLinear([minCitationCount, maxCitationCount], [0.5, 3]);
+    const valToColor = scaleLog([1, 5, 75, 150], [resolvedTheme === 'dark' ? "gray": "white", "lightblue", "steelblue", "lightgreen"]);
+    const borderWidthScale = scaleLinear([minCitationCount, maxCitationCount], [0.5, 4]);
 
     return (
+        <div className="flex flex-col gap-4 items-end">
+        <GraphLegend 
+            colorScale={valToColor}
+            borderWidthScale={borderWidthScale}
+            minCitationCount={minCitationCount}
+            maxCitationCount={maxCitationCount}
+            />
         <Card ref={containerRef} className="relative w-full h-full min-w-0">
             <ForceGraph2D
                 ref={fgRef}
                 graphData={graphData}
-                onNodeHover={(node) => setHoverNode(node)}
+                onNodeHover={(node) => setHoverNode(node as GraphNode)}
                 nodeLabel={() => ''}
                 width={dimensions.width}    
                 height={dimensions.height}
+                minZoom={1}
                 linkColor={() => resolvedTheme === 'dark' ? 'gray' : 'lightgray'}
                 linkWidth={1}
                 nodeCanvasObject={(node, ctx, globalScale) => {
@@ -107,7 +135,7 @@ export default function CitationGraph({ graphData, originatingPaperId }: { graph
             
                     // Draw the border
                     const borderWidth = borderWidthScale(node.val2 as number);
-                    const borderColor = resolvedTheme === 'dark' ? 'darkgray' : 'black';
+                    const borderColor = resolvedTheme === 'dark' ? 'lightgray' : 'black';
 
                     ctx.lineWidth = borderWidth;
                     ctx.strokeStyle = borderColor;
@@ -125,10 +153,9 @@ export default function CitationGraph({ graphData, originatingPaperId }: { graph
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <div className="absolute top-4 left-4 p-2 bg-background/80 rounded-sm">
+                            <div className="absolute top-4 left-4 p-2 bg-background/90 backdrop-blur-sm rounded-sm">
                                 <h3 className="text-sm font-medium">{hoverNode.name}</h3>
-                                <p className="text-xs">Year: {hoverNode.val3}</p>
-                                <p className="text-xs">Journal: {hoverNode.val6}</p>
+                                <p className="text-xs">{hoverNode.val6} ({hoverNode.val3})</p>
                                 <p className="text-xs">Influential citation count: {hoverNode.val}</p>
                                 <p className="text-xs">Citation count: {hoverNode.val2}</p>
                                 <p className="text-xs">Reference count: {hoverNode.val4}</p>
@@ -138,15 +165,25 @@ export default function CitationGraph({ graphData, originatingPaperId }: { graph
                 </TooltipProvider>
                 )
             }
-            <GraphLegend scale={valToColor} />
         </Card>
+        </div>
     )
 }
 
-function GraphLegend ({ scale }: { scale: ScaleLogarithmic<string, string, never>}) {
-    const legendValues = [1, 5, 75, 150];
-    const legendItems = legendValues.map(value => {
-        const color = scale(value);
+function GraphLegend ({ 
+    colorScale, 
+    borderWidthScale,
+    minCitationCount,
+    maxCitationCount,
+}: { 
+    colorScale: ScaleLogarithmic<string, string, never>, 
+    borderWidthScale: ScaleLinear<number, number, never>,
+    minCitationCount: number,
+    maxCitationCount: number,
+}) {
+    const colorValues = [1, 5, 75, 150];
+    const colorItems = colorValues.map(value => {
+        const color = colorScale(value);
         return (
             <div key={value} className="flex items-center mb-2">
                 <div className="w-4 h-4 rounded-full mr-2 border border-black" style={{ backgroundColor: color }}></div>
@@ -155,11 +192,38 @@ function GraphLegend ({ scale }: { scale: ScaleLogarithmic<string, string, never
         )
     });
 
+    const borderValues = [minCitationCount, maxCitationCount];
+    const borderItems = borderValues.map((value, index) => {
+        const borderWidth = borderWidthScale(value);
+        return (
+            <div key={index} className="flex items-center mb-2">
+                <div className="w-4 h-4 rounded-full mr-2 border border-black" style={{ borderWidth: `${borderWidth}px` }}></div>
+                <div className="text-xs">{value}</div>
+            </div>
+        )
+    });
+
     return (
-        <div className="px-4 py-2 border rounded-sm bg-background/80 backdrop-blur-sm absolute bottom-10 left-4 ">
-            <h3 className="text-sm font-medium mb-2">Influential citations</h3>
-            {legendItems}
-        </div>
+        <Popover>
+            <PopoverTrigger asChild>
+                <Button variant="outline" size="sm" className="text-sm">
+                    <InfoCircledIcon className="h-4 w-4 mr-2" />
+                    Graph legend
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-max">
+                <div className="flex items-start">
+                    <div className="flex flex-col items-start justify-center mr-4">
+                        <h3 className="text-xs font-medium mb-2 w-16">Influential citations</h3>
+                        <div className="flex flex-col items-start justify-center">{colorItems}</div>
+                    </div>
+                    <div className="flex flex-col items-start justify-center">
+                        <h3 className="text-xs font-medium mb-2 w-16">Total citations</h3>
+                        <div className="flex flex-col items-start justify-center">{borderItems}</div>
+                    </div>
+                </div>
+            </PopoverContent>
+        </Popover>
     )
 }
 

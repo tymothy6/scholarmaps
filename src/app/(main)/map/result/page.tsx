@@ -52,7 +52,15 @@ export default async function Results({ searchParams }: SearchProps ) {
             console.error('Error transforming citation data:', error);
             return { 
                 nodes: [
-                { id: paperId, name: 'Seed paper', val: 10, val2: 2024, val3: 0 },
+                { 
+                    id: paperId, 
+                    name: 'Seed paper', 
+                    val: 10, 
+                    val2: 2024, 
+                    val3: 0, 
+                    val4: 0, 
+                    val5: ["Journal Article"], 
+                    val6: "Journal", },
                 ], 
                 links: [] ,
                 minReferenceCount: 0,

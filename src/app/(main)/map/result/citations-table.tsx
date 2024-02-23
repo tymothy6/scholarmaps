@@ -96,28 +96,31 @@ export function CitationResultTable<TData, TValue>({
 
     return (
         <div>
-          <div className="flex items-center py-4 gap-2">
-          <Input
-          placeholder={`Filter ${filteredResults} citations`}
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
-          }
-          className="w-full sm:max-w-sm"
-          />
-          {isFiltered && (
-            <TooltipProvider>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                    <Button variant="destructive" size="icon" onClick={() => handleResetFilters()}>
-                        <span className="sr-only">Reset filters</span>
-                        <RotateCcwIcon className="h-4 w-4" />
-                    </Button>
-                    </TooltipTrigger>
-                <TooltipContent className="text-sm">Reset filters</TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
-          )}
+            <div className="flex items-center justify-between">
+                <div className="flex items-center py-4 gap-2">
+                <Input
+                placeholder={`Filter ${filteredResults} citations`}
+                value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                    table.getColumn("title")?.setFilterValue(event.target.value)
+                }
+                className="w-full sm:max-w-sm"
+                />
+                {isFiltered && (
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                            <Button variant="destructive" size="icon" onClick={() => handleResetFilters()}>
+                                <span className="sr-only">Reset filters</span>
+                                <RotateCcwIcon className="h-4 w-4" />
+                            </Button>
+                            </TooltipTrigger>
+                        <TooltipContent className="text-sm">Reset filters</TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                )}
+                </div>
+                <DataTablePagination table={table} />
           </div>
           <Card>
             <div className="w-full">
@@ -165,8 +168,7 @@ export function CitationResultTable<TData, TValue>({
                 </TableBody>
             </Table>
             </div>
-                <div className="flex justify-between items-center px-2 py-4 w-full">
-                    <DataTablePagination table={table} />
+                <div className="flex items-center p-4 w-full">
                     <DataTableViewOptions table={table} />
                 </div>
             </div>

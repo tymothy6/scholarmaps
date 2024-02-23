@@ -5,19 +5,19 @@ function transformGraphData (citations: PaperCitationResult[], originatingPaperI
     // First filter step
     const filteredCitations = citations.filter(citation => citation.citingPaper.citationCount >= 5);
 
-    const nodes = filteredCitations.map(citation => ({
+    const nodes = citations.map(citation => ({
         id: citation.citingPaper.paperId,
         name: citation.citingPaper.title,
         val: citation.citingPaper.influentialCitationCount, 
         val2: citation.citingPaper.citationCount,
         val3: citation.citingPaper.year,
         val4: citation.citingPaper.referenceCount,
-        val5: citation.citingPaper.publicationTypes,
-        val6: citation.citingPaper.journal.name,
+        val5: citation.citingPaper.publicationTypes?.map(type => type),
+        val6: citation.citingPaper.journal?.name,
 
     }));
 
-    const links = filteredCitations.map(citation => ({
+    const links = citations.map(citation => ({
         source: originatingPaperId,
         target: citation.citingPaper.paperId,
     }));
@@ -31,7 +31,7 @@ function transformGraphData (citations: PaperCitationResult[], originatingPaperI
         val3: 2024,
         val4: 5,
         val5: ["Journal Article"],
-        val6: "My favourite journal",
+        val6: "Journal",
     };
 
     // Ensure the source paper is only added if it's not already a node
@@ -40,11 +40,11 @@ function transformGraphData (citations: PaperCitationResult[], originatingPaperI
     }
 
     // Find min and max values for visualization
-    const referenceCounts = filteredCitations.map(citation => citation.citingPaper.referenceCount);
+    const referenceCounts = citations.map(citation => citation.citingPaper.referenceCount);
     const minReferenceCount = Math.min(...referenceCounts);
     const maxReferenceCount = Math.max(...referenceCounts);
 
-    const citationCounts = filteredCitations.map(citation => citation.citingPaper.citationCount);
+    const citationCounts = citations.map(citation => citation.citingPaper.citationCount);
     const minCitationCount = Math.min(...citationCounts);
     const maxCitationCount = Math.max(...citationCounts);
 
