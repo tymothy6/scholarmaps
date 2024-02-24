@@ -19,6 +19,16 @@ export function generateMetadata( { searchParams }: { searchParams: {[key: strin
 
 interface SearchProps { searchParams: { [key: string]: string | undefined } }
 
+// async function getSeedPaperData (searchParams: { [key: string]: string | undefined }) {
+//     const paperId = searchParams['paperId'] || '';
+//     let results: PaperCitationResult[] = [];
+//     if (paperId) {
+//         const response = await getInfluentialPaperCitations(paperId);
+//         results = response.data;
+//     }
+//     return results;
+// }
+
 export default async function Results({ searchParams }: SearchProps ) {
     const paperId = searchParams['paperId'] || '';
 

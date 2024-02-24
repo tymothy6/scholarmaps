@@ -3,7 +3,7 @@ import { PaperCitationResult } from '@/app/(main)/map/page';
 
 function transformGraphData (citations: PaperCitationResult[], originatingPaperId: string) {
     // First filter step
-    const filteredCitations = citations.filter(citation => citation.citingPaper.citationCount >= 5);
+    // const filteredCitations = citations.filter(citation => citation.citingPaper.citationCount >= 5);
 
     const nodes = citations.map(citation => ({
         id: citation.citingPaper.paperId,
@@ -22,7 +22,6 @@ function transformGraphData (citations: PaperCitationResult[], originatingPaperI
         target: citation.citingPaper.paperId,
     }));
 
-    // Submit seed paper ID to relevance search to fetch details to populate this node
     const originatingNode = {
         id: originatingPaperId,
         name: "Seed paper", 
@@ -74,3 +73,5 @@ export async function POST(req: NextRequest) {
     }
     
 }
+
+// 10.1126/science.1106148
