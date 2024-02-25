@@ -18,14 +18,14 @@ export async function GET(req: NextRequest) {
         });
 
         if (!response.ok) {
-            throw new Error(`Bulk search API responded with status code ${response.status}: ${response.statusText}`);
+            throw new Error(`Paper details API responded with status code ${response.status}: ${response.statusText}`);
         }
 
         const data = await response.json();
         return NextResponse.json(data);
     } catch (error) {
-        console.error('Error in bulk search route handler:', error);
-        return new NextResponse(JSON.stringify({ error: 'Failed to fetch data from paper bulk search API' }), {
+        console.error('Error in paper details route handler:', error);
+        return new NextResponse(JSON.stringify({ error: 'Failed to fetch data from paper details API' }), {
             status: 500,
             headers: {
                 'Content-Type': 'application/json',

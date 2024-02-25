@@ -36,6 +36,7 @@ export type CitationGraphData = {
         val4: number;
         val5: string[];
         val6: string;
+        val7: string;
     }>;
     links: Array<{
         source: string;
@@ -54,7 +55,8 @@ interface GraphNode {
     val2: number; // Citation count
     val3: number; // Year
     val4: number; // Reference count
-    val6: string; // Additional information, adjust type as needed
+    val6: string; // Journal name
+    val7: string; // URL
     x?: number; // Optional because it might not be set initially
     y?: number; // Optional for the same reason
 }

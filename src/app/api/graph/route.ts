@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PaperCitationResult } from '@/app/(main)/map/page';
+import { SeedPaperData } from '@/app/(main)/map/result/page';
 
-function transformGraphData (citations: PaperCitationResult[], originatingPaperId: string) {
-    // First filter step
+function transformGraphData (citations: PaperCitationResult[], seedPaperData: SeedPaperData) {
+    // Filter out papers with less than 5 citations
     // const filteredCitations = citations.filter(citation => citation.citingPaper.citationCount >= 5);
 
     const nodes = citations.map(citation => ({
@@ -12,29 +13,30 @@ function transformGraphData (citations: PaperCitationResult[], originatingPaperI
         val2: citation.citingPaper.citationCount,
         val3: citation.citingPaper.year,
         val4: citation.citingPaper.referenceCount,
-        val5: citation.citingPaper.publicationTypes?.map(type => type),
+        val5: citation.citingPaper.publicationTypes?.join(', '),
         val6: citation.citingPaper.journal?.name,
-
+        val7: citation.citingPaper.url
     }));
 
     const links = citations.map(citation => ({
-        source: originatingPaperId,
+        source: seedPaperData.paperId,
         target: citation.citingPaper.paperId,
     }));
 
     const originatingNode = {
-        id: originatingPaperId,
-        name: "Seed paper", 
-        val: 5, 
-        val2: 5,
-        val3: 2024,
-        val4: 5,
-        val5: ["Journal Article"],
-        val6: "Journal",
+        id: seedPaperData.paperId,
+        name: seedPaperData.title, 
+        val: seedPaperData.influentialCitationCount, 
+        val2: seedPaperData.citationCount,
+        val3: seedPaperData.year,
+        val4: seedPaperData.referenceCount,
+        val5: seedPaperData.publicationTypes?.join(', '),
+        val6: seedPaperData.journal?.name,
+        val7: seedPaperData.url
     };
 
     // Ensure the source paper is only added if it's not already a node
-    if (!nodes.some(node => node.id === originatingPaperId)) {
+    if (!nodes.some(node => node.id === seedPaperData.paperId)) {
         nodes.push(originatingNode);
     }
 

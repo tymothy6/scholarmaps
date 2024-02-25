@@ -10,7 +10,6 @@ import { CitationGraphData } from '@/components/graph/force-citations'
 
 const CitationGraph = dynamic(() => import('@/components/graph/force-citations'), { ssr: false })
 
-
 export function generateMetadata( { searchParams }: { searchParams: {[key: string]: string | undefined } } ) {
     const title = searchParams['paperId'] ? `Map for ${searchParams['paperId']}` : 'Map results';
     const description = 'Map connected papers in the Semantic Scholar research corpus';
@@ -19,15 +18,25 @@ export function generateMetadata( { searchParams }: { searchParams: {[key: strin
 
 interface SearchProps { searchParams: { [key: string]: string | undefined } }
 
-// async function getSeedPaperData (searchParams: { [key: string]: string | undefined }) {
-//     const paperId = searchParams['paperId'] || '';
-//     let results: PaperCitationResult[] = [];
-//     if (paperId) {
-//         const response = await getInfluentialPaperCitations(paperId);
-//         results = response.data;
-//     }
-//     return results;
-// }
+export type SeedPaperData = {
+    paperId: string;
+    url: string;
+    title: string;
+    year: number;
+    referenceCount: number;
+    citationCount: number;
+    influentialCitationCount: number;
+    journal: {
+        name: string;
+        pages?: string;
+        volume?: string;
+    }
+    authors: Array<{
+        authorId: string
+        name: string
+    }>
+    publicationTypes: string[];
+}
 
 export default async function Results({ searchParams }: SearchProps ) {
     const paperId = searchParams['paperId'] || '';
@@ -36,7 +45,25 @@ export default async function Results({ searchParams }: SearchProps ) {
         if (paperId) {
             const response = await getInfluentialPaperCitations(paperId);
             results = response.data;
+    }
+
+    // Fetch data for the seed paper using details API
+    async function getSeedPaperData(paperId: string) {
+        if (paperId) {
+            const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+            const url = `${baseUrl}/api/details?query=${paperId}`;
+            const response = await fetch(url, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const details = await response.json();
+            return details;
         }
+    }
+
+    const seedPaperData = await getSeedPaperData(paperId);
 
     // Fetch citations and transform into shape that matches react-force-graph
     async function getCitationGraphData(): Promise<CitationGraphData> {
@@ -49,7 +76,7 @@ export default async function Results({ searchParams }: SearchProps ) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ citations: results, originatingPaperId: paperId }),
+                body: JSON.stringify({ citations: results, seedPaperData: seedPaperData }),
             });
 
             if (!response.ok) {
@@ -65,12 +92,14 @@ export default async function Results({ searchParams }: SearchProps ) {
                 { 
                     id: paperId, 
                     name: 'Seed paper', 
-                    val: 10, 
+                    val: 0, 
                     val2: 2024, 
                     val3: 0, 
                     val4: 0, 
                     val5: ["Journal Article"], 
-                    val6: "Journal", },
+                    val6: "No journal found",
+                    val7: "https://www.semanticscholar.org/"
+                },
                 ], 
                 links: [] ,
                 minReferenceCount: 0,
