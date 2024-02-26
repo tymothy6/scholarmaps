@@ -42,7 +42,6 @@ export default async function Results({ searchParams }: SearchProps ) {
     const paperId = searchParams['paperId'] || '';
 
     let results: PaperCitationResult[] = [];
-    let seedPaperData: SeedPaperData;
 
     if (paperId) {
         const response = await getInfluentialPaperCitations(paperId);
@@ -50,8 +49,8 @@ export default async function Results({ searchParams }: SearchProps ) {
     }
 
     // Fetch data for the seed paper using details API
-    async function getSeedPaperData() {
-        if (paperId) {
+    async function getSeedPaperData(): Promise<SeedPaperData> {
+        try {
             const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
             const url = `${baseUrl}/api/details?paperId=${paperId}`;
             const response = await fetch(url, {
@@ -62,17 +61,32 @@ export default async function Results({ searchParams }: SearchProps ) {
 
             const data = await response.json();
             return data;
+        } catch (error) {
+            console.error('Error fetching seed paper data:', error);
+            return {
+                paperId: paperId,
+                url: 'https://www.semanticscholar.org/',
+                title: 'Seed paper',
+                year: 2024,
+                referenceCount: 0,
+                citationCount: 0,
+                influentialCitationCount: 0,
+                journal: {
+                    name: 'No journal found',
+                },
+                authors: [],
+                publicationTypes: [],
+            };
         }
     }
+
+    const seedPaperResponse = await getSeedPaperData();
+    // console.log('Seed paper data:', seedPaperData); // log for debugging
 
     // Fetch citations and transform into shape that matches react-force-graph
     async function getCitationGraphData(): Promise<CitationGraphData> {
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
         const url = `${baseUrl}/api/graph`;
-
-        const seedPaperResponse = await getSeedPaperData();
-        seedPaperData = seedPaperResponse;
-        // console.log('Seed paper data:', seedPaperData); // log for debugging
 
         try {
             const response = await fetch(url, {
@@ -80,7 +94,7 @@ export default async function Results({ searchParams }: SearchProps ) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ citations: results, seedPaperData: seedPaperData }),
+                body: JSON.stringify({ citations: results, seedPaperData: seedPaperResponse }),
             });
 
             if (!response.ok) {
@@ -97,8 +111,8 @@ export default async function Results({ searchParams }: SearchProps ) {
                     id: paperId, 
                     name: 'Seed paper', 
                     val: 0, 
-                    val2: 2024, 
-                    val3: 0, 
+                    val2: 0, 
+                    val3: 2024, 
                     val4: 0, 
                     val5: ["Journal Article"], 
                     val6: "No journal found",
@@ -120,7 +134,7 @@ export default async function Results({ searchParams }: SearchProps ) {
         // console.log(JSON.stringify(graphData, null, 2)); // log for debugging
 
         return (
-            <CitationGraph graphData={graphData} originatingPaperId={paperId} />
+            <CitationGraph graphData={graphData} seedPaperId={seedPaperResponse.paperId} />
         )
     }
 

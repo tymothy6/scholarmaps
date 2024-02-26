@@ -5,8 +5,8 @@ import { SeedPaperData } from '@/app/(main)/map/result/page';
 function transformGraphData (citations: PaperCitationResult[], seedPaperData: SeedPaperData) {
     // Filter out papers with less than 5 citations
     // const filteredCitations = citations.filter(citation => citation.citingPaper.citationCount >= 5);
-    console.log('Seed paper data:', seedPaperData); // log for debugging
-    
+    console.log('Seed paper data in route handler:', seedPaperData); // log for debugging
+
     const nodes = citations.map(citation => ({
         id: citation.citingPaper.paperId,
         name: citation.citingPaper.title,
@@ -55,10 +55,10 @@ function transformGraphData (citations: PaperCitationResult[], seedPaperData: Se
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
-    const { citations, originatingPaperId } = body;
+    const { citations, seedPaperData } = body;
 
     try {
-        const graphData = transformGraphData(citations, originatingPaperId);
+        const graphData = transformGraphData(citations, seedPaperData);
         return new NextResponse(JSON.stringify(graphData), {
             status: 200,
             headers: {

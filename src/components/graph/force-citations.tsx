@@ -61,7 +61,7 @@ interface GraphNode {
     y?: number; // Optional for the same reason
 }
 
-export default function CitationGraph({ graphData, originatingPaperId }: { graphData: CitationGraphData, originatingPaperId: string}) {
+export default function CitationGraph({ graphData, seedPaperId }: { graphData: CitationGraphData, seedPaperId: string}) {
     const { resolvedTheme } = useTheme();
     const [dimensions, setDimensions] = React.useState({ width: 300, height: 600 });
     const [hoverNode, setHoverNode] = React.useState<GraphNode | null>(null);
@@ -144,7 +144,7 @@ export default function CitationGraph({ graphData, originatingPaperId }: { graph
                     const radius = calculateRadius(node.val3 as number);
 
                     // Fill the seed node 
-                    const isSeedNode = node.id === originatingPaperId;
+                    const isSeedNode = node.id === seedPaperId;
                     const fillColor: string = isSeedNode ? '#F5F5F5' : valToColor(node.val as number) as unknown as string;
             
                     // Draw the node (circle) with a fill
