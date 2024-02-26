@@ -95,7 +95,7 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
             // const nodeFilterFn = (node: any) => true;
 
             // fgRef.current.zoomToFit(transitionDuration, padding, nodeFilterFn);
-            fgRef.current.d3Force('charge').strength(-100);
+            fgRef.current.d3Force('charge').strength(-125);
         }
     }, [graphData]);
 
@@ -106,7 +106,7 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
 
     const valToColor = scaleLinear([q1, q2, q3, maxVal], [resolvedTheme === 'dark' ? "gray" : "white", "lightblue", "steelblue", "lightgreen"]);
 
-    const borderWidthScale = scaleLinear([minCitationCount, maxCitationCount], [0.5, 4]);
+    const borderWidthScale = scaleLinear([minCitationCount, maxCitationCount], [0.25, 4]);
 
     const calculateRadius = (year: number) => {
         const currentYear = 2024;

@@ -7,7 +7,10 @@ function transformGraphData (citations: PaperCitationResult[], seedPaperData: Se
     // const filteredCitations = citations.filter(citation => citation.citingPaper.citationCount >= 5);
     console.log('Seed paper data in route handler:', seedPaperData); // log for debugging
 
-    const nodes = citations.map(citation => ({
+    // Filter citations to ensure paperId is not null and is a non-empty string
+    const validCitations = citations.filter(citation => citation.citingPaper.paperId && citation.citingPaper.paperId.trim());
+
+    const nodes = validCitations.map(citation => ({
         id: citation.citingPaper.paperId,
         name: citation.citingPaper.title,
         val: citation.citingPaper.influentialCitationCount, 
@@ -19,7 +22,7 @@ function transformGraphData (citations: PaperCitationResult[], seedPaperData: Se
         val7: citation.citingPaper.url
     }));
 
-    const links = citations.map(citation => ({
+    const links = validCitations.map(citation => ({
         source: seedPaperData.paperId,
         target: citation.citingPaper.paperId,
     }));
