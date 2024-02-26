@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
-    const searchQuery = req.nextUrl.searchParams.get('query') || ''; 
+    const paperId = req.nextUrl.searchParams.get('paperId') || ''; 
+    const fields = 'paperId,url,title,year,referenceCount,citationCount,influentialCitationCount,journal,authors,publicationTypes';
 
-    const queryParams = new URLSearchParams({
-        query: searchQuery,
-        fields: 'paperId,url,title,abstract,year,referenceCount,citationCount,influentialCitationCount,tldr,journal,authors,publicationTypes',
-    });
-
-    const url = `https://api.semanticscholar.org/graph/v1/paper/${queryParams.toString()}`;
+    const url = `https://api.semanticscholar.org/graph/v1/paper/${paperId}?fields=${fields}`;
 
     try {
         const response = await fetch(url, {

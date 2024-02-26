@@ -42,33 +42,37 @@ export default async function Results({ searchParams }: SearchProps ) {
     const paperId = searchParams['paperId'] || '';
 
     let results: PaperCitationResult[] = [];
-        if (paperId) {
-            const response = await getInfluentialPaperCitations(paperId);
-            results = response.data;
+    let seedPaperData: SeedPaperData;
+
+    if (paperId) {
+        const response = await getInfluentialPaperCitations(paperId);
+        results = response.data;
     }
 
     // Fetch data for the seed paper using details API
-    async function getSeedPaperData(paperId: string) {
+    async function getSeedPaperData() {
         if (paperId) {
             const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-            const url = `${baseUrl}/api/details?query=${paperId}`;
+            const url = `${baseUrl}/api/details?paperId=${paperId}`;
             const response = await fetch(url, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
 
-            const details = await response.json();
-            return details;
+            const data = await response.json();
+            return data;
         }
     }
-
-    const seedPaperData = await getSeedPaperData(paperId);
 
     // Fetch citations and transform into shape that matches react-force-graph
     async function getCitationGraphData(): Promise<CitationGraphData> {
         const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
         const url = `${baseUrl}/api/graph`;
+
+        const seedPaperResponse = await getSeedPaperData();
+        seedPaperData = seedPaperResponse;
+        // console.log('Seed paper data:', seedPaperData); // log for debugging
 
         try {
             const response = await fetch(url, {

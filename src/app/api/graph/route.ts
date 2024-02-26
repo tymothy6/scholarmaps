@@ -5,7 +5,8 @@ import { SeedPaperData } from '@/app/(main)/map/result/page';
 function transformGraphData (citations: PaperCitationResult[], seedPaperData: SeedPaperData) {
     // Filter out papers with less than 5 citations
     // const filteredCitations = citations.filter(citation => citation.citingPaper.citationCount >= 5);
-
+    console.log('Seed paper data:', seedPaperData); // log for debugging
+    
     const nodes = citations.map(citation => ({
         id: citation.citingPaper.paperId,
         name: citation.citingPaper.title,
