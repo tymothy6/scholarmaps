@@ -7,11 +7,18 @@ import { useTheme } from "next-themes"
 import * as d3 from "d3-array"
 
 import { ForceGraph2D } from "react-force-graph"
-import { ForceGraphProps, ForceGraphMethods } from "react-force-graph-2d"
 import { ScaleLogarithmic, scaleLog, ScaleLinear, scaleLinear } from "d3-scale"
 
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { 
+    DropdownMenu,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuSeparator,
+    DropdownMenuLabel
+} from "@/components/ui/dropdown-menu"
 import { 
     Tooltip,
     TooltipTrigger,
@@ -34,7 +41,7 @@ export type CitationGraphData = {
         val2: number;
         val3: number;
         val4: number;
-        val5: string[];
+        val5: string;
         val6: string;
         val7: string;
     }>;
@@ -55,6 +62,7 @@ interface GraphNode {
     val2: number; // Citation count
     val3: number; // Year
     val4: number; // Reference count
+    val5: string; // Publication types
     val6: string; // Journal name
     val7: string; // URL
     x?: number; // Optional because it might not be set initially
@@ -65,6 +73,9 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
     const { resolvedTheme } = useTheme();
     const [dimensions, setDimensions] = React.useState({ width: 300, height: 600 });
     const [hoverNode, setHoverNode] = React.useState<GraphNode | null>(null);
+    const [menuOpen, setMenuOpen] = React.useState(false);
+    const [menuPosition, setMenuPosition] = React.useState({ x: 0, y: 0 });
+
     const containerRef = React.useRef<HTMLDivElement>(null);
     const fgRef = React.useRef<any>(null);
 
@@ -115,8 +126,18 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
         return Math.max(5, maxRadius - yearDiff * 0.5);
     };
 
+    // Handler for right-clicks on nodes
+    const handleNodeRightClick = (node: GraphNode, event: MouseEvent) => {
+        event.preventDefault(); // Prevent the browser context menu from opening
+        setMenuOpen(true);
+        setMenuPosition({ x: event.clientX, y: event.clientY });
+        console.log('Menu position after click: ', menuPosition); // debug
+    };
+
     return (
         <div className="flex flex-col gap-4 items-end">
+        <div className="flex justify-between items-center w-full">
+        <p className="text-sm text-muted-foreground">{graphData.nodes.length} influential citations found</p>
         <GraphLegend 
             colorScale={valToColor}
             borderWidthScale={borderWidthScale}
@@ -127,7 +148,8 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
             q3={q3}
             maxVal={maxVal}
             calculateRadius={calculateRadius}
-            />
+        />
+        </div>
         <Card ref={containerRef} className="relative w-full h-full min-w-0">
             <ForceGraph2D
                 ref={fgRef}
@@ -139,6 +161,12 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
                 minZoom={1}
                 linkColor={() => resolvedTheme === 'dark' ? 'gray' : 'lightgray'}
                 linkWidth={1}
+                onNodeClick={(node) => {
+                    if (node.val7) {
+                        window.open(node.val7, '_blank');
+                    }
+                }}
+                onNodeRightClick={handleNodeRightClick}
                 nodeCanvasObject={(node, ctx, globalScale) => {
                     // Determine the size of the node based on year
                     const radius = calculateRadius(node.val3 as number);
@@ -173,7 +201,7 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <div className="absolute top-4 left-4 px-4 py-2 bg-background/90 backdrop-blur-sm rounded-sm border shadow-sm">
+                            <div className="absolute top-4 left-4 px-4 py-2 text-primary-foreground bg-primary rounded-sm border-primary shadow-sm">
                                 <h3 className="text-sm font-medium">{hoverNode.name}</h3>
                                 <p className="text-sm">{hoverNode.val6} ({hoverNode.val3})</p>
                                 <p className="text-sm">Influential citation count: {hoverNode.val}</p>
@@ -186,6 +214,23 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
                 )
             }
         </Card>
+        {menuOpen && (
+                <div>
+                    <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
+                        <DropdownMenuTrigger asChild>
+                            <div className="fixed" style={{ top: `${menuPosition.y}px`, left: `${menuPosition.x}px` }} />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem onClick={() => setMenuOpen(false)}>Item 1</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setMenuOpen(false)}>Item 2</DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => setMenuOpen(false)}>Item 3</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setMenuOpen(false)}>Item 4</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+        )}
         </div>
     )
 }

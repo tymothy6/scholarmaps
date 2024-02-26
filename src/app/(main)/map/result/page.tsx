@@ -114,7 +114,7 @@ export default async function Results({ searchParams }: SearchProps ) {
                     val2: 0, 
                     val3: 2024, 
                     val4: 0, 
-                    val5: ["Journal Article"], 
+                    val5: "Journal Article", 
                     val6: "No journal found",
                     val7: "https://www.semanticscholar.org/"
                 },

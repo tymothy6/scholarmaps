@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
 
     try {
         const citations = await fetchCitations(paperId);
-        console.log(`Total citations fetched: ${citations.length}`); // debug
+        // console.log(`Total citations fetched: ${citations.length}`); // debug
 
         const response = NextResponse.json(citations);
 
@@ -52,4 +52,3 @@ export async function GET(req: NextRequest) {
     }
 }
 
-// https://api.semanticscholar.org/graph/v1/paper/10.1126/science.1106148/citations?fields=isInfluential
