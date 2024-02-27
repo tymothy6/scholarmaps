@@ -457,7 +457,7 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                         <Link2Icon className="mr-2 h-4 w-4" />
                         Copy paper URL
                     </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => alert(`Sharing ${result.title}`)}>
+                    <DropdownMenuItem onSelect={() => alert(`Saving ${result.title}`)}>
                         <BookmarkPlusIcon className="mr-2 h-4 w-4" />
                         Save
                     </DropdownMenuItem>

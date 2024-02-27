@@ -18,7 +18,7 @@ import { toast } from "sonner"
 
 import { DataTableColumnHeader } from "@/components/patterns/table-column-header"
 
-import { MoreHorizontalIcon } from "lucide-react"
+import { BookmarkPlusIcon, FileSearchIcon, Link2Icon, MoreHorizontalIcon, NavigationIcon, XIcon } from "lucide-react"
 
 // Import type from map/page.tsx or move here
 import { PaperCitationResult } from "../page"
@@ -149,20 +149,34 @@ export const columns: ColumnDef<PaperCitationResult>[] = [
                     <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
+                            onClick={() => {
+                                if (result.citingPaper.paperId) {
+                                    window.open(`/map/result?paperId=${result.citingPaper.paperId}`, '_blank');
+                                }
+                            }}
+                        >
+                            <NavigationIcon className="h-4 w-4 mr-2" />
+                            Map citations
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
                             onClick={() => copyToClipboard(result.citingPaper.paperId)}
                         >
-                            Copy S2 identifier
+                            <FileSearchIcon className="h-4 w-4 mr-2" />
+                            Copy paper ID
                         </DropdownMenuItem>
                         <DropdownMenuItem 
                             onClick={() => copyToClipboard(result.citingPaper.url)}
                         >
-                            Copy S2 URL
+                            <Link2Icon className="h-4 w-4 mr-2" />
+                            Copy paper URL
                         </DropdownMenuItem>
-                        <DropdownMenuItem onSelect={() => alert(`Sharing ${result.citingPaper.title}`)}>
-                            Share
+                        <DropdownMenuItem onSelect={() => alert(`Saving ${result.citingPaper.title}`)}>
+                            <BookmarkPlusIcon className="h-4 w-4 mr-2" />
+                            Save
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onSelect={() => alert(`Deleting ${result.citingPaper.title}`)}>
+                            <XIcon className="h-4 w-4 mr-2" />
                             Delete
                         </DropdownMenuItem>
                     </DropdownMenuContent>

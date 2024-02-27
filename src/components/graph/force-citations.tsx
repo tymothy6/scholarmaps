@@ -30,8 +30,7 @@ import {
     PopoverContent,
 } from "@/components/ui/popover"
 
-import { InfoCircledIcon } from "@radix-ui/react-icons"
-import { BookmarkPlusIcon, ExternalLinkIcon, NavigationIcon, SearchIcon } from "lucide-react"
+import { InfoIcon, BookmarkPlusIcon, ExternalLinkIcon, NavigationIcon, SearchIcon } from "lucide-react"
 
 
 export type CitationGraphData = {
@@ -79,9 +78,11 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
     const [menuPosition, setMenuPosition] = React.useState({ x: 0, y: 0 });
     const [selectedNode, setSelectedNode] = React.useState<GraphNode | null>(null);
 
-
     const containerRef = React.useRef<HTMLDivElement>(null);
     const fgRef = React.useRef<any>(null);
+
+    // Exclude the seed paper from the nodes
+    const nonSeedGraphNodes = graphData.nodes.filter(node => node.id !== seedPaperId);
 
     const minCitationCount = Math.min(...graphData.nodes.map(node => node.val2));
     const maxCitationCount = Math.max(...graphData.nodes.map(node => node.val2));
@@ -114,11 +115,10 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
         }
     }, [graphData]);
 
-    const { q1, q2, q3 } = calculateQuartiles(graphData.nodes.map(node => node.val));
-    const maxVal = Math.max(...graphData.nodes.map(node => node.val));
-
+    // Calculate quartiles and max value for color scale
+    const { q1, q2, q3 } = calculateQuartiles(nonSeedGraphNodes.map(node => node.val));
+    const maxVal = Math.max(...nonSeedGraphNodes.map(node => node.val));
     // const valToColor = scaleLog([1, 5, 75, 150], [resolvedTheme === 'dark' ? "gray": "white", "lightblue", "steelblue", "lightgreen"]);
-
     const valToColor = scaleLinear([q1, q2, q3, maxVal], ["white", "lightblue", "steelblue", "lightgreen"]);
 
     const borderWidthScale = scaleLinear([minCitationCount, maxCitationCount], [0.25, 4]);
@@ -142,7 +142,7 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
     return (
         <div className="flex flex-col gap-4 items-end">
         <div className="flex justify-between items-center w-full">
-        <p className="text-sm text-muted-foreground">{graphData.nodes.length - 1} influential citations found</p>
+        <p className="text-sm text-muted-foreground">{nonSeedGraphNodes.length} influential citations found</p>
         <GraphLegend 
             colorScale={valToColor}
             borderWidthScale={borderWidthScale}
@@ -307,7 +307,7 @@ function GraphLegend ({
         return (
             <div key={value} className="flex items-center mb-2">
                 <div className="w-4 h-4 rounded-full mr-2 border-[0.75px] border-black" style={{ backgroundColor: color }}></div>
-                <div className="text-xs">{value}</div>
+                <div className="text-xs font-mono">{value}</div>
             </div>
         )
     });
@@ -318,7 +318,7 @@ function GraphLegend ({
         return (
             <div key={index} className="flex items-center mb-2">
                 <div className="w-4 h-4 rounded-full mr-2 border border-black" style={{ borderWidth: `${borderWidth}px` }}></div>
-                <div className="text-xs">{value}</div>
+                <div className="text-xs font-mono">{value}</div>
             </div>
         )
     });
@@ -332,7 +332,7 @@ function GraphLegend ({
         return (
             <div key={item.year} className="flex items-center mb-2">
                 <div className="rounded-full mr-2 border-[0.75px] border-black" style={{ width: `${item.diameter}px`, height: `${item.diameter}px` }}></div>
-                <div className="text-xs">{item.year}</div>
+                <div className="text-xs font-mono">{item.year}</div>
             </div>
         )
     });
@@ -341,7 +341,7 @@ function GraphLegend ({
         <Popover>
             <PopoverTrigger asChild>
                 <Button variant="outline" size="sm" className="text-[13px]">
-                    <InfoCircledIcon className="h-4 w-4 mr-2" />
+                    <InfoIcon className="h-4 w-4 mr-2" />
                     Graph legend
                 </Button>
             </PopoverTrigger>
@@ -367,43 +367,3 @@ function GraphLegend ({
         </Popover>
     )
 }
-
-// // Shape of the data
-// const sampleData = {
-//     "nodes": [ 
-//         { 
-//           "id": "id1",
-//           "name": "name1",
-//           "val": 1 
-//         },
-//         { 
-//           "id": "id2",
-//           "name": "name2",
-//           "val": 10 
-//         },
-//         { 
-//           "id": "id3",
-//           "name": "name3",
-//           "val": 12 
-//         },
-//         { 
-//           "id": "id4",
-//           "name": "name4",
-//           "val": 24
-//         },
-//     ],
-//     "links": [
-//         {
-//             "source": "id1",
-//             "target": "id2"
-//         },
-//         {
-//             "source": "id2",
-//             "target": "id3"
-//         },
-//         {
-//             "source": "id3",
-//             "target": "id1"
-//         }
-//     ]
-// }
