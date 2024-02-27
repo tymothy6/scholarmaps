@@ -159,7 +159,7 @@ export function SearchResultTable<TData, TValue>({
       let newVisibility: Record<string, boolean> = {};
       Object.entries(visibleColumns).forEach(([columnName, isVisible]) => {
         newVisibility[columnName] = isVisible;
-      });
+      }); 
 
       table.setColumnVisibility(newVisibility);
     }
@@ -177,7 +177,8 @@ export function SearchResultTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4 gap-2">
+      <div className="flex justify-between items-center py-4">
+        <div className="flex gap-2 items-center">
         <Input
         placeholder={`Filter ${filteredResults} results`}
         value={selectedFilter ? (table.getColumn(selectedFilter.value)?.getFilterValue() as string) ?? "" : ""}
@@ -194,7 +195,7 @@ export function SearchResultTable<TData, TValue>({
               <Popover open={open} onOpenChange={setOpen}>
                 <TooltipTrigger asChild>
                 <PopoverTrigger asChild>
-                  <Button variant="secondary" size={selectedFilter ? "default" : "icon"}>
+                  <Button variant="secondary" size={selectedFilter ? "default" : "icon"} className="px-2">
                     {selectedFilter ? <span><FilterIcon className="inline mr-2 h-4 w-4"/>{selectedFilter.label}</span> : <FilterIcon className="h-4 w-4"/>}
                   </Button>
                 </PopoverTrigger>
@@ -210,7 +211,7 @@ export function SearchResultTable<TData, TValue>({
         (
           <Drawer open={open} onOpenChange={setOpen}>
             <DrawerTrigger asChild>
-              <Button variant="secondary" size="default">
+              <Button variant="secondary" size="default" className="px-2">
                 {selectedFilter ? <span>{selectedFilter.label}</span> : <FilterIcon className="h-4 w-4"/> }
               </Button>
             </DrawerTrigger>
@@ -242,7 +243,7 @@ export function SearchResultTable<TData, TValue>({
           <Tooltip>
             <TooltipTrigger asChild>
               { table.getColumn("title")?.getFilterValue() ?
-              <Button variant="destructive" size="icon" onClick={() => handleResetFilters()}>
+              <Button variant="destructive" size="icon" className="px-2" onClick={() => handleResetFilters()}>
                 <span className="sr-only">Reset filters</span>
                 <RotateCcwIcon className="h-4 w-4" />
               </Button>
@@ -251,6 +252,8 @@ export function SearchResultTable<TData, TValue>({
           <TooltipContent className="text-sm">Reset all filters</TooltipContent>
           </Tooltip>
         </TooltipProvider>
+        </div>
+        <DataTablePagination table={table} />
       </div>
       <Card>
         <div className="w-full">
@@ -299,7 +302,6 @@ export function SearchResultTable<TData, TValue>({
           </Table>
         </div>
             <div className="flex justify-between items-center px-2 py-4 w-full">
-                <DataTablePagination table={table} />
                 <DataTableViewOptions table={table} />
             </div>
         </div>

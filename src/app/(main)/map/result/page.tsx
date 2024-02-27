@@ -10,7 +10,7 @@ import { CitationGraphData } from '@/components/graph/force-citations'
 
 const CitationGraph = dynamic(() => import('@/components/graph/force-citations'), { ssr: false })
 
-export function generateMetadata( { searchParams }: { searchParams: {[key: string]: string | undefined } } ) {
+export function generateMetadata( { searchParams, seedPaperData }: { searchParams: {[key: string]: string | undefined }, seedPaperData: SeedPaperData} ) {
     const title = searchParams['paperId'] ? `Map for ${searchParams['paperId']}` : 'Map results';
     const description = 'Map connected papers in the Semantic Scholar research corpus';
     return { title, description };
@@ -120,6 +120,7 @@ export default async function Results({ searchParams }: SearchProps ) {
                 },
                 ], 
                 links: [] ,
+                totalCitations: 0,
                 minReferenceCount: 0,
                 maxReferenceCount: 0,
                 minCitationCount: 0,
@@ -151,9 +152,6 @@ export default async function Results({ searchParams }: SearchProps ) {
                 <Suspense fallback={<CitationGraphSkeleton />}>
                     <PaperCitationResultsGraph />
                     <FAQButton />
-                    <div className="absolute bottom-4 left-4">
-                        <p className="text-xs text-muted-foreground">Scroll to zoom | ⌘ click to pan or drag</p>
-                    </div>
                 </Suspense>
             </div>
             <div className="w-full">

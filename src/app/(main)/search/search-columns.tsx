@@ -59,7 +59,7 @@ import { toast } from "sonner"
 // Reusable component to make any column header sortable & hideable
 import { DataTableColumnHeader } from "@/components/patterns/table-column-header"
 
-import { InfoIcon, MoreHorizontalIcon, BookMarkedIcon, LayersIcon } from "lucide-react"
+import { InfoIcon, MoreHorizontalIcon, BookMarkedIcon, LayersIcon, NavigationIcon, EyeIcon, Link2Icon, BookmarkPlusIcon, XIcon, FileSearchIcon } from "lucide-react"
 
 // This type is based on the shape of the data returned from the Semantic Scholar (S2) Academic Graph API
 export type SearchPaperResult = {
@@ -436,20 +436,34 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuItem
+                        onClick={() => {
+                            if (result.paperId) {
+                                window.open(`/map/result?paperId=${result.paperId}`, '_blank');
+                            }
+                        }}
+                    >
+                        <NavigationIcon className="mr-2 h-4 w-4" />
+                        Map citations
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
                         onClick={() => copyToClipboard(result.paperId)}
                     >
-                        Copy S2 identifier
+                        <FileSearchIcon className="mr-2 h-4 w-4" />
+                        Copy paper ID
                     </DropdownMenuItem>
                     <DropdownMenuItem 
                         onClick={() => copyToClipboard(result.url)}
                     >
-                        Copy S2 URL
+                        <Link2Icon className="mr-2 h-4 w-4" />
+                        Copy paper URL
                     </DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => alert(`Sharing ${result.title}`)}>
-                        Share
+                        <BookmarkPlusIcon className="mr-2 h-4 w-4" />
+                        Save
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onSelect={() => alert(`Deleting ${result.title}`)}>
+                        <XIcon className="mr-2 h-4 w-4" />
                         Delete
                     </DropdownMenuItem>
                 </DropdownMenuContent>

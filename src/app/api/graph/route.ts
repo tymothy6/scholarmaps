@@ -7,6 +7,9 @@ function transformGraphData (citations: PaperCitationResult[], seedPaperData: Se
     // const filteredCitations = citations.filter(citation => citation.citingPaper.citationCount >= 5);
     console.log('Seed paper data in route handler:', seedPaperData); // log for debugging
 
+    // Report number of total citations received
+    const totalCitations = citations.length;
+
     // Filter citations to ensure paperId is not null and is a non-empty string
     const validCitations = citations.filter(citation => citation.citingPaper.paperId && citation.citingPaper.paperId.trim());
 
@@ -53,7 +56,7 @@ function transformGraphData (citations: PaperCitationResult[], seedPaperData: Se
     const minCitationCount = Math.min(...citationCounts);
     const maxCitationCount = Math.max(...citationCounts);
 
-    return { nodes, links, minReferenceCount, maxReferenceCount, minCitationCount, maxCitationCount};
+    return { nodes, links, totalCitations, minReferenceCount, maxReferenceCount, minCitationCount, maxCitationCount};
 }
 
 export async function POST(req: NextRequest) {

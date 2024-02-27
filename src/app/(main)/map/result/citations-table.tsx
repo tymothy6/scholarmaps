@@ -110,7 +110,7 @@ export function CitationResultTable<TData, TValue>({
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger asChild>
-                            <Button variant="destructive" size="icon" onClick={() => handleResetFilters()}>
+                            <Button variant="destructive" size="icon" className="px-2" onClick={() => handleResetFilters()}>
                                 <span className="sr-only">Reset filters</span>
                                 <RotateCcwIcon className="h-4 w-4" />
                             </Button>

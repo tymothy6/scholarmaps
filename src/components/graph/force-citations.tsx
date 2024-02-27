@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/popover"
 
 import { InfoCircledIcon } from "@radix-ui/react-icons"
+import { BookmarkPlusIcon, ExternalLinkIcon, NavigationIcon, SearchIcon } from "lucide-react"
 
 
 export type CitationGraphData = {
@@ -49,6 +50,7 @@ export type CitationGraphData = {
         source: string;
         target: string;
     }>;
+    totalCitations: number;
     minReferenceCount: number;
     maxReferenceCount: number;
     minCitationCount: number;
@@ -75,6 +77,8 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
     const [hoverNode, setHoverNode] = React.useState<GraphNode | null>(null);
     const [menuOpen, setMenuOpen] = React.useState(false);
     const [menuPosition, setMenuPosition] = React.useState({ x: 0, y: 0 });
+    const [selectedNode, setSelectedNode] = React.useState<GraphNode | null>(null);
+
 
     const containerRef = React.useRef<HTMLDivElement>(null);
     const fgRef = React.useRef<any>(null);
@@ -115,7 +119,7 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
 
     // const valToColor = scaleLog([1, 5, 75, 150], [resolvedTheme === 'dark' ? "gray": "white", "lightblue", "steelblue", "lightgreen"]);
 
-    const valToColor = scaleLinear([q1, q2, q3, maxVal], [resolvedTheme === 'dark' ? "gray" : "white", "lightblue", "steelblue", "lightgreen"]);
+    const valToColor = scaleLinear([q1, q2, q3, maxVal], ["white", "lightblue", "steelblue", "lightgreen"]);
 
     const borderWidthScale = scaleLinear([minCitationCount, maxCitationCount], [0.25, 4]);
 
@@ -126,18 +130,19 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
         return Math.max(5, maxRadius - yearDiff * 0.5);
     };
 
-    // Handler for right-clicks on nodes
+    // Handler for right-click on nodes
     const handleNodeRightClick = (node: GraphNode, event: MouseEvent) => {
         event.preventDefault(); // Prevent the browser context menu from opening
         setMenuOpen(true);
         setMenuPosition({ x: event.clientX, y: event.clientY });
-        console.log('Menu position after click: ', menuPosition); // debug
+        setSelectedNode(node);
+        // console.log('Menu position after click: ', menuPosition); // debug
     };
 
     return (
         <div className="flex flex-col gap-4 items-end">
         <div className="flex justify-between items-center w-full">
-        <p className="text-sm text-muted-foreground">{graphData.nodes.length} influential citations found</p>
+        <p className="text-sm text-muted-foreground">{graphData.nodes.length - 1} influential citations found</p>
         <GraphLegend 
             colorScale={valToColor}
             borderWidthScale={borderWidthScale}
@@ -204,9 +209,9 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
                             <div className="absolute top-4 left-4 px-4 py-2 text-primary-foreground bg-primary rounded-sm border-primary shadow-sm">
                                 <h3 className="text-sm font-medium">{hoverNode.name}</h3>
                                 <p className="text-sm">{hoverNode.val6} ({hoverNode.val3})</p>
-                                <p className="text-sm">Influential citation count: {hoverNode.val}</p>
-                                <p className="text-sm">Citation count: {hoverNode.val2}</p>
-                                <p className="text-sm">Reference count: {hoverNode.val4}</p>
+                                <p className="text-sm">Influential citation count: <span className="font-mono">{hoverNode.val}</span></p>
+                                <p className="text-sm">Citation count: <span className="font-mono">{hoverNode.val2}</span></p>
+                                <p className="text-sm">Reference count: <span className="font-mono">{hoverNode.val4}</span></p>
                             </div>
                         </TooltipTrigger>
                     </Tooltip>
@@ -222,11 +227,38 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => setMenuOpen(false)}>Item 1</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setMenuOpen(false)}>Item 2</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => {
+                                if (selectedNode?.id) {
+                                    window.open(`/map/result?paperId=${selectedNode.id}`, '_blank');
+                                }
+                                setMenuOpen(false);
+                            }}>
+                                <NavigationIcon className="mr-2 h-4 w-4" />
+                                Map
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => {
+                                if (selectedNode?.name) {
+                                    const query = selectedNode.name;
+                                    window.open(`/search?query=${query}`, '_blank');
+                                }
+                                setMenuOpen(false);
+                            }}>
+                                <SearchIcon className="mr-2 h-4 w-4" />Search
+                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => setMenuOpen(false)}>Item 3</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setMenuOpen(false)}>Item 4</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setMenuOpen(false)}>
+                                <BookmarkPlusIcon className="mr-2 h-4 w-4" />
+                                Save
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => {
+                                if (selectedNode?.val7) {
+                                    window.open(selectedNode.val7, '_blank');
+                                }
+                                setMenuOpen(false);
+                            }}>
+                                <ExternalLinkIcon className="mr-2 h-4 w-4" />
+                                View
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
@@ -308,25 +340,28 @@ function GraphLegend ({
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Button variant="outline" size="sm" className="text-sm">
+                <Button variant="outline" size="sm" className="text-[13px]">
                     <InfoCircledIcon className="h-4 w-4 mr-2" />
                     Graph legend
                 </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-max">
-                <div className="flex gap-2 items-start">
-                    <div className="flex flex-col items-start justify-center mr-4">
-                        <h3 className="text-xs font-medium mb-2 w-16">Influential citations</h3>
-                        <div className="flex flex-col items-start justify-center">{colorItems}</div>
+                <div className="flex flex-col gap-2 items-start">
+                    <div className="flex gap-2 items-start">
+                        <div className="flex flex-col items-start justify-center mr-4">
+                            <h3 className="text-xs font-medium mb-2 w-16">Influential citations</h3>
+                            <div className="flex flex-col items-start justify-center">{colorItems}</div>
+                        </div>
+                        <div className="flex flex-col items-start justify-center">
+                            <h3 className="text-xs font-medium mb-2 w-16">Total citations</h3>
+                            <div className="flex flex-col items-start justify-center">{borderItems}</div>
+                        </div>
+                        <div className="flex flex-col items-start justify-center">
+                            <h3 className="text-xs font-medium mb-2 w-16">Citation year</h3>
+                            <div className="flex flex-col items-start justify-center">{yearCircles}</div>
+                        </div>
                     </div>
-                    <div className="flex flex-col items-start justify-center">
-                        <h3 className="text-xs font-medium mb-2 w-16">Total citations</h3>
-                        <div className="flex flex-col items-start justify-center">{borderItems}</div>
-                    </div>
-                    <div className="flex flex-col items-start justify-center">
-                        <h3 className="text-xs font-medium mb-2 w-16">Citation year</h3>
-                        <div className="flex flex-col items-start justify-center">{yearCircles}</div>
-                    </div>
+                    <p className="text-xs text-muted-foreground">Scroll to zoom | ⌘ click to pan or drag</p>
                 </div>
             </PopoverContent>
         </Popover>
