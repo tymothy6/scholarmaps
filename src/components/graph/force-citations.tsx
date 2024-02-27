@@ -167,8 +167,10 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
                 linkColor={() => resolvedTheme === 'dark' ? 'gray' : 'lightgray'}
                 linkWidth={1}
                 onNodeClick={(node) => {
-                    if (node.val7) {
-                        window.open(node.val7, '_blank');
+                    if (!menuOpen) {
+                        if (node.val7) {
+                            window.open(node.val7, '_blank');
+                        }
                     }
                 }}
                 onNodeRightClick={handleNodeRightClick}
@@ -228,20 +230,20 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
                         <DropdownMenuContent align="start">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem onClick={() => {
+                                setMenuOpen(false);
                                 if (selectedNode?.id) {
                                     window.open(`/map/result?paperId=${selectedNode.id}`, '_blank');
                                 }
-                                setMenuOpen(false);
                             }}>
                                 <NavigationIcon className="mr-2 h-4 w-4" />
                                 Map
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => {
+                                setMenuOpen(false);
                                 if (selectedNode?.name) {
                                     const query = selectedNode.name;
                                     window.open(`/search?query=${query}`, '_blank');
                                 }
-                                setMenuOpen(false);
                             }}>
                                 <SearchIcon className="mr-2 h-4 w-4" />Search
                             </DropdownMenuItem>
@@ -251,10 +253,10 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
                                 Save
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => {
+                                setMenuOpen(false);
                                 if (selectedNode?.val7) {
                                     window.open(selectedNode.val7, '_blank');
                                 }
-                                setMenuOpen(false);
                             }}>
                                 <ExternalLinkIcon className="mr-2 h-4 w-4" />
                                 View

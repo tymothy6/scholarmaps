@@ -5,7 +5,7 @@ import { CitationGraphSkeleton, SearchTableSkeleton } from '../../search/search-
 import { columns } from './citations-columns'
 import { CitationResultTable } from './citations-table'
 import { FAQButton } from '@/components/navigation/faq-button'
-import { PaperCitationResult, getAllPaperCitations, getInfluentialPaperCitations } from '../page'
+import { PaperCitationResult, getInfluentialPaperCitations } from '../page'
 import { CitationGraphData } from '@/components/graph/force-citations'
 
 const CitationGraph = dynamic(() => import('@/components/graph/force-citations'), { ssr: false })
@@ -147,7 +147,7 @@ export default async function Results({ searchParams }: SearchProps ) {
 
     return (
         <section className="p-4 absolute top-16 lg:left-[16.666%] lg:p-8 flex flex-col gap-2 w-full lg:w-5/6">
-            <h1 className="mt-2 lg:mt-0 text-xl lg:text-2xl font-semibold lg:font-bold mb-2">Map results</h1>
+            <h1 className="mt-2 lg:mt-0 text-xl lg:text-2xl font-semibold lg:font-bold mb-2">Citation map</h1>
             <div className="relative w-full mb-4">
                 <Suspense fallback={<CitationGraphSkeleton />}>
                     <PaperCitationResultsGraph />
