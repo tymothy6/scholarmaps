@@ -5,7 +5,7 @@ import { SeedPaperData } from '@/app/(main)/map/result/page';
 function transformGraphData (citations: PaperCitationResult[], seedPaperData: SeedPaperData) {
     // Filter out papers with less than 5 citations
     // const filteredCitations = citations.filter(citation => citation.citingPaper.citationCount >= 5);
-    console.log('Seed paper data in route handler:', seedPaperData); // log for debugging
+    // console.log('Seed paper data in route handler:', seedPaperData); // log for debugging
 
     // Report number of total citations received
     const totalCitations = citations.length;

@@ -5,12 +5,12 @@ import { Loader2Icon } from "lucide-react"
 
 export function CitationGraphSkeleton () {
     return (
-        <div className="grid gap-2">
+        <div className="grid gap-2 mt-2">
             <div className="flex items-center justify-between">
                 <Skeleton className="h-4 w-48" />
                 <Skeleton className="h-8 w-32" />
             </div>
-            <Card className="mt-2 w-full h-[300px] md:h-[600px]">
+            <Card className="w-full h-[300px] md:h-[600px]">
                 <div className="w-full h-full flex items-center justify-center">
                     <Loader2Icon className="text-primary animate-spin h-6 w-6 md:w-12 md:h-12" />
                 </div>
@@ -21,7 +21,7 @@ export function CitationGraphSkeleton () {
 
 export function SearchTableSkeleton () {
     return (
-        <div className="grid gap-2">
+        <div className="grid gap-2 mt-2">
         <div className="flex items-center justify-between">
                 <Skeleton className="h-8 w-48" />
                 <div className="flex items-center gap-2">
@@ -31,7 +31,7 @@ export function SearchTableSkeleton () {
                 <Skeleton className="h-8 w-8" />
                 </div>
         </div>
-        <Card className="mt-2">
+        <Card>
             <div className="flex sm:hidden flex-col gap-2 w-full">
                 <div className="flex sm:hidden items-center p-4 justify-between w-full border-b">
                     <Skeleton className="h-4 w-32" />
