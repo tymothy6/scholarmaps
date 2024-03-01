@@ -85,6 +85,8 @@ export type SearchPaperResult = {
     name: string // 
   }> // up to 500 authors will be returned
   publicationTypes: string[] // e.g. "Journal Article", "Conference Paper"
+  isOpenAccess: boolean // Whether the paper is available as open access
+  openAccessPdf: string // Link to the open access PDF, if available from S2
 }
 
 async function copyToClipboard(text: string) {
@@ -176,13 +178,18 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                                     <Badge variant="default" className="mr-2 font-hubotSans">tl;dr</Badge>
                                 </div>
                                 <div className="flex flex-wrap gap-2 items-center justify-start">
+                                {result.isOpenAccess && (
+                                    <a href={result.openAccessPdf} rel="noreferrer" target="_blank">
+                                        <Badge variant="default" className="font-hubotSans">Open access</Badge>
+                                    </a>
+                                )}
                                 {result.publicationTypes && result.publicationTypes.map((publicationType, index) => (
                                     <Badge key={publicationType} variant="secondary" className="font-hubotSans">
                                     {publicationType.replace(/([A-Z])/g, ' $1').trim()}
                                     </Badge>
                                 ))}
                                 </div>
-                                <p className="text-sm">
+                                <p className="text-sm mb-2">
                                     {isTldrObject(result.tldr) ? result.tldr.text : 'No tl;dr available :('}
                                 </p>
                             </div>
@@ -350,7 +357,7 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                         </DialogHeader>
                         <ScrollArea className="w-full max-h-[300px]">
                         <DialogDescription>
-                            {typeof abstract === 'string' ? abstract : '🥹 Abstract not available from Semantic Scholar.'}
+                            {typeof abstract === 'string' ? abstract : '🥹 Abstract not available from Semantic Scholar API.'}
                         </DialogDescription>
                         </ScrollArea>
                         <DialogFooter className="sm:justify-end">

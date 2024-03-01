@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
     const queryParams = new URLSearchParams({
         query: searchQuery,
         limit: '100', // Must be <= 100 for paper relevance search
-        fields: 'paperId,url,title,abstract,year,referenceCount,citationCount,influentialCitationCount,tldr,journal,authors,publicationTypes',
+        fields: 'paperId,url,title,abstract,year,referenceCount,citationCount,influentialCitationCount,tldr,journal,authors,publicationTypes,isOpenAccess,openAccessPdf',
     });
 
     const url = `https://api.semanticscholar.org/graph/v1/paper/search?${queryParams.toString()}`;
