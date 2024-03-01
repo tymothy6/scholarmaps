@@ -12,7 +12,7 @@ export default function PaperResult() {
         <section className="bg-background p-4 absolute top-16 lg:left-[16.666%] lg:p-8 flex flex-col gap-2 w-full overflow-x-hidden lg:w-5/6">
             <h1 className="mt-2 lg:mt-0 text-xl lg:text-2xl font-semibold lg:font-bold">Paper details</h1>
             <div className="w-full">
-                <PaperReader file="https://europepmc.org/backend/ptpmcrender.fcgi?accid=PMC4721659&blobtype=pdf" />
+                <PaperReader source="https://europepmc.org/backend/ptpmcrender.fcgi?accid=PMC4721659&blobtype=pdf" />
             </div>
         </section>
         
