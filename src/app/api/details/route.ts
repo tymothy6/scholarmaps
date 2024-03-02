@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
     const paperId = req.nextUrl.searchParams.get('paperId') || ''; 
-    const fields = 'paperId,url,title,year,referenceCount,citationCount,influentialCitationCount,journal,authors,publicationTypes';
-
+    const fields = 'paperId,url,title,year,referenceCount,citationCount,influentialCitationCount,journal,authors,publicationTypes,isOpenAccess,openAccessPdf';
     const url = `https://api.semanticscholar.org/graph/v1/paper/${paperId}?fields=${fields}`;
 
     try {

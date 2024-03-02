@@ -2,6 +2,8 @@
 
 import * as React from "react"
 
+import Link from "next/link"
+
 import { useMediaQuery } from "@/lib/use-media-query"
 
 import { ColumnDef } from "@tanstack/react-table"
@@ -86,7 +88,10 @@ export type SearchPaperResult = {
   }> // up to 500 authors will be returned
   publicationTypes: string[] // e.g. "Journal Article", "Conference Paper"
   isOpenAccess: boolean // Whether the paper is available as open access
-  openAccessPdf: string // Link to the open access PDF, if available from S2
+  openAccessPdf: {
+    url: string // URL to the open access PDF
+    status: string
+  } 
 }
 
 async function copyToClipboard(text: string) {
@@ -166,20 +171,20 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                     <HoverCard>
                         <HoverCardTrigger asChild>
                             <Button variant="link" className="w-max whitespace-normal h-max focus-visible:ring-0" asChild>
-                                <a href={result.url} target="_blank" rel="noopener noreferrer">
+                                <Link href={`/search/result?paperId=${result.paperId}`}>
                                 <span className="w-72 text-left">{typeof title === 'string' ? title : 'N/A'}</span>
-                                </a>
+                                </Link>
                             </Button>
                         </HoverCardTrigger>
                         <HoverCardContent className="w-40 lg:w-80">
                             <div className="space-y-2">
                                 <div className="flex gap-2 items-start">
                                     <h4 className="text-sm font-semibold">{typeof title === 'string' ? title : 'N/A'}</h4>
-                                    <Badge variant="default" className="mr-2 font-hubotSans">tl;dr</Badge>
+                                    {isTldrObject(result.tldr) && result.tldr.text ? <Badge variant="default" className="mr-2 font-hubotSans">tl;dr</Badge> : <div /> }
                                 </div>
                                 <div className="flex flex-wrap gap-2 items-center justify-start">
                                 {result.isOpenAccess && (
-                                    <a href={result.openAccessPdf} rel="noreferrer" target="_blank">
+                                    <a href={result.openAccessPdf?.url} rel="noreferrer" target="_blank">
                                         <Badge variant="default" className="font-hubotSans">Open access</Badge>
                                     </a>
                                 )}
@@ -249,7 +254,7 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                                     <DrawerTitle className="text-left">{typeof title === 'string' ? title : 'N/A'}</DrawerTitle>
                                 </DrawerHeader>
                                 <div className="px-4 max-h-[50vh] overflow-y-scroll">
-                                <DrawerDescription>{typeof abstract === 'string' ? abstract : '🥹 Abstract not available from Semantic Scholar.'}</DrawerDescription>
+                                <DrawerDescription>{typeof abstract === 'string' ? abstract : '🥹 Abstract not available from Semantic Scholar API.'}</DrawerDescription>
                                 </div>
                                 <DrawerFooter>
                                     <DrawerClose asChild>
@@ -354,6 +359,11 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
                             <ScrollArea className="w-full max-h-[100px]">
                                 <DialogDescription className="text-popover-foreground">{authors.map(author => author.name).join(", ")}</DialogDescription>
                             </ScrollArea>
+                            {result.isOpenAccess && (
+                                <a href={result.openAccessPdf?.url} rel="noreferrer" target="_blank">
+                                    <Badge variant="default" className="font-hubotSans">Open access</Badge>
+                                </a>
+                            )}
                         </DialogHeader>
                         <ScrollArea className="w-full max-h-[300px]">
                         <DialogDescription>

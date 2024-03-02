@@ -12,6 +12,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
+import { 
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from "@/components/ui/tooltip"
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>
@@ -21,7 +27,10 @@ export function DataTableViewOptions<TData>({
   table,
 }: DataTableViewOptionsProps<TData>) {
   return (
+    <TooltipProvider>
+    <Tooltip>
     <DropdownMenu>
+      <TooltipTrigger asChild>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
@@ -32,6 +41,7 @@ export function DataTableViewOptions<TData>({
           View
         </Button>
       </DropdownMenuTrigger>
+      </TooltipTrigger>
       <DropdownMenuContent align="end" className="w-[150px]">
         <DropdownMenuLabel>Columns</DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -54,7 +64,12 @@ export function DataTableViewOptions<TData>({
             )
           })}
       </DropdownMenuContent>
+      <TooltipContent>
+        <p className="text-sm">Toggle columns</p>
+      </TooltipContent>
     </DropdownMenu>
+    </Tooltip>
+    </TooltipProvider>
   )
 }
 

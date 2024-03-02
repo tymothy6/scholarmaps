@@ -301,8 +301,9 @@ export function SearchResultTable<TData, TValue>({
             </TableBody>
           </Table>
         </div>
-            <div className="flex justify-between items-center px-2 py-4 w-full">
-                <DataTableViewOptions table={table} />
+            <div className="flex items-center gap-4 px-2 py-4 w-full">
+              <DataTableViewOptions table={table} />
+              <DataTablePagination table={table} />
             </div>
         </div>
       </Card>

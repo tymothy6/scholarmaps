@@ -5,7 +5,7 @@ import { SearchResultTable } from './search-table'
 import { SearchTableSkeleton } from './search-skeleton'
 
 export async function generateMetadata({ searchParams }: { searchParams: {[key: string]: string | undefined } }) {
-    const title = searchParams['query'] ? `Results for ${searchParams['query']}` : 'Search';
+    const title = searchParams['query'] ? `Search results for ${searchParams['query']}` : 'Search';
     const description = 'Search for papers in the Semantic Scholar research corpus';
     return { title, description };
 }

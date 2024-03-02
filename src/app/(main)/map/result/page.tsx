@@ -36,6 +36,11 @@ export type SeedPaperData = {
         name: string
     }>
     publicationTypes: string[];
+    isOpenAccess: boolean;
+    openAccessPdf: {
+        url: string;
+        status: string;
+    }
 }
 
 export default async function Results({ searchParams }: SearchProps ) {
@@ -76,6 +81,11 @@ export default async function Results({ searchParams }: SearchProps ) {
                 },
                 authors: [],
                 publicationTypes: [],
+                isOpenAccess: false,
+                openAccessPdf: {
+                    url: 'https://www.semanticscholar.org/',
+                    status: 'No PDF found',
+                },
             };
         }
     }
