@@ -6,7 +6,6 @@ import './globals.css'
 
 import { ThemeProvider } from '@/components/theme-provider'
 import NextAuthProvider from '@/components/session-provider'
-import { PDFWorker } from '@/lib/pdfjs-worker'
 import { Toaster } from '@/components/ui/sonner'
 
 const hubotSans = localFont({
@@ -31,7 +30,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${hubotSans.variable} ${GeistSans.variable} ${GeistMono.variable}`}>
       <body className={GeistSans.className}>
-        <PDFWorker>
           <NextAuthProvider>
             <ThemeProvider
                 attribute="class"
@@ -43,7 +41,6 @@ export default function RootLayout({
             </ThemeProvider>
           </NextAuthProvider>
           <Toaster richColors position="top-center" />
-        </PDFWorker>
       </body>
     </html>
   )
