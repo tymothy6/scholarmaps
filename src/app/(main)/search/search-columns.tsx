@@ -285,7 +285,7 @@ export const columns: ColumnDef<SearchPaperResult>[] = [
     },
     cell: ({ row }) => {
         const journal = row.getValue("journal");
-        return <div className="flex px-4 py-2 text-left">
+        return <div className="flex px-4 py-2 min-w-[180px] text-left">
             {isJournalObject(journal) ? journal.name : 'N/A'}
         </div>;
     }

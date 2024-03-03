@@ -14,11 +14,16 @@ export function PaperReader({ source }: { source: string }) {
     }
 
     return (
-        <Document 
-        file={source}
-        onLoadSuccess={onDocumentLoadSuccess}
-        >
-            <Page pageNumber={1} />
-        </Document>
+        <embed
+            type='application/pdf'
+            src={source}
+            className="w-full h-[600px] lg:h-[800px] rounded-lg border"
+        />
+        // <Document 
+        // file={source}
+        // onLoadSuccess={onDocumentLoadSuccess}
+        // >
+        //     <Page pageNumber={1} />
+        // </Document>
     )
 }
