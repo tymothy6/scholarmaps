@@ -10,29 +10,49 @@ import ReactFlow, {
     useNodesState, 
     useEdgesState, 
     addEdge, 
-    Handle,
     Connection, 
     Edge 
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
 
-const initialNodes = [
+import CustomNode from './flow-nodes';
+
+const nodeTypes = { custom: CustomNode }; 
+// Define nodeTypes outside of the component to avoid re-renders
+// you could also use React.useMemo for this
+
+interface NodeData {
+    name: string;
+    job: string;
+    emoji: string;
+}
+  
+interface FlowNode  {
+    id: string;
+    type: string;
+    data: NodeData;
+    position: { x: number; y: number };
+}
+
+const initialNodes: FlowNode[] = [
     {
         id: '1',
-        type: 'input',
-        data: { label: 'Input Node' },
+        type: 'custom',
+        data: { name: 'Jane Doe', job: 'CEO', emoji: '😎' },
         position: { x: 250, y: 25 },
     },
     {
         id: '2',
-        data: { label: 'Another Node' },
-        position: { x: 100, y: 125 },
+        type: 'custom',
+        data: { name: 'Tyler Cox', job: 'Developer Advocate', emoji: '🧑🏼‍💻' },
+        position: { x: 100, y: 200 },
     },
     {
         id: '3',
-        data: { label: 'Not an Input Node' },
-        position: { x: 400, y: 125 },
+        type: 'custom',
+        data: { name: 'Jim Price', job: 'Product Owner', emoji: '👋🏼' },
+        position: { x: 400, y: 200 },
     },
 ];
 
@@ -97,10 +117,14 @@ export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
+                nodeTypes={nodeTypes}
                 {...variantProps}
              >
                 <Controls />
-                <MiniMap />
+                <MiniMap 
+                    pannable 
+                    zoomable
+                 />
                 <Background />
              </ReactFlow>
         </div>
