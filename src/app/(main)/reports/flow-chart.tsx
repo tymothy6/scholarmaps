@@ -14,6 +14,8 @@ import ReactFlow, {
     Edge 
 } from 'reactflow';
 
+import { initialNodes, initialEdges } from './nodes-edges';
+
 import 'reactflow/dist/style.css';
 
 import CustomNode from './flow-nodes';
@@ -21,55 +23,6 @@ import CustomNode from './flow-nodes';
 const nodeTypes = { custom: CustomNode }; 
 // Define nodeTypes outside of the component to avoid re-renders
 // you could also use React.useMemo for this
-
-interface NodeData {
-    name: string;
-    job: string;
-    emoji: string;
-}
-  
-interface FlowNode  {
-    id: string;
-    type: string;
-    data: NodeData;
-    position: { x: number; y: number };
-}
-
-const initialNodes: FlowNode[] = [
-    {
-        id: '1',
-        type: 'custom',
-        data: { name: 'Jane Doe', job: 'CEO', emoji: '😎' },
-        position: { x: 250, y: 25 },
-    },
-    {
-        id: '2',
-        type: 'custom',
-        data: { name: 'Tyler Cox', job: 'Developer Advocate', emoji: '🧑🏼‍💻' },
-        position: { x: 100, y: 200 },
-    },
-    {
-        id: '3',
-        type: 'custom',
-        data: { name: 'Jim Price', job: 'Product Owner', emoji: '👋🏼' },
-        position: { x: 400, y: 200 },
-    },
-];
-
-const initialEdges = [
-    {
-        id: 'e1-2',
-        source: '1',
-        target: '2',
-        animated: false,
-    },
-    {
-        id: 'e1-3',
-        source: '1',
-        target: '3',
-        animated: true,
-    },
-];
 
 export type ChartVariant = 'default' | 'figma';
 
@@ -110,7 +63,7 @@ export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
     const variantProps = chartVariants[variant] || chartVariants.default;
 
     return (
-        <div className="w-full h-[60vh] border rounded-lg p-2">
+        <div className="w-full h-[90vh] p-2">
             <ReactFlow 
                 nodes={nodes} 
                 edges={edges}
