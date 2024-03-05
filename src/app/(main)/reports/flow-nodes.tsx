@@ -6,7 +6,7 @@ import { Handle, Position } from 'reactflow';
 
 function CustomNode({ data }: { data: { emoji: string; name: string; job: string }}) {
     return (
-      <div className="px-4 py-2 shadow-md rounded-md bg-background border">
+      <div className="px-4 py-2 shadow-md bg-background border-y">
         <div className="flex">
           <div className="rounded-full w-8 h-8 flex justify-center items-center bg-accent">
             {data.emoji}
@@ -20,24 +20,12 @@ function CustomNode({ data }: { data: { emoji: string; name: string; job: string
         <Handle 
             type="target" 
             position={Position.Left} 
-            className="!bg-blue-500" 
-            style={{
-                width: '4px',
-                height: '32px',
-                borderRadius: '2px',
-                border: 'none',
-            }}
+            className="!bg-blue-500/70 hover:!bg-blue-500 !h-full !w-2 !rounded-none !rounded-tl-lg !rounded-bl-lg !border-0"
         />
         <Handle 
             type="source" 
             position={Position.Right} 
-            className="!bg-blue-500"
-            style={{
-                width: '4px',
-                height: '32px',
-                borderRadius: '2px',
-                border: 'none',
-            }} 
+            className="!bg-blue-500/70 hover:!bg-blue-500 !h-full !w-2 !rounded-none !rounded-tr-lg !rounded-br-lg !border-0"
         />
       </div>
     );

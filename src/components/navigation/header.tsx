@@ -8,6 +8,8 @@ import { useRouter, usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { useTheme } from "next-themes"
 
+import { ReportHeader } from "../../app/(main)/reports/report-header";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
@@ -112,17 +114,12 @@ export function PageHeader () {
         router.push('/login');
       }
     
-      // Use server-side navigation using the redirect function instead 
-      
-      // React.useEffect(() => {
-      //   if (session?.status === 'unauthenticated') {
-      //     router.push('/login')
-      //   }
-      // }, [session, router])
+    const alternateRoutes = ["/reports"];
+    const isAlternateRoute = alternateRoutes.some((route) => pathname.startsWith(route));
 
     return (
         <header className="fixed top-0 left-0 z-[49] w-full lg:w-5/6 lg:left-[16.666%] h-max">
-          <div className="flex items-center justify-between w-full p-4 bg-background shadow-sm border-b">
+          <div className="flex items-center w-full p-2 bg-background shadow-sm border-b">
             <div className="flex gap-2 w-full">
               <Sheet>
                 <SheetTrigger className="block lg:hidden" asChild>
@@ -246,6 +243,8 @@ export function PageHeader () {
                 </SheetContent>
               </Sheet>
               <Separator orientation="vertical" className="block lg:hidden" />
+              { isAlternateRoute ? (<ReportHeader />)
+              : (
               <form onSubmit={handleSubmit} className="flex gap-2 w-full">
                 <Input 
                 type="search"
@@ -258,8 +257,10 @@ export function PageHeader () {
                   {isSearchLoading ? <Loader2Icon className="h-4 w-4 animate-spin" /> : <SearchIcon className="h-4 w-4" />}
                 </Button>
               </form>
+              )
+              }
             </div>
-            <div className="hidden sm:flex gap-4 w-full items-center justify-between ml-2">
+            <div className="hidden sm:flex gap-4 w-full items-center justify-end ml-2">
               <TooltipProvider>
                 <Tooltip>
               <DropdownMenu>
@@ -282,9 +283,9 @@ export function PageHeader () {
               </Tooltip>
               </TooltipProvider>
               <div className="flex gap-1 w-max items-center justify-end">
-              <Avatar className="h-8 w-8 mr-2">
+              <Avatar className="h-6 w-6 mr-2">
                 <AvatarImage src={session?.data?.user?.image ?? ''} />
-                <AvatarFallback>
+                <AvatarFallback className="text-xs">
                 {session?.data?.user?.email ? session.data.user.email[0].toUpperCase(): 'SM'}
                 </AvatarFallback>
               </Avatar>

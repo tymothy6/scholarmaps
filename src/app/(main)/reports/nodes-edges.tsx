@@ -16,19 +16,19 @@ export const initialNodes: FlowNode[] = [
         id: '1',
         type: 'custom',
         data: { name: 'Jane Doe', job: 'CEO', emoji: '😎' },
-        position: { x: 0, y: 250 },
+        position: { x: 50, y: 250 },
     },
     {
         id: '2',
         type: 'custom',
         data: { name: 'Tyler Cox', job: 'Developer Advocate', emoji: '🧑🏼‍💻' },
-        position: { x: 400, y: 200 },
+        position: { x: 450, y: 100 },
     },
     {
         id: '3',
         type: 'custom',
-        data: { name: 'Jim Price', job: 'Product Owner', emoji: '👋🏼' },
-        position: { x: 400, y: 300 },
+        data: { name: 'Jim Price', job: 'Product Designer', emoji: '🎨' },
+        position: { x: 450, y: 400 },
     },
 ];
 
