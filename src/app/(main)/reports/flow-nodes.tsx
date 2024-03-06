@@ -20,12 +20,12 @@ function CustomNode({ data }: { data: { emoji: string; name: string; job: string
         <Handle 
             type="target" 
             position={Position.Left} 
-            className="!bg-blue-500/70 hover:!bg-blue-500 !h-full !w-2 !rounded-none !rounded-tl-lg !rounded-bl-lg !border-0"
+            className="!bg-primary/50 hover:!bg-primary !h-full !w-2 !rounded-none !rounded-tl-lg !rounded-bl-lg !border-0"
         />
         <Handle 
             type="source" 
             position={Position.Right} 
-            className="!bg-blue-500/70 hover:!bg-blue-500 !h-full !w-2 !rounded-none !rounded-tr-lg !rounded-br-lg !border-0"
+            className="!bg-primary/50 hover:!bg-primary !h-full !w-2 !rounded-none !rounded-tr-lg !rounded-br-lg !border-0"
         />
       </div>
     );

@@ -4,6 +4,12 @@ import * as React from 'react';
 
 import { useTheme } from 'next-themes';
 
+import { 
+    ResizableHandle,
+    ResizablePanel,
+    ResizablePanelGroup,
+} from '@/components/ui/resizable';
+
 import ReactFlow, { 
     MiniMap,
     Controls,
@@ -67,31 +73,56 @@ export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
     const variantProps = chartVariants[variant] || chartVariants.default;
 
     return (
-        <div className="w-full h-[90vh] p-2">
-            <ReactFlow 
-                nodes={nodes} 
-                edges={edges}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
-                onConnect={onConnect}
-                nodeTypes={nodeTypes}
-                className="bg-background"
-                {...variantProps}
-             >
-                <Controls>
-                    <ControlButton onClick={() => alert('Something magical just happened. ✨')}>
-                        <WandIcon />
-                    </ControlButton>
-                </Controls>
-                <MiniMap 
-                    pannable 
-                    zoomable
-                    style={{
-                        backgroundColor: resolvedTheme === 'dark' ? '#343435' : '#ffffff',
-                    }}
-                 />
-                <Background />
-             </ReactFlow>
-        </div>
+        <>
+            <ResizablePanelGroup
+            direction="vertical"
+            className="w-full min-h-[100vh]"
+            >
+            <ResizablePanel defaultSize={75}>
+                <div className="w-full h-full">
+                    <ReactFlow 
+                        nodes={nodes} 
+                        edges={edges}
+                        onNodesChange={onNodesChange}
+                        onEdgesChange={onEdgesChange}
+                        onConnect={onConnect}
+                        nodeTypes={nodeTypes}
+                        className="bg-background"
+                        {...variantProps}
+                    >
+                        <Controls>
+                            <ControlButton onClick={() => alert('Something magical just happened. ✨')}>
+                                <WandIcon />
+                            </ControlButton>
+                        </Controls>
+                        <MiniMap 
+                            pannable 
+                            zoomable
+                            style={{
+                                backgroundColor: resolvedTheme === 'dark' ? '#343435' : '#ffffff',
+                            }}
+                        />
+                        <Background />
+                    </ReactFlow>
+                </div>
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+            <ResizablePanel defaultSize={25}>
+                <ResizablePanelGroup direction="horizontal">
+                    <ResizablePanel defaultSize={70}>
+                        <div className="flex w-full h-full items-center justify-center p-6">
+                            <span className="font-semibold">Output ✨</span>
+                        </div>
+                    </ResizablePanel>
+                    <ResizableHandle withHandle />
+                    <ResizablePanel defaultSize={30}>
+                    <div className="flex w-full h-full items-center justify-center p-6">
+                        <span className="font-semibold">Logs</span>
+                    </div>
+                    </ResizablePanel>
+                </ResizablePanelGroup>
+            </ResizablePanel>
+        </ResizablePanelGroup>
+        </>
     )
 }
