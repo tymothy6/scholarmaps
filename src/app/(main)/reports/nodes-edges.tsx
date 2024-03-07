@@ -1,14 +1,13 @@
-interface NodeData {
+import { Node, Edge } from "reactflow";
+
+export interface NodeData { // the shape of the data object
     name: string;
     job: string;
     emoji: string;
 }
   
-interface FlowNode  {
-    id: string;
-    type: string;
+interface FlowNode extends Node {
     data: NodeData;
-    position: { x: number; y: number };
 }
 
 export const initialNodes: FlowNode[] = [
@@ -62,7 +61,7 @@ export const initialNodes: FlowNode[] = [
     }
 ];
 
-export const initialEdges = [
+export const initialEdges: Edge[] = [
     {
         id: 'e1-2',
         source: '1',

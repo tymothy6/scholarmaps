@@ -4,7 +4,9 @@ import * as React from 'react';
 
 import { Handle, Position } from 'reactflow';
 
-function CustomNode({ data }: { data: { emoji: string; name: string; job: string }}) {
+import { NodeData } from './nodes-edges';
+
+function CustomNode({ data }: { data: NodeData }) {
     return (
       <div className="px-4 py-2 shadow-md bg-background border-y">
         <div className="flex">

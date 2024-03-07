@@ -93,7 +93,7 @@ interface SearchProps { searchParams: { [key: string]: string | undefined } }
 
 export default function Map( { searchParams }: SearchProps) {
     return (
-        <section className="p-4 absolute top-16 lg:left-[16.666%] lg:p-8 flex flex-col gap-2 w-full lg:w-5/6">
+        <section className="p-4 absolute top-10 lg:left-[16.666%] lg:p-8 flex flex-col gap-2 w-full lg:w-5/6">
             <h1 className="mt-2 lg:mt-0 text-xl lg:text-2xl font-semibold lg:font-bold mb-2">Map connected papers</h1>
             <div className="flex flex-col space-y-8 items-center mx-auto">
                 <div className="flex flex-col space-y-4 items-center w-full md:mx-auto">

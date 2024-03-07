@@ -4,6 +4,7 @@ import * as React from 'react';
 
 import { useTheme } from 'next-themes';
 
+import { Input } from '@/components/ui/input';
 import { 
     ResizableHandle,
     ResizablePanel,
@@ -110,15 +111,19 @@ export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
             <ResizablePanel defaultSize={25}>
                 <ResizablePanelGroup direction="horizontal">
                     <ResizablePanel defaultSize={70}>
-                        <div className="flex w-full h-full items-center justify-center p-6">
-                            <span className="font-semibold">Output</span>
+                        <div className="flex w-full h-max items-center justify-start p-1 border-b">
+                            <span className="font-mono text-sm font-semibold">Output</span>
                         </div>
                     </ResizablePanel>
                     <ResizableHandle withHandle />
-                    <ResizablePanel defaultSize={30}>
-                    <div className="flex w-full h-full items-center justify-center p-6">
-                        <span className="font-semibold">Logs</span>
-                    </div>
+                    <ResizablePanel defaultSize={30} className="flex flex-col">
+                        <div className="flex w-full h-max items-center justify-start p-1 border-b">
+                            <span className="font-mono text-sm font-semibold">Logs</span>
+                        </div>
+                        <div className="flex w-full h-full items-center justify-center p-1 border-b">
+                            <span className="font-mono text-sm font-semibold">Terminal</span>
+                        </div>
+                        <Input className="w-full rounded-none border-x-0 h-6" />
                     </ResizablePanel>
                 </ResizablePanelGroup>
             </ResizablePanel>

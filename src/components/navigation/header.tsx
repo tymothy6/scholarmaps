@@ -286,14 +286,14 @@ export function PageHeader () {
               <Avatar className="h-6 w-6 mr-2">
                 <AvatarImage src={session?.data?.user?.image ?? ''} />
                 <AvatarFallback className="text-xs">
-                {session?.data?.user?.email ? session.data.user.email[0].toUpperCase(): 'SM'}
+                {session?.data?.user?.email ? session.data.user.email[0].toUpperCase(): '📖'}
                 </AvatarFallback>
               </Avatar>
               <Separator orientation="vertical" className="h-6"/>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="data-[state=open]:bg-accent">
-                  <span className="text-sm font-medium">{session?.data?.user?.email}</span>
+                <Button variant="ghost" className="data-[state=open]:bg-accent px-3">
+                  <span className="text-sm font-medium">{session?.data?.user?.email ? session.data.user.email : 'User not found'}</span>
                   <ChevronDownIcon className="ml-2 h-4 w-4" />
                 </Button>
                 </DropdownMenuTrigger>
