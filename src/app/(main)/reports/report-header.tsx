@@ -31,6 +31,12 @@ import {
     MenubarSubTrigger,
  } from '@/components/ui/menubar';
 import { Separator } from '@/components/ui/separator';
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from '@/components/ui/tabs';
 
 export function ReportHeader () {
     const [isEditing, setIsEditing] = React.useState(false);
@@ -95,9 +101,14 @@ export function ReportHeader () {
             <SheetHeader>
                 <SheetTitle>Block Library</SheetTitle>
             </SheetHeader>
-        <SheetDescription className="flex items-start gap-4 p-4">
-            <div>
-            <h2 className="text-sm mb-2 font-medium uppercase font-mono">Input</h2>
+        <SheetDescription className="mt-4">
+        <Tabs defaultValue="input">
+            <TabsList>
+                <TabsTrigger value="input">Input</TabsTrigger>
+                <TabsTrigger value="transform">Transform</TabsTrigger>
+                <TabsTrigger value="visualize">Visualize</TabsTrigger>
+            </TabsList>
+            <TabsContent value="input">
             <div className="grid gap-4">
                 <Card>
                     <CardHeader className="p-4">
@@ -127,9 +138,8 @@ export function ReportHeader () {
                     </CardFooter>
                 </Card>
             </div>
-            </div>
-            <div>
-            <h2 className="text-sm mt-4 mb-2 font-medium uppercase font-mono">Transform</h2>
+            </TabsContent>
+            <TabsContent value="transform">
             <div className="grid gap-4">
                 <Card>
                     <CardHeader className="p-4">
@@ -152,16 +162,39 @@ export function ReportHeader () {
                 <Card>
                     <CardHeader className="p-4">
                         <h3 className="text-base font-hubotSans font-semibold">Code</h3>
-                        <p className="text-sm">Do anything you want with JavaScript or Python 🧑🏼‍💻</p>
+                        <p className="text-sm">Do (almost) anything you want with JavaScript or Python 🧑🏼‍💻</p>
                     </CardHeader>
                     <CardFooter className="p-4">
-                        <p className="text-sm text-muted-foreground">Input: Dataset</p>
+                        <p className="text-sm text-muted-foreground">Input: Dataset, Output: Terminal</p>
                     </CardFooter>
                 </Card>
             </div>
+            </TabsContent>
+            <TabsContent value="visualize">
+            <div className="grid gap-4">
+                <Card>
+                    <CardHeader className="p-4">
+                        <h3 className="text-base font-hubotSans font-semibold">Bar</h3>
+                        <p className="text-sm">Plot a bar graph</p>
+                    </CardHeader>
+                    <CardFooter className="p-4">
+                        <p className="text-sm text-muted-foreground">Input: Dataset, Output: Graph</p>
+                    </CardFooter>
+                </Card>
+                <Card>
+                    <CardHeader className="p-4">
+                        <h3 className="text-base font-hubotSans font-semibold">Scatterplot</h3>
+                        <p className="text-sm">Plot values against each other</p>
+                    </CardHeader>
+                    <CardFooter className="p-4">
+                        <p className="text-sm text-muted-foreground">Input: Dataset, Output: Graph</p>
+                    </CardFooter>
+                </Card>
             </div>
+            </TabsContent>
+        </Tabs>
         </SheetDescription>
-        <SheetFooter>
+        <SheetFooter className="mt-4">
             <Button type="submit">Close</Button>
         </SheetFooter>
         </SheetContent>
