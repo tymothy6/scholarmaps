@@ -120,10 +120,8 @@ export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
                         <div className="flex w-full h-max items-center justify-start p-1 border-b">
                             <span className="font-mono text-sm font-semibold">Logs</span>
                         </div>
-                        <div className="flex w-full h-full items-center justify-center p-1 border-b">
-                            <span className="font-mono text-sm font-semibold">Terminal</span>
-                        </div>
-                        <Input className="w-full rounded-none border-x-0 h-6" />
+                        <div className="flex w-full h-full items-center justify-center p-1 border-b" />
+                        <Input className="w-full rounded-none border-x-0 h-6 font-mono" />
                     </ResizablePanel>
                 </ResizablePanelGroup>
             </ResizablePanel>

@@ -16,6 +16,7 @@ import {
     SheetTitle,
     SheetTrigger,
     SheetFooter,
+    SheetClose,
  } from "@/components/ui/sheet"
 import { Input } from '@/components/ui/input';
 import {
@@ -38,21 +39,36 @@ import {
     TabsTrigger,
 } from '@/components/ui/tabs';
 
+import { AreaChartIcon, ArrowDownUpIcon, BarChart3Icon, BookOpenIcon, ClipboardPasteIcon, CodeIcon, FileInputIcon, FilterIcon, ScatterChartIcon } from 'lucide-react';
+
 export function ReportHeader () {
     const [isEditing, setIsEditing] = React.useState(false);
     const [reportName, setReportName] = React.useState('New Report');
+    const [isSheetOpen, setIsSheetOpen] = React.useState(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setReportName(e.target.value);
-    }
+    };
 
     const handleBlur = () => {
         setIsEditing(false);
-    }
+    };
+
+    React.useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'b') {
+                e.preventDefault();
+                setIsSheetOpen(!isSheetOpen);
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [isSheetOpen]);
 
     return (
         <section className="flex items-center gap-2 w-full">
-        <Sheet>
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <Menubar>
         <MenubarMenu>
             <MenubarTrigger>Create</MenubarTrigger>
@@ -108,30 +124,45 @@ export function ReportHeader () {
                 <TabsTrigger value="transform">Transform</TabsTrigger>
                 <TabsTrigger value="visualize">Visualize</TabsTrigger>
             </TabsList>
-            <TabsContent value="input">
+            <TabsContent value="input" className="mt-4">
             <div className="grid gap-4">
-                <Card>
+                <Card className="hover:bg-muted">
                     <CardHeader className="p-4">
-                        <h3 className="text-base font-hubotSans font-semibold">File</h3>
-                        <p className="text-sm">Read csv, json, and pdf files</p>
+                    <div className="flex items-start justify-between">
+                        <div className="flex flex-col gap-2">
+                            <h3 className="text-base font-hubotSans font-semibold">File</h3>
+                            <p className="text-sm">Read csv, json, and pdf files</p>
+                        </div>
+                        <FileInputIcon className="w-5 h-5" />
+                    </div>
                     </CardHeader>
                     <CardFooter className="p-4">
                         <p className="text-sm text-muted-foreground">Output: Dataset</p>
                     </CardFooter>
                 </Card>
-                <Card>
+                <Card className="hover:bg-muted">
                     <CardHeader className="p-4">
-                        <h3 className="text-base font-hubotSans font-semibold">Paste</h3>
-                        <p className="text-sm">Paste input strings, numbers, or csv files</p>
+                    <div className="flex items-start justify-between">
+                        <div className="flex flex-col gap-2">
+                            <h3 className="text-base font-hubotSans font-semibold">Paste</h3>
+                            <p className="text-sm">Paste strings, numbers, or tabular data</p>
+                        </div>
+                        <ClipboardPasteIcon className="w-5 h-5" />
+                    </div>
                     </CardHeader>
                     <CardFooter className="p-4">
                         <p className="text-sm text-muted-foreground">Output: Dataset, Object, String, Number</p>
                     </CardFooter>
                 </Card>
-                <Card>
+                <Card className="hover:bg-muted">
                     <CardHeader className="p-4">
-                        <h3 className="text-base font-hubotSans font-semibold">Semantic Scholar</h3>
-                        <p className="text-sm">Load papers from Semantic Scholar</p>
+                    <div className="flex items-start justify-between">
+                        <div className="flex flex-col gap-2">
+                            <h3 className="text-base font-hubotSans font-semibold">Semantic Scholar</h3>
+                            <p className="text-sm">Load papers from Semantic Scholar</p>
+                        </div>
+                        <BookOpenIcon className="w-5 h-5" />
+                    </div>
                     </CardHeader>
                     <CardFooter className="p-4">
                         <p className="text-sm text-muted-foreground">Output: Dataset</p>
@@ -139,30 +170,45 @@ export function ReportHeader () {
                 </Card>
             </div>
             </TabsContent>
-            <TabsContent value="transform">
+            <TabsContent value="transform" className="mt-4">
             <div className="grid gap-4">
-                <Card>
+                <Card className="hover:bg-muted">
                     <CardHeader className="p-4">
-                        <h3 className="text-base font-hubotSans font-semibold">Filter</h3>
-                        <p className="text-sm">Parse data sets based on a given column</p>
+                    <div className="flex items-start justify-between">
+                        <div className="flex flex-col gap-2">
+                            <h3 className="text-base font-hubotSans font-semibold">Filter</h3>
+                            <p className="text-sm">Parse data sets based on a given column</p>
+                        </div>
+                        <FilterIcon className="w-5 h-5" />
+                    </div>
                     </CardHeader>
                     <CardFooter className="p-4">
                         <p className="text-sm text-muted-foreground">Input: Dataset, Output: Dataset</p>
                     </CardFooter>
                 </Card>
-                <Card>
+                <Card className="hover:bg-muted">
                     <CardHeader className="p-4">
-                        <h3 className="text-base font-hubotSans font-semibold">Sort</h3>
-                        <p className="text-sm">Sort data sets based on a given column</p>
+                    <div className="flex items-start justify-between">
+                        <div className="flex flex-col gap-2">
+                            <h3 className="text-base font-hubotSans font-semibold">Sort</h3>
+                            <p className="text-sm">Sort data sets based on a given column</p>
+                        </div>
+                        <ArrowDownUpIcon className="w-5 h-5" />
+                    </div>
                     </CardHeader>
                     <CardFooter className="p-4">
                         <p className="text-sm text-muted-foreground">Input: Dataset, Output: Dataset</p>
                     </CardFooter>
                 </Card>
-                <Card>
+                <Card className="hover:bg-muted">
                     <CardHeader className="p-4">
-                        <h3 className="text-base font-hubotSans font-semibold">Code</h3>
-                        <p className="text-sm">Do (almost) anything you want with JavaScript or Python 🧑🏼‍💻</p>
+                    <div className="flex items-start justify-between">
+                        <div className="flex flex-col gap-2">
+                            <h3 className="text-base font-hubotSans font-semibold">Code</h3>
+                            <p className="text-sm">Analyze data your way with JavaScript or Python</p>
+                        </div>
+                        <CodeIcon className="w-5 h-5" />
+                    </div>
                     </CardHeader>
                     <CardFooter className="p-4">
                         <p className="text-sm text-muted-foreground">Input: Dataset, Output: Terminal</p>
@@ -170,21 +216,45 @@ export function ReportHeader () {
                 </Card>
             </div>
             </TabsContent>
-            <TabsContent value="visualize">
+            <TabsContent value="visualize" className="mt-4">
             <div className="grid gap-4">
-                <Card>
+                <Card className="hover:bg-muted">
                     <CardHeader className="p-4">
-                        <h3 className="text-base font-hubotSans font-semibold">Bar</h3>
-                        <p className="text-sm">Plot a bar graph</p>
+                        <div className="flex items-start justify-between">
+                            <div className="flex flex-col gap-2">
+                                <h3 className="text-base font-hubotSans font-semibold">Bar</h3>
+                                <p className="text-sm">Plot values from one column on a bar graph</p>
+                            </div>
+                            <BarChart3Icon className="w-5 h-5" />
+                        </div>
                     </CardHeader>
                     <CardFooter className="p-4">
                         <p className="text-sm text-muted-foreground">Input: Dataset, Output: Graph</p>
                     </CardFooter>
                 </Card>
-                <Card>
+                <Card className="hover:bg-muted">
                     <CardHeader className="p-4">
-                        <h3 className="text-base font-hubotSans font-semibold">Scatterplot</h3>
-                        <p className="text-sm">Plot values against each other</p>
+                        <div className="flex items-start justify-between">
+                            <div className="flex flex-col gap-2">
+                                <h3 className="text-base font-hubotSans font-semibold">Scatterplot</h3>
+                                <p className="text-sm">Plot values from two columns against each other</p>
+                            </div>
+                            <ScatterChartIcon className="w-5 h-5" />
+                        </div>
+                    </CardHeader>
+                    <CardFooter className="p-4">
+                        <p className="text-sm text-muted-foreground">Input: Dataset, Output: Graph</p>
+                    </CardFooter>
+                </Card>
+                <Card className="hover:bg-muted">
+                    <CardHeader className="p-4">
+                        <div className="flex items-start justify-between">
+                            <div className="flex flex-col gap-2">
+                                <h3 className="text-base font-hubotSans font-semibold">Areachart</h3>
+                                <p className="text-sm">Plot values from two columns against each other</p>
+                            </div>
+                            <AreaChartIcon className="w-5 h-5" />
+                        </div>
                     </CardHeader>
                     <CardFooter className="p-4">
                         <p className="text-sm text-muted-foreground">Input: Dataset, Output: Graph</p>
@@ -195,7 +265,9 @@ export function ReportHeader () {
         </Tabs>
         </SheetDescription>
         <SheetFooter className="mt-4">
-            <Button type="submit">Close</Button>
+            <SheetClose asChild>
+                <Button type="button">Close</Button>
+            </SheetClose>
         </SheetFooter>
         </SheetContent>
         </Sheet>
