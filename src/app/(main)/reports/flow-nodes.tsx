@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { Handle, Position } from 'reactflow';
 
-import { NodeData } from './nodes-edges';
+import { NodeData } from './context/flow-provider';
 
 function CustomNode({ data }: { data: NodeData }) {
     return (

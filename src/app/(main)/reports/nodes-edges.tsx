@@ -1,14 +1,6 @@
-import { Node, Edge } from "reactflow";
+import { Edge } from "reactflow";
 
-export interface NodeData { // the shape of the data object
-    name: string;
-    job: string;
-    emoji: string;
-}
-  
-interface FlowNode extends Node {
-    data: NodeData;
-}
+import { FlowNode } from "./context/flow-provider";
 
 export const initialNodes: FlowNode[] = [
     {

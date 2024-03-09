@@ -28,6 +28,8 @@ import { initialNodes, initialEdges } from './nodes-edges';
 
 import 'reactflow/dist/style.css';
 
+import { useFlowContext } from './context/flow-provider';
+
 import CustomNode from './flow-nodes';
 
 import { WandIcon } from 'lucide-react';
@@ -72,6 +74,9 @@ export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
     );
 
     const variantProps = chartVariants[variant] || chartVariants.default;
+
+    // General function to add a new node
+    const { addNewNode } = useFlowContext();
 
     return (
         <>
