@@ -2,6 +2,8 @@
 
 import * as React from 'react';
 
+import { useFlowContext, NodeData, FlowNode } from './context/flow-provider';
+
 import { Button } from '@/components/ui/button';
 import { 
     Card,
@@ -39,7 +41,7 @@ import {
     TabsTrigger,
 } from '@/components/ui/tabs';
 
-import { AreaChartIcon, ArrowDownUpIcon, BarChart3Icon, BookOpenIcon, ClipboardPasteIcon, CodeIcon, FileInputIcon, FilterIcon, ScatterChartIcon } from 'lucide-react';
+import { AreaChartIcon, ArrowDownUpIcon, BarChart3Icon, BookOpenIcon, ClipboardPasteIcon, CodeIcon, FileInputIcon, FilterIcon, PlusIcon, ScatterChartIcon } from 'lucide-react';
 
 export function ReportHeader () {
     const [isEditing, setIsEditing] = React.useState(false);
@@ -65,6 +67,20 @@ export function ReportHeader () {
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [isSheetOpen]);
+
+    const { addNewNode, nodes } = useFlowContext();
+
+    const handleAddNode = () => {
+        const newNodeData: FlowNode = {
+            id: `${nodes.length + 1}`,
+            type: 'custom',
+            data: { name: 'New node', job: 'New job', emoji: '' },
+            position: { x: Math.random() * window.innerWidth / 2, y: Math.random() * window.innerHeight / 2 },
+        };
+        addNewNode(newNodeData);
+        setIsSheetOpen(false);
+
+    }
 
     return (
         <section className="flex items-center gap-2 w-full">
@@ -126,7 +142,7 @@ export function ReportHeader () {
             </TabsList>
             <TabsContent value="input" className="mt-4">
             <div className="grid gap-4">
-                <Card className="hover:bg-muted">
+                <Card>
                     <CardHeader className="p-4">
                     <div className="flex items-start justify-between">
                         <div className="flex flex-col gap-2">
@@ -136,11 +152,14 @@ export function ReportHeader () {
                         <FileInputIcon className="w-5 h-5" />
                     </div>
                     </CardHeader>
-                    <CardFooter className="p-4">
+                    <CardFooter className="p-4 flex items-center justify-between">
                         <p className="text-sm text-muted-foreground">Output: Dataset</p>
+                        <Button variant="secondary" size="icon" onClick={handleAddNode} className="rounded-full">
+                            <PlusIcon className="h-5 w-5" />
+                        </Button>
                     </CardFooter>
                 </Card>
-                <Card className="hover:bg-muted">
+                <Card>
                     <CardHeader className="p-4">
                     <div className="flex items-start justify-between">
                         <div className="flex flex-col gap-2">
@@ -150,11 +169,14 @@ export function ReportHeader () {
                         <ClipboardPasteIcon className="w-5 h-5" />
                     </div>
                     </CardHeader>
-                    <CardFooter className="p-4">
-                        <p className="text-sm text-muted-foreground">Output: Dataset, Object, String, Number</p>
+                    <CardFooter className="p-4 flex items-center justify-between">
+                        <p className="text-sm text-muted-foreground">Output: Dataset, String, Number</p>
+                        <Button variant="secondary" size="icon" onClick={handleAddNode} className="rounded-full">
+                            <PlusIcon className="h-5 w-5" />
+                        </Button>
                     </CardFooter>
                 </Card>
-                <Card className="hover:bg-muted">
+                <Card>
                     <CardHeader className="p-4">
                     <div className="flex items-start justify-between">
                         <div className="flex flex-col gap-2">
@@ -164,15 +186,18 @@ export function ReportHeader () {
                         <BookOpenIcon className="w-5 h-5" />
                     </div>
                     </CardHeader>
-                    <CardFooter className="p-4">
+                    <CardFooter className="p-4 flex items-center justify-between">
                         <p className="text-sm text-muted-foreground">Output: Dataset</p>
+                        <Button variant="secondary" size="icon" onClick={handleAddNode} className="rounded-full">
+                            <PlusIcon className="h-5 w-5" />
+                        </Button>
                     </CardFooter>
                 </Card>
             </div>
             </TabsContent>
             <TabsContent value="transform" className="mt-4">
             <div className="grid gap-4">
-                <Card className="hover:bg-muted">
+                <Card>
                     <CardHeader className="p-4">
                     <div className="flex items-start justify-between">
                         <div className="flex flex-col gap-2">
@@ -186,7 +211,7 @@ export function ReportHeader () {
                         <p className="text-sm text-muted-foreground">Input: Dataset, Output: Dataset</p>
                     </CardFooter>
                 </Card>
-                <Card className="hover:bg-muted">
+                <Card>
                     <CardHeader className="p-4">
                     <div className="flex items-start justify-between">
                         <div className="flex flex-col gap-2">
@@ -200,7 +225,7 @@ export function ReportHeader () {
                         <p className="text-sm text-muted-foreground">Input: Dataset, Output: Dataset</p>
                     </CardFooter>
                 </Card>
-                <Card className="hover:bg-muted">
+                <Card>
                     <CardHeader className="p-4">
                     <div className="flex items-start justify-between">
                         <div className="flex flex-col gap-2">
@@ -218,7 +243,7 @@ export function ReportHeader () {
             </TabsContent>
             <TabsContent value="visualize" className="mt-4">
             <div className="grid gap-4">
-                <Card className="hover:bg-muted">
+                <Card>
                     <CardHeader className="p-4">
                         <div className="flex items-start justify-between">
                             <div className="flex flex-col gap-2">
@@ -232,7 +257,7 @@ export function ReportHeader () {
                         <p className="text-sm text-muted-foreground">Input: Dataset, Output: Graph</p>
                     </CardFooter>
                 </Card>
-                <Card className="hover:bg-muted">
+                <Card>
                     <CardHeader className="p-4">
                         <div className="flex items-start justify-between">
                             <div className="flex flex-col gap-2">
@@ -246,7 +271,7 @@ export function ReportHeader () {
                         <p className="text-sm text-muted-foreground">Input: Dataset, Output: Graph</p>
                     </CardFooter>
                 </Card>
-                <Card className="hover:bg-muted">
+                <Card>
                     <CardHeader className="p-4">
                         <div className="flex items-start justify-between">
                             <div className="flex flex-col gap-2">

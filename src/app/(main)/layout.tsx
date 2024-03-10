@@ -1,3 +1,5 @@
+"use client"
+
 import { PageHeader } from "@/components/navigation/header" 
 import { Sidebar } from "@/components/navigation/sidebar"
 

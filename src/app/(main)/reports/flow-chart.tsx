@@ -17,11 +17,6 @@ import ReactFlow, {
     ControlButton,
     Background,
     SelectionMode,
-    useNodesState, 
-    useEdgesState, 
-    addEdge, 
-    Connection, 
-    Edge 
 } from 'reactflow';
 
 import { initialNodes, initialEdges } from './nodes-edges';
@@ -65,18 +60,8 @@ const chartVariants: Record<ChartVariant, ChartVariantProps> = {
 
 export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
     const { resolvedTheme } = useTheme();
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
-    const onConnect = React.useCallback(
-        (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
-        [setEdges]
-    );
-
+    const { nodes, edges, onConnect, onNodesChange, onEdgesChange, addNewNode } = useFlowContext();
     const variantProps = chartVariants[variant] || chartVariants.default;
-
-    // General function to add a new node
-    const { addNewNode } = useFlowContext();
 
     return (
         <>

@@ -7,7 +7,7 @@ export const initialNodes: FlowNode[] = [
         id: '1',
         type: 'custom',
         data: { name: 'Jane Doe', job: 'CEO', emoji: '😎' },
-        position: { x: 50, y: 250 },
+        position: { x: 50, y: 100 },
     },
     {
         id: '2',
