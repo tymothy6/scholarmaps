@@ -30,6 +30,7 @@ interface FlowContextTypes {
     onEdgesChange: (changes: any) => void;
     addNewNode: (newNodeData: FlowNode) => void;
     onConnect: (connection: Edge | Connection) => void;
+    updateNodeData: (id: string, newData: Partial<NodeData>) => void;
 }
 
 const FlowContext = React.createContext<FlowContextTypes | undefined>(undefined);
@@ -55,9 +56,13 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
         setNodes((nds) => [...nds, newNodeData]);
     };
 
+    const updateNodeData = (id: string, newData: Partial<NodeData>) => {
+        setNodes((prevNodes) => prevNodes.map(node => node.id === id ? { ...node, data: { ...node.data, ...newData } } : node));
+    };
+
     return (
         <ReactFlowProvider>
-            <FlowContext.Provider value={{ nodes, setNodes, onNodesChange, edges, setEdges, onEdgesChange, addNewNode, onConnect }}>
+            <FlowContext.Provider value={{ nodes, setNodes, onNodesChange, edges, setEdges, onEdgesChange, addNewNode, onConnect, updateNodeData }}>
                 {children}
             </FlowContext.Provider>
         </ReactFlowProvider>

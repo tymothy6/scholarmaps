@@ -5,49 +5,49 @@ import { FlowNode } from "./context/flow-provider";
 export const initialNodes: FlowNode[] = [
     {
         id: '1',
-        type: 'custom',
+        type: 'jobNode',
         data: { name: 'Jane Doe', job: 'CEO', emoji: '😎' },
         position: { x: 50, y: 100 },
     },
     {
         id: '2',
-        type: 'custom',
+        type: 'jobNode',
         data: { name: 'Tyler Cox', job: 'Developer Advocate', emoji: '🧑🏼‍💻' },
         position: { x: 450, y: 100 },
     },
     {
         id: '3',
-        type: 'custom',
+        type: 'jobNode',
         data: { name: 'Jim Price', job: 'Product Designer', emoji: '🎨' },
         position: { x: 450, y: 400 },
     },
     {
         id: '4',
-        type: 'custom',
+        type: 'jobNode',
         data: { name: 'John Doe', job: 'CTO', emoji: '👨🏻‍💻' },
         position: { x: 450, y: 250 },
     },
     {
         id: '5',
-        type: 'custom',
+        type: 'jobNode',
         data: { name: 'Jenny Smith', job: 'Software Engineer', emoji: '👩🏻‍💻' },
         position: { x: 850, y: 400 },
     },
     {
         id: '6',
-        type: 'custom',
+        type: 'jobNode',
         data: { name: 'Sara Smith', job: 'Product Manager', emoji: '👩🏻‍💼' },
         position: { x: 850, y: 250 },
     },
     {
         id: '7',
-        type: 'custom',
+        type: 'jobNode',
         data: { name: 'Nikki Miles', job: 'Product Owner', emoji: '🫡' },
         position: { x: 1250, y: 400 },
     },
     {
         id: '8',
-        type: 'custom',
+        type: 'jobNode',
         data: { name: 'Jack Black', job: 'Designer Advocate', emoji: '🖥️' },
         position: { x: 1250, y: 250 },
     }

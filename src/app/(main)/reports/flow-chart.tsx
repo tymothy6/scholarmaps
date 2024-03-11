@@ -19,17 +19,17 @@ import ReactFlow, {
     SelectionMode,
 } from 'reactflow';
 
-import { initialNodes, initialEdges } from './nodes-edges';
-
 import 'reactflow/dist/style.css';
 
 import { useFlowContext } from './context/flow-provider';
 
-import CustomNode from './flow-nodes';
+import JobNode from './job-node';
 
 import { WandIcon } from 'lucide-react';
 
-const nodeTypes = { custom: CustomNode }; 
+const nodeTypes = { 
+    jobNode: JobNode,
+ }; 
 // Define nodeTypes outside of the component to avoid re-renders
 // you could also use React.useMemo for this
 
@@ -110,7 +110,9 @@ export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
                         <div className="flex w-full h-max items-center justify-start p-1 border-b">
                             <span className="font-mono text-sm font-semibold">Logs</span>
                         </div>
-                        <div className="flex w-full h-full items-center justify-center p-1 border-b" />
+                        <div className="flex w-full h-full items-center justify-center p-1 border-b">
+                            {/* Render logs here */}
+                        </div>
                         <Input className="w-full rounded-none border-x-0 h-6 font-mono" />
                     </ResizablePanel>
                 </ResizablePanelGroup>
