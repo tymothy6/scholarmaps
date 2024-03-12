@@ -24,11 +24,13 @@ import 'reactflow/dist/style.css';
 import { useFlowContext } from './context/flow-provider';
 
 import JobNode from './job-node';
+import CompletionNode from './completion-node';
 
 import { WandIcon } from 'lucide-react';
 
 const nodeTypes = { 
     jobNode: JobNode,
+    completionNode: CompletionNode,
  }; 
 // Define nodeTypes outside of the component to avoid re-renders
 // you could also use React.useMemo for this

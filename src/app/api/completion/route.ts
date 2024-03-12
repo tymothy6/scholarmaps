@@ -11,18 +11,18 @@ const perplexity = new OpenAI({
 export const runtime = 'edge';
  
 export async function POST(req: Request) {
-  const { messages } = await req.json();
+  const { prompt } = await req.json();
  
   // Ask Perplexity for a streaming chat completion using PPLX 70B online model
   // @see https://blog.perplexity.ai/blog/introducing-pplx-online-llms
-  const response = await perplexity.chat.completions.create({
+  const response = await perplexity.completions.create({
     model: 'pplx-70b-online',
     stream: true,
     max_tokens: 1000,
-    messages,
+    prompt,
   });
  
-  // Convert the response into a text-stream using the OpenAIStream helper
+  // Convert the response into a friendly text-stream
   const stream = OpenAIStream(response);
  
   // Respond with the stream

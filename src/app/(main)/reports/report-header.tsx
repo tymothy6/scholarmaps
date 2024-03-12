@@ -41,7 +41,7 @@ import {
     TabsTrigger,
 } from '@/components/ui/tabs';
 
-import { AreaChartIcon, ArrowDownUpIcon, BarChart3Icon, BookOpenIcon, ClipboardPasteIcon, CodeIcon, FileInputIcon, FilterIcon, PlusIcon, ScatterChartIcon } from 'lucide-react';
+import { AreaChartIcon, ArrowDownUpIcon, BarChart3Icon, BookOpenIcon, ClipboardPasteIcon, CodeIcon, FileInputIcon, FilterIcon, PlusIcon, ScatterChartIcon, SparklesIcon } from 'lucide-react';
 
 export function ReportHeader () {
     const [isEditing, setIsEditing] = React.useState(false);
@@ -70,10 +70,10 @@ export function ReportHeader () {
 
     const { addNewNode, nodes } = useFlowContext();
 
-    const handleAddNode = () => {
+    const handleAddNode = (variant: string) => {
         const newNodeData: FlowNode = {
             id: `${nodes.length + 1}`,
-            type: 'custom',
+            type: variant,
             data: { name: 'New node', job: 'New job', emoji: '' },
             position: { x: Math.random() * window.innerWidth / 2, y: Math.random() * window.innerHeight / 2 },
         };
@@ -154,7 +154,7 @@ export function ReportHeader () {
                     </CardHeader>
                     <CardFooter className="p-4 flex items-center justify-between">
                         <p className="text-sm text-muted-foreground">Output: Dataset</p>
-                        <Button variant="secondary" size="icon" onClick={handleAddNode} className="rounded-full">
+                        <Button variant="secondary" size="icon" onClick={() => handleAddNode('jobNode')} className="rounded-full">
                             <PlusIcon className="h-5 w-5" />
                         </Button>
                     </CardFooter>
@@ -171,7 +171,7 @@ export function ReportHeader () {
                     </CardHeader>
                     <CardFooter className="p-4 flex items-center justify-between">
                         <p className="text-sm text-muted-foreground">Output: Dataset, String, Number</p>
-                        <Button variant="secondary" size="icon" onClick={handleAddNode} className="rounded-full">
+                        <Button variant="secondary" size="icon" onClick={() => handleAddNode('jobNode')} className="rounded-full">
                             <PlusIcon className="h-5 w-5" />
                         </Button>
                     </CardFooter>
@@ -188,7 +188,7 @@ export function ReportHeader () {
                     </CardHeader>
                     <CardFooter className="p-4 flex items-center justify-between">
                         <p className="text-sm text-muted-foreground">Output: Dataset</p>
-                        <Button variant="secondary" size="icon" onClick={handleAddNode} className="rounded-full">
+                        <Button variant="secondary" size="icon" onClick={() => handleAddNode('jobNode')} className="rounded-full">
                             <PlusIcon className="h-5 w-5" />
                         </Button>
                     </CardFooter>
@@ -197,6 +197,23 @@ export function ReportHeader () {
             </TabsContent>
             <TabsContent value="transform" className="mt-4">
             <div className="grid gap-4">
+                <Card>
+                    <CardHeader className="p-4">
+                    <div className="flex items-start justify-between">
+                        <div className="flex flex-col gap-2">
+                            <h3 className="text-base font-hubotSans font-semibold">Summarize</h3>
+                            <p className="text-sm">Summarize data sets using AI</p>
+                        </div>
+                        <SparklesIcon className="w-5 h-5" />
+                    </div>
+                    </CardHeader>
+                    <CardFooter className="p-4 flex items-center justify-between">
+                        <p className="text-sm text-muted-foreground">Input: Dataset, Output: Dataset</p>
+                        <Button variant="secondary" size="icon" onClick={() => handleAddNode('completionNode')} className="rounded-full">
+                            <PlusIcon className="h-5 w-5" />
+                        </Button>
+                    </CardFooter>
+                </Card>
                 <Card>
                     <CardHeader className="p-4">
                     <div className="flex items-start justify-between">
