@@ -25,11 +25,13 @@ import { useFlowContext } from './context/flow-provider';
 
 import JobNode from './job-node';
 import CompletionNode from './completion-node';
+import ChatNode from './chat-node';
 
 import { WandIcon } from 'lucide-react';
 
 const nodeTypes = { 
     jobNode: JobNode,
+    chatNode: ChatNode,
     completionNode: CompletionNode,
  }; 
 // Define nodeTypes outside of the component to avoid re-renders

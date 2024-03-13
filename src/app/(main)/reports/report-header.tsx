@@ -209,7 +209,7 @@ export function ReportHeader () {
                     </CardHeader>
                     <CardFooter className="p-4 flex items-center justify-between">
                         <p className="text-sm text-muted-foreground">Input: Dataset, Output: Dataset</p>
-                        <Button variant="secondary" size="icon" onClick={() => handleAddNode('completionNode')} className="rounded-full">
+                        <Button variant="secondary" size="icon" onClick={() => handleAddNode('chatNode')} className="rounded-full">
                             <PlusIcon className="h-5 w-5" />
                         </Button>
                     </CardFooter>

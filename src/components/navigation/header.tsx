@@ -293,8 +293,8 @@ export function PageHeader () {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="data-[state=open]:bg-accent px-3">
-                  <span className="text-sm font-medium">{session?.data?.user?.email ? session.data.user.email : 'User not found'}</span>
-                  <ChevronDownIcon className="ml-2 h-4 w-4" />
+                  <span className="text-sm font-medium">{session?.data?.user?.email ? session.data.user.email : 'Login'}</span>
+                  {session?.data?.user ? <ChevronDownIcon className="ml-2 h-4 w-4" /> : <div /> }
                 </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
