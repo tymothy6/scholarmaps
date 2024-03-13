@@ -4,6 +4,7 @@ import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
+import { AI } from "./action"; // Connect to the ai/rsc instance
 import { ThemeProvider } from '@/components/theme-provider'
 import NextAuthProvider from '@/components/session-provider'
 import { Toaster } from '@/components/ui/sonner'
