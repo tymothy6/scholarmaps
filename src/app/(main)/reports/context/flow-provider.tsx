@@ -9,7 +9,12 @@ import {
     addEdge,
  } from 'reactflow';
 
-import { initialNodes, initialEdges } from '../nodes-edges';
+import { 
+    initialNodes, 
+    initialEdges,
+    exampleNodes,
+    exampleEdges,
+ } from '../nodes-edges';
 
 export interface NodeData {
     name: string;
@@ -22,6 +27,7 @@ export interface FlowNode extends Node {
 }
 
 interface FlowContextTypes {
+    loadData: (dataName: string) => void;
     nodes: FlowNode[];
     setNodes: React.Dispatch<React.SetStateAction<FlowNode[]>>;
     onNodesChange: (changes: any) => void;
@@ -60,9 +66,33 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
         setNodes((prevNodes) => prevNodes.map(node => node.id === id ? { ...node, data: { ...node.data, ...newData } } : node));
     };
 
+    const loadData = (dataName: string) => {
+        switch (dataName) {
+            case 'example':
+                setNodes(exampleNodes);
+                setEdges(exampleEdges);
+                break;
+            case 'initial':
+            default:
+                setNodes(initialNodes);
+                setEdges(initialEdges);
+        }
+    };
+
     return (
         <ReactFlowProvider>
-            <FlowContext.Provider value={{ nodes, setNodes, onNodesChange, edges, setEdges, onEdgesChange, addNewNode, onConnect, updateNodeData }}>
+            <FlowContext.Provider value={{ 
+                loadData,
+                nodes, 
+                setNodes, 
+                onNodesChange, 
+                edges, 
+                setEdges, 
+                onEdgesChange, 
+                addNewNode, 
+                onConnect, 
+                updateNodeData
+                 }}>
                 {children}
             </FlowContext.Provider>
         </ReactFlowProvider>

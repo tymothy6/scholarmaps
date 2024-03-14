@@ -292,8 +292,8 @@ export function PageHeader () {
               <Separator orientation="vertical" className="h-6"/>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="data-[state=open]:bg-accent px-3">
-                  <span className="text-sm font-medium">{session?.data?.user?.email ? session.data.user.email : 'Login'}</span>
+                <Button variant={session?.data?.user ? "ghost" : "default"} className="data-[state=open]:bg-accent px-3">
+                  <span className="text-sm font-medium">{session?.data?.user?.email ? session.data.user.email : 'Login with Email'}</span>
                   {session?.data?.user ? <ChevronDownIcon className="ml-2 h-4 w-4" /> : <div /> }
                 </Button>
                 </DropdownMenuTrigger>

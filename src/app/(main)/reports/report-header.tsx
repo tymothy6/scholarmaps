@@ -68,7 +68,7 @@ export function ReportHeader () {
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [isSheetOpen]);
 
-    const { addNewNode, nodes } = useFlowContext();
+    const { addNewNode, nodes, loadData } = useFlowContext();
 
     const handleAddNode = (variant: string) => {
         const newNodeData: FlowNode = {
@@ -94,13 +94,15 @@ export function ReportHeader () {
                 New Block <MenubarShortcut>⌘B</MenubarShortcut>
             </MenubarItem>
             </SheetTrigger>
-            <MenubarItem>
-                New Report <MenubarShortcut>⌘R</MenubarShortcut>
+            <MenubarItem onSelect={() => loadData('initial')}>
+                New Report <MenubarShortcut>⌘N</MenubarShortcut>
+            </MenubarItem>
+            <MenubarSeparator />
+            <MenubarItem onSelect={() => loadData('example')} >
+                Example flow
             </MenubarItem>
             <MenubarSeparator />
             <MenubarItem>Help</MenubarItem>
-            <MenubarSeparator />
-            <MenubarItem>Results</MenubarItem>
             </MenubarContent>
         </MenubarMenu>
         <MenubarMenu>

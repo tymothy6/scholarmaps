@@ -3,6 +3,12 @@ import { Edge } from "reactflow";
 import { FlowNode } from "./context/flow-provider";
 
 export const initialNodes: FlowNode[] = [
+];
+
+export const initialEdges: Edge[] = [
+];
+
+export const exampleNodes: FlowNode[] = [
     {
         id: '1',
         type: 'jobNode',
@@ -53,7 +59,7 @@ export const initialNodes: FlowNode[] = [
     }
 ];
 
-export const initialEdges: Edge[] = [
+export const exampleEdges: Edge[] = [
     {
         id: 'e1-2',
         source: '1',
@@ -97,3 +103,4 @@ export const initialEdges: Edge[] = [
         animated: true,
     },
 ];
+
