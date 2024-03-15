@@ -190,7 +190,7 @@ export function ReportHeader () {
                     </CardHeader>
                     <CardFooter className="p-4 flex items-center justify-between">
                         <p className="text-sm text-muted-foreground">Output: Dataset</p>
-                        <Button variant="secondary" size="icon" onClick={() => handleAddNode('jobNode')} className="rounded-full">
+                        <Button variant="secondary" size="icon" onClick={() => handleAddNode('searchNode')} className="rounded-full">
                             <PlusIcon className="h-5 w-5" />
                         </Button>
                     </CardFooter>

@@ -4,7 +4,7 @@ import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
-import { AI } from "./action"; // Connect to the ai/rsc instance
+import { ReactQueryProvider } from '@/components/query-provider'
 import { ThemeProvider } from '@/components/theme-provider'
 import NextAuthProvider from '@/components/session-provider'
 import { Toaster } from '@/components/ui/sonner'
@@ -29,20 +29,22 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${hubotSans.variable} ${GeistSans.variable} ${GeistMono.variable}`}>
-      <body className={GeistSans.className}>
-          <NextAuthProvider>
-            <ThemeProvider
-                attribute="class"
-                defaultTheme="light"
-                enableSystem
-                disableTransitionOnChange
-              >
-                {children}
-            </ThemeProvider>
-          </NextAuthProvider>
-          <Toaster richColors position="top-center" />
-      </body>
-    </html>
+      <html lang="en" className={`${hubotSans.variable} ${GeistSans.variable} ${GeistMono.variable}`}>
+        <body className={GeistSans.className}>
+            <ReactQueryProvider>
+              <NextAuthProvider>
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="light"
+                    enableSystem
+                    disableTransitionOnChange
+                  >
+                    {children}
+                </ThemeProvider>
+              </NextAuthProvider>
+              <Toaster richColors position="top-center" />
+            </ReactQueryProvider>
+        </body>
+      </html>
   )
 }

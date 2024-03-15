@@ -26,16 +26,17 @@ import { useFlowContext } from './context/flow-provider';
 import JobNode from './job-node';
 import CompletionNode from './completion-node';
 import ChatNode from './chat-node';
+import PaperSearchNode from './search-node';
 
 import { WandIcon } from 'lucide-react';
 
+// Define nodeTypes outside of the component to avoid re-renders
 const nodeTypes = { 
     jobNode: JobNode,
     chatNode: ChatNode,
     completionNode: CompletionNode,
+    searchNode: PaperSearchNode,
  }; 
-// Define nodeTypes outside of the component to avoid re-renders
-// you could also use React.useMemo for this
 
 export type ChartVariant = 'default' | 'figma';
 
