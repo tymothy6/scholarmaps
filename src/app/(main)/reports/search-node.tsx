@@ -4,6 +4,9 @@ import * as React from 'react';
 
 import { useQuery } from '@tanstack/react-query'; 
 
+import { SearchPaperResult, columns } from '../search/search-columns'
+import { SearchResultTable } from '../search/search-table'
+
 import { Handle, Position } from 'reactflow';
 
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -11,6 +14,13 @@ import { useForm } from "react-hook-form"
 import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
+import { 
+    Sheet,
+    SheetTitle,
+    SheetContent,
+    SheetTrigger,
+    SheetDescription,
+ } from "@/components/ui/sheet"
 import { Input } from "@/components/ui/input"
 import {
   Form,
@@ -19,16 +29,18 @@ import {
   FormField,
   FormItem,
   FormMessage,
-} from "@/components/ui/form"
+ } from "@/components/ui/form"
 import { Loader2Icon, SearchIcon } from "lucide-react"
 
 const searchSchema = z.object({
     paperId: z.string().min(6, {
-        message: "Please enter a valid Semantic Scholar paper ID",
+        message: "Please enter a valid paper ID",
     }),
 })
 
 function PaperSearchNode() {
+    const [isSheetOpen, setIsSheetOpen] = React.useState(false);
+    const [searchResults, setSearchResults] = React.useState<SearchPaperResult[]>([]);
 
     const searchForm = useForm<z.infer<typeof searchSchema>>({
         resolver: zodResolver(searchSchema),
@@ -40,19 +52,25 @@ function PaperSearchNode() {
     const paperId = searchForm.watch('paperId');
 
     const fetchSearchResults = async (paperId: string) => {
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-        const url = `${baseUrl}/api/search?query=${paperId}`;
-        const response = await fetch(url);
-    
-        if (!response.ok) {
-            throw new Error(`Relevance API responded with status code ${response.status}: ${response.statusText}`);
-        }
+        try {
+            const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+            const url = `${baseUrl}/api/search?query=${paperId}`;
+            const response = await fetch(url);
         
-        const results = await response.json();
-        return results;
+            if (!response.ok) {
+                throw new Error(`Relevance API responded with status code ${response.status}: ${response.statusText}`);
+            }
+
+            const results = await response.json();
+
+            setSearchResults(results.data);
+            setIsSheetOpen(true);
+        } catch (error) {
+            console.error('Failed to fetch search results using query:', error);
+        }
     }
 
-    const { isPending, refetch } = useQuery({
+    const { isPending, error, refetch } = useQuery({
         queryKey: ['search', paperId],
         queryFn: () => fetchSearchResults(paperId),
         enabled: false,
@@ -88,6 +106,17 @@ function PaperSearchNode() {
                 </Button>
               </form>
             </Form>
+            if (error) {
+                <p className="text-xs text-destructive">An error occurred while fetching search results</p>
+            }
+            {isSheetOpen && (
+                <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                    <SheetContent side="right">
+                        <SheetTitle>Search Results</SheetTitle>
+                        <SearchResultTable columns={columns} data={searchResults} />
+                    </SheetContent>
+                </Sheet>
+            )}
             <Handle 
                 type="target" 
                 position={Position.Left} 
