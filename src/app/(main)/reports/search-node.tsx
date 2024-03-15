@@ -48,9 +48,8 @@ function PaperSearchNode() {
             throw new Error(`Relevance API responded with status code ${response.status}: ${response.statusText}`);
         }
         
-        const data = await response.json();
-        console.log('Search results:', data);
-        return data;
+        const results = await response.json();
+        return results;
     }
 
     const { isPending, refetch } = useQuery({
