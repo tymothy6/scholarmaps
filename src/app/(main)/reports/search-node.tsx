@@ -70,7 +70,7 @@ function PaperSearchNode() {
         }
     }
 
-    const { isPending, error, refetch } = useQuery({
+    const { isPending, isError, refetch } = useQuery({
         queryKey: ['search', paperId],
         queryFn: () => fetchSearchResults(paperId),
         enabled: false,
@@ -106,9 +106,9 @@ function PaperSearchNode() {
                 </Button>
               </form>
             </Form>
-            if (error) {
+            {isError &&  (
                 <p className="text-xs text-destructive">An error occurred while fetching search results</p>
-            }
+            )}
             {isSheetOpen && (
                 <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                     <SheetContent side="right">
