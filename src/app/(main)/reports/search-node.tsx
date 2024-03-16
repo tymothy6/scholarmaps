@@ -66,7 +66,7 @@ function PaperSearchNode() {
             setSearchResults(results.data);
             setIsSheetOpen(true);
         } catch (error) {
-            console.error('Failed to fetch search results using query:', error);
+            console.error('Failed to fetch search results during query:', error);
         }
     }
 
@@ -111,8 +111,14 @@ function PaperSearchNode() {
             )}
             {isSheetOpen && (
                 <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                    <SheetContent side="right">
-                        <SheetTitle>Search Results</SheetTitle>
+                    <SheetTrigger asChild>
+                        <Button variant="default" size="sm">Results</Button>
+                    </SheetTrigger>
+                    <SheetContent side="right" className="w-[50vw]">
+                        <SheetTitle>Results</SheetTitle>
+                        <SheetDescription>
+                            Search for <span className="font-mono">{paperId}</span>
+                        </SheetDescription>
                         <SearchResultTable columns={columns} data={searchResults} />
                     </SheetContent>
                 </Sheet>

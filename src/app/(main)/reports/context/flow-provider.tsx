@@ -16,14 +16,26 @@ import {
     exampleEdges,
  } from '../nodes-edges';
 
-export interface NodeData {
+
+export interface JobNodeData {
     name: string;
     emoji: string;
     job: string;
 }
 
+export interface ChatNodeData {
+    messages: Array<{ 
+        id: string; 
+        content: string; 
+        role: 'function' | 'user' | 'system' | 'assistant' | 'data' | 'tool';
+    }>;
+}
+
+// Define a union type for the node data
+export type NodeData = JobNodeData | ChatNodeData;
+
 export interface FlowNode extends Node {
-    data: NodeData;
+    data: NodeData; // use the union type here
 }
 
 interface FlowContextTypes {

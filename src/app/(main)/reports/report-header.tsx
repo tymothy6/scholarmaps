@@ -79,7 +79,17 @@ export function ReportHeader () {
         };
         addNewNode(newNodeData);
         setIsSheetOpen(false);
+    }
 
+    const handleAddChatNode = () => {
+        const newNodeData: FlowNode = {
+            id: `${nodes.length + 1}`,
+            type: 'chatNode',
+            data: { messages: [] },
+            position: { x: Math.random() * window.innerWidth / 2, y: Math.random() * window.innerHeight / 2 },
+        };
+        addNewNode(newNodeData);
+        setIsSheetOpen(false);
     }
 
     return (
@@ -211,7 +221,7 @@ export function ReportHeader () {
                     </CardHeader>
                     <CardFooter className="p-4 flex items-center justify-between">
                         <p className="text-sm text-muted-foreground">Input: Dataset, Output: Dataset</p>
-                        <Button variant="secondary" size="icon" onClick={() => handleAddNode('chatNode')} className="rounded-full">
+                        <Button variant="secondary" size="icon" onClick={handleAddChatNode} className="rounded-full">
                             <PlusIcon className="h-5 w-5" />
                         </Button>
                     </CardFooter>

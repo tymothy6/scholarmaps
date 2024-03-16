@@ -4,6 +4,8 @@ import * as React from "react";
 
 import { Handle, Position } from "reactflow";
 
+import { useFlowContext } from "./context/flow-provider";
+
 import { useChat } from "ai/react";
 
 import { Button } from "@/components/ui/button";
@@ -12,8 +14,24 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SendIcon } from "lucide-react";
 
-function ChatNode() {
+function ChatNode({ id }: { id: string }) {
     const { messages, input, handleInputChange, handleSubmit } = useChat();
+    const { updateNodeData } = useFlowContext();
+
+    const updateMessages = (newMessages: typeof messages) => {
+      updateNodeData(id, { messages: newMessages });
+    };
+
+    const handleChatSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      handleSubmit(e);
+      updateMessages([...messages]);
+    };
+
+    // Watch for changes to messages in real-time
+    // Persist messages in route handler
+    React.useEffect(() => {
+      updateMessages(messages);
+    }, [messages]);
    
     return (
       <div className="shadow-md bg-background border-y px-4 py-2 flex flex-col gap-2 max-h-[300px] w-[300px] nowheel">
@@ -36,7 +54,7 @@ function ChatNode() {
         </div>
         ))}
         </ScrollArea>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleChatSubmit}>
           <Label>
             Say something...
           </Label>
