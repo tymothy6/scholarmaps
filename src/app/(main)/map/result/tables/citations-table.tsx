@@ -44,7 +44,7 @@ import { DataTableViewOptions } from "@/components/patterns/table-column-toggle"
 import { DataTableFacetedFilter } from "@/components/patterns/table-faceted-filter"
 
 import { RotateCcwIcon } from "lucide-react"
-import { results } from "../../dashboard-columns"
+import { results } from "../../../tables/dashboard-columns"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]

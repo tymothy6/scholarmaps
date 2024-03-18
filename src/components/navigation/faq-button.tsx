@@ -7,12 +7,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuGroup,
-    DropdownMenuSub,
-    DropdownMenuSubTrigger,
-    DropdownMenuPortal,
-    DropdownMenuSubContent,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
@@ -26,7 +20,7 @@ import {
 import { 
     BookOpenIcon,
     MessageSquareIcon,
-} from "lucide-react"
+ } from "lucide-react"
 
 
 export function FAQButton() {
@@ -47,7 +41,7 @@ export function FAQButton() {
                   <DropdownMenuItem><MessageSquareIcon className="mr-2 h-4 w-4" />Message support</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>Keyboard shortcuts</DropdownMenuItem>
-                  <DropdownMenuItem>What's new?</DropdownMenuItem>
+                  <DropdownMenuItem>What&apos;s new?</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem disabled>X - @ScholarMaps</DropdownMenuItem>
                   <DropdownMenuItem disabled>Terms & Privacy</DropdownMenuItem>

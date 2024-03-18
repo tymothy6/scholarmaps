@@ -4,8 +4,8 @@ import * as React from 'react';
 
 import { useQuery } from '@tanstack/react-query'; 
 
-import { SearchPaperResult, columns } from '../search/search-columns'
-import { SearchResultTable } from '../search/search-table'
+import { SearchPaperResult, columns } from '../search/tables/search-columns'
+import { SearchResultTable } from '../search/tables/search-table'
 
 import { Handle, Position } from 'reactflow';
 

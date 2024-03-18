@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 
-import { SearchPaperResult, columns } from './search-columns'
-import { SearchResultTable } from './search-table'
+import { SearchPaperResult, columns } from './tables/search-columns'
+import { SearchResultTable } from './tables/search-table'
 import { SearchTableSkeleton } from './search-skeleton'
 
 export async function generateMetadata({ searchParams }: { searchParams: {[key: string]: string | undefined } }) {

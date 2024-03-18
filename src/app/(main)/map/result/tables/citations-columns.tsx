@@ -4,7 +4,6 @@ import * as React from "react"
 
 import { ColumnDef } from "@tanstack/react-table"
 
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -21,9 +20,9 @@ import { DataTableColumnHeader } from "@/components/patterns/table-column-header
 import { BookmarkPlusIcon, FileSearchIcon, Link2Icon, MoreHorizontalIcon, NavigationIcon, XIcon } from "lucide-react"
 
 // Import type from map/page.tsx or move here
-import { PaperCitationResult } from "../page"
+import { PaperCitationResult } from "../../page"
 
-import { isJournalObject } from "../../search/search-columns"
+import { isJournalObject } from "../../../search/tables/search-columns"
 
 async function copyToClipboard(text: string) {
     await navigator.clipboard.writeText(text);

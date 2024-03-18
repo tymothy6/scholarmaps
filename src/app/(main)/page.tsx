@@ -9,8 +9,8 @@ import { Card } from '@/components/ui/card'
 
 import { LineChartCard } from '@/components/patterns/chart-card'
 import { DashboardCards } from '@/components/patterns/dashboard-card'
-import { DashboardResult, columns, results } from './dashboard-columns'
-import { DashboardResultTable } from './dashboard-table'
+import { DashboardResult, columns, results } from './tables/dashboard-columns'
+import { DashboardResultTable } from './tables/dashboard-table'
 import { LogoutAuth } from '@/components/auth/logout-auth'
 
 export const metadata: Metadata = {

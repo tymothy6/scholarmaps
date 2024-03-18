@@ -12,15 +12,14 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { SendIcon } from "lucide-react";
 
 function ChatNode({ id }: { id: string }) {
     const { messages, input, handleInputChange, handleSubmit } = useChat();
     const { updateNodeData } = useFlowContext();
 
-    const updateMessages = (newMessages: typeof messages) => {
+    const updateMessages = React.useCallback((newMessages: typeof messages) => {
       updateNodeData(id, { messages: newMessages });
-    };
+    }, [updateNodeData, id]);
 
     const handleChatSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       handleSubmit(e);
@@ -31,7 +30,7 @@ function ChatNode({ id }: { id: string }) {
     // Persist messages in route handler
     React.useEffect(() => {
       updateMessages(messages);
-    }, [messages]);
+    }, [messages, updateMessages]);
    
     return (
       <div className="shadow-md bg-background border-y px-4 py-2 flex flex-col gap-2 max-h-[300px] w-[300px] nowheel">
