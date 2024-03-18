@@ -55,18 +55,18 @@ function ChatNode({ id }: { id: string }) {
         ))}
         </ScrollArea>
         <form onSubmit={handleChatSubmit}>
-          <Label>
+          <Label className={`${ input === '' ? 'block' : 'hidden'}`}>
             Say something...
           </Label>
-          <div className="flex items-start justify-center gap-2 mt-1">
+          <div className="flex items-start justify-center gap-2 mt-2">
             <Input
               className="w-full"
               value={input}
               onChange={handleInputChange}
             />
         {input && (
-          <Button type="submit" size="icon">
-            <SendIcon className="h-4 w-4" />
+          <Button type="submit" className="px-2">
+            Send
           </Button>
         )}
           </div>
