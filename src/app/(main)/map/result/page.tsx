@@ -10,7 +10,7 @@ import { CitationGraphData } from '@/components/graph/force-citations'
 
 const CitationGraph = dynamic(() => import('@/components/graph/force-citations'), { ssr: false })
 
-export function generateMetadata( { searchParams, seedPaperData }: { searchParams: {[key: string]: string | undefined }, seedPaperData: SeedPaperData} ) {
+export async function generateMetadata( { searchParams }: { searchParams: {[key: string]: string | undefined }} ) {
     const title = searchParams['paperId'] ? `Map for ${searchParams['paperId']}` : 'Map results';
     const description = 'Map connected papers in the Semantic Scholar research corpus';
     return { title, description };
