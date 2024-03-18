@@ -16,7 +16,6 @@ import {
     exampleEdges,
  } from '../nodes-edges';
 
-
 export interface JobNodeData {
     name: string;
     emoji: string;

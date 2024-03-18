@@ -4,12 +4,22 @@ import * as React from 'react';
 
 import { Handle, Position } from 'reactflow';
 
-import { NodeData, useFlowContext } from './context/flow-provider';
+import { NodeData, JobNodeData, useFlowContext } from './context/flow-provider';
 
 import { Input } from '@/components/ui/input';
 
+// Type guard to check if data if of the expected type 
+function isJobNodeData(data: NodeData): data is JobNodeData {
+  return 'name' in data && 'emoji' in data && 'job' in data;
+}
+
 function JobNode({ id, data }: { id: string, data: NodeData }) {
   const { updateNodeData } = useFlowContext();
+
+  // Use type guard to check if data is JobNodeData
+  if (!isJobNodeData(data)) {
+    throw new Error('Invalid node data for JobNode');
+  }
   const dataName = data.name;
 
   const [isEditingName, setIsEditingName] = React.useState(false);
