@@ -8,6 +8,7 @@ import { ReactQueryProvider } from '@/components/query-provider'
 import { ThemeProvider } from '@/components/theme-provider'
 import NextAuthProvider from '@/components/session-provider'
 import { Toaster } from '@/components/ui/sonner'
+import { Analytics } from '@vercel/analytics/react'
 
 const hubotSans = localFont({
   src: './Hubot-Sans.woff2',
@@ -40,6 +41,7 @@ export default function RootLayout({
                     disableTransitionOnChange
                   >
                     {children}
+                    <Analytics />
                 </ThemeProvider>
               </NextAuthProvider>
               <Toaster richColors position="top-center" />
