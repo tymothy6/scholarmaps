@@ -72,14 +72,20 @@
 
   h1 { 
     @apply font-hubotSans;
+    font-size: 1.75rem;
+    font-weight: 700;
   }
 
   h2 { 
     @apply font-hubotSans;
+    font-size: 1.5rem;
+    font-weight: 700;
   }
 
   h3 { 
     @apply font-hubotSans;
+    font-size: 1.25rem;
+    font-weight: 700;
   }
 
   ::selection {

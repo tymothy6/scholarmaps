@@ -11,6 +11,7 @@ import {
   EditorInstance, 
   type JSONContent,
  } from "novel";
+import { defaultEditorContent } from "./content";
 import { useDebouncedCallback } from "use-debounce";
 import { defaultExtensions } from "./extensions";
 import { slashCommand, suggestionItems } from "./slash-command";
@@ -22,7 +23,8 @@ import { ColorSelector } from "./selectors/color-selector";
 import { TextButtons } from "./selectors/text-buttons";
 import GenerativeMenuSwitch from "./generative/generative-menu-switch";
 
-import { Separator } from "@/components/ui/separator";
+import { handleImageDrop, handleImagePaste } from "./plugins";
+import { uploadFn } from "./image-upload";
 
 const extensions = [ ...defaultExtensions, slashCommand ];
 
@@ -45,14 +47,23 @@ const NovelTailwindEditor = () => {
     500,
   );
 
-  // Add useEffect hook to load initial content here
+  // Load initial content
+  useEffect(() => {
+    const content = window.localStorage.getItem("novel-content");
+    if (content) setInitialContent(JSON.parse(content));
+    else setInitialContent(defaultEditorContent);
+  }, []);
 
   return (
+    <div className="relative w-full">
+    <div className="absolute right-5 top-5 z-10 rounded-lg bg-accent px-2 py-1 text-sm text-muted-foreground">
+        {saveStatus}
+    </div>
     <EditorRoot>
       <EditorContent
         initialContent={initialContent || undefined}
         extensions={extensions}
-        className="relative min-h-[500px] w-full border-muted bg-background sm:rounded-lg sm:border sm:shadow"
+        className="relative min-h-[500px] w-full border pl-8 pr-6 py-6 bg-background sm:rounded-lg sm:border sm:shadow"
         onUpdate={({ editor }) => {
           debouncedUpdates(editor);
           setSaveStatus("Unsaved");
@@ -61,6 +72,10 @@ const NovelTailwindEditor = () => {
           handleDOMEvents: {
             keydown: (_view, event) => handleCommandNavigation(event),
           },
+          handlePaste: (view, event) => 
+            handleImagePaste(view, event, uploadFn),
+          handleDrop: (view, event, _slice, moved) =>
+            handleImageDrop(view, event, moved, uploadFn),
           attributes: {
             class: `prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full`,
           }
@@ -91,19 +106,15 @@ const NovelTailwindEditor = () => {
               ))}
             </EditorCommandList>
           </EditorCommand>
-            
           <GenerativeMenuSwitch open={openAI} onOpenChange={setOpenAI}>
-            <Separator orientation="vertical" />
             <NodeSelector open={openNode} onOpenChange={setOpenNode} />
-            <Separator orientation="vertical" />
             <LinkSelector open={openLink} onOpenChange={setOpenLink} />
-            <Separator orientation="vertical" />
             <TextButtons />
-            <Separator orientation="vertical" />
             <ColorSelector open={openColor} onOpenChange={setOpenColor} />
           </GenerativeMenuSwitch>
       </EditorContent>
     </EditorRoot>
+  </div>
   );
 };
 export default NovelTailwindEditor;

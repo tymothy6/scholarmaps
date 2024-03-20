@@ -1,4 +1,5 @@
 import StarterKit from "@tiptap/starter-kit";
+import Heading from "@tiptap/extension-heading";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import TiptapLink from "@tiptap/extension-link";
 import TiptapImage from "@tiptap/extension-image";
@@ -11,6 +12,7 @@ import { TaskList } from "@tiptap/extension-task-list";
 import { InputRule } from "@tiptap/core";
 import { Markdown } from "tiptap-markdown";
 import Highlight from "@tiptap/extension-highlight";
+import Typography from "@tiptap/extension-typography";
 import UpdatedImage from "./updated-image";
 import CustomKeymap from "./custom-keymap";
 import DragAndDrop from "./drag-and-drop";
@@ -26,6 +28,10 @@ const PlaceholderExtension = Placeholder.configure({
   includeChildren: true,
 });
 
+const HeadingExtension = Heading.configure({
+  levels: [1, 2, 3],
+});
+
 const simpleExtensions = [
   TiptapUnderline,
   TextStyle,
@@ -33,7 +39,6 @@ const simpleExtensions = [
   Highlight.configure({
     multicolor: true,
   }),
-
   Markdown.configure({
     html: false,
     transformCopiedText: true,
@@ -64,8 +69,14 @@ const Horizontal = HorizontalRule.extend({
   },
 });
 
+const TypographyExtension = Typography.configure({
+  threeQuarters: false,
+});
+
 export {
   PlaceholderExtension as Placeholder,
+  HeadingExtension as Heading,
+  TypographyExtension as Typography,
   simpleExtensions,
   StarterKit,
   Horizontal as HorizontalRule,

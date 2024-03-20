@@ -7,16 +7,19 @@ import {
   HorizontalRule,
   StarterKit,
   Placeholder,
+  Typography,
+  Heading,
+  AIHighlight,
 } from "./extensions/index";
 import { UploadImagesPlugin } from "./plugins";
 
 import { cx } from "class-variance-authority";
 
 
-// const aiHighlight = AIHighlight;
-
-//You can overwrite the placeholder with your own configuration
-const placeholder = Placeholder;
+const aiHighlight = AIHighlight;
+const placeholder = Placeholder; 
+const typography = Typography;
+const heading = Heading;
 const tiptapLink = TiptapLink.configure({
   HTMLAttributes: {
     class: cx(
@@ -51,6 +54,7 @@ const taskList = TaskList.configure({
     class: cx("not-prose pl-2 "),
   },
 });
+
 const taskItem = TaskItem.configure({
   HTMLAttributes: {
     class: cx("flex gap-2 items-start my-4"),
@@ -109,10 +113,13 @@ const starterKit = StarterKit.configure({
 export const defaultExtensions = [
   starterKit,
   placeholder,
+  typography,
+  heading,
   tiptapLink,
   tiptapImage,
   updatedImage,
   taskList,
   taskItem,
   horizontalRule,
+  aiHighlight,
 ];
