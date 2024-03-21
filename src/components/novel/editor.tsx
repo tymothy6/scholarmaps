@@ -10,7 +10,7 @@ import {
   EditorCommandList,
   EditorInstance, 
   type JSONContent,
- } from "./headless/index";
+ } from "./headless/index"; 
 import { defaultEditorContent } from "./content";
 import { useDebouncedCallback } from "use-debounce";
 import { defaultExtensions } from "./extensions";

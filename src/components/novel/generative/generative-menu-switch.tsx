@@ -26,7 +26,7 @@ const GenerativeMenuSwitch = ({
       tippyOptions={{
         placement: open ? "bottom-start" : "top",
         onHidden: () => {
-          onOpenChange(false);
+          onOpenChange(false); 
           editor?.chain().unsetHighlight().run();
         },
       }}
@@ -36,7 +36,7 @@ const GenerativeMenuSwitch = ({
       {!open && (
         <Fragment>
           <Button
-            className="gap-1 rounded-none text-purple-500"
+            className="gap-1 rounded-none text-sm text-purple-500"
             variant="ghost"
             onClick={() => onOpenChange(true)}
             size="sm"

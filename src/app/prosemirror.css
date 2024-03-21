@@ -1,11 +1,25 @@
 .ProseMirror {
     @apply p-12 px-8 sm:px-12;
   }
+
+  /* Custom heading styles */
+  
+  .ProseMirror h1 {
+    @apply text-2xl font-bold;
+  }
+
+  .ProseMirror h2 {
+    @apply text-xl font-bold;
+  }
+
+  .ProseMirror h3 {
+    @apply text-lg font-bold;
+  }
   
   .ProseMirror .is-editor-empty:first-child::before {
     content: attr(data-placeholder);
     float: left;
-    color: var(--novel-stone-400);
+    color: hsl(var(--primary));
     pointer-events: none;
     height: 0;
   }
@@ -110,7 +124,7 @@
   }
   
   ul[data-type="taskList"] li[data-checked="true"] > div > p {
-    color: var(--muted-foreground);
+    color: hsl(var(--muted-foreground));
     text-decoration: line-through;
     text-decoration-thickness: 2px;
   }
@@ -123,6 +137,7 @@
   
   .ProseMirror:not(.dragging) .ProseMirror-selectednode {
     outline: none !important;
+    color: hsl(var(--primary)) !important;
     background-color: var(--novel-highlight-blue);
     transition: background-color 0.2s;
     box-shadow: none;

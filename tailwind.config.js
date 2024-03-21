@@ -56,6 +56,10 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        novel: {
+          DEFAULT: "var(--novel-highlight-default)",
+          blue: "var(--novel-highlight-blue)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

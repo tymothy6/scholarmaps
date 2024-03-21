@@ -88,8 +88,13 @@
     font-weight: 700;
   }
 
+  p { 
+    font-size: 1rem;
+    @apply text-foreground;
+  }
+
   ::selection {
-    @apply bg-primary text-primary-foreground;
+    @apply bg-novel-blue;
   }
   
 }
