@@ -1,5 +1,4 @@
 import StarterKit from "@tiptap/starter-kit";
-import Heading from "@tiptap/extension-heading";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import TiptapLink from "@tiptap/extension-link";
 import TiptapImage from "@tiptap/extension-image";
@@ -26,10 +25,6 @@ const PlaceholderExtension = Placeholder.configure({
     return "Press '/' for commands";
   },
   includeChildren: true,
-});
-
-const HeadingExtension = Heading.configure({
-  levels: [1, 2, 3],
 });
 
 const simpleExtensions = [
@@ -75,7 +70,6 @@ const TypographyExtension = Typography.configure({
 
 export {
   PlaceholderExtension as Placeholder,
-  HeadingExtension as Heading,
   TypographyExtension as Typography,
   simpleExtensions,
   StarterKit,

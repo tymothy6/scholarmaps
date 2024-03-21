@@ -3,6 +3,7 @@ import localFont from 'next/font/local'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
+import './prosemirror.css'
 
 import { ReactQueryProvider } from '@/components/query-provider'
 import { ThemeProvider } from '@/components/theme-provider'

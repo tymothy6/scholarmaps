@@ -10,12 +10,12 @@ import {
   EditorCommandList,
   EditorInstance, 
   type JSONContent,
- } from "novel";
+ } from "./headless/index";
 import { defaultEditorContent } from "./content";
 import { useDebouncedCallback } from "use-debounce";
 import { defaultExtensions } from "./extensions";
 import { slashCommand, suggestionItems } from "./slash-command";
-import { handleCommandNavigation } from "./extensions/slash-command";
+import { handleCommandNavigation, type SuggestionItem } from "./extensions/slash-command";
 
 import { NodeSelector } from "./selectors/node-selector";
 import { LinkSelector } from "./selectors/link-selector";
@@ -63,7 +63,7 @@ const NovelTailwindEditor = () => {
       <EditorContent
         initialContent={initialContent || undefined}
         extensions={extensions}
-        className="relative min-h-[500px] w-full border pl-8 pr-6 py-6 bg-background sm:rounded-lg sm:border sm:shadow"
+        className="relative min-h-[500px] w-full border bg-background sm:rounded-lg sm:border sm:shadow"
         onUpdate={({ editor }) => {
           debouncedUpdates(editor);
           setSaveStatus("Unsaved");
@@ -77,19 +77,17 @@ const NovelTailwindEditor = () => {
           handleDrop: (view, event, _slice, moved) =>
             handleImageDrop(view, event, moved, uploadFn),
           attributes: {
-            class: `prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full`,
+            class: `prose prose-lg dark:prose-invert prose-headings:font-title prose-headings:text-primary font-default focus:outline-none max-w-full`,
           }
         }}
       >
         <EditorCommand className="z-50 h-auto max-h-[330px] overflow-y-auto rounded-md border border-muted bg-background px-1 py-2 shadow-md transition-all">
-            <EditorCommandEmpty className="px-2 text-muted-foreground">
-              No results
-            </EditorCommandEmpty>
+            <EditorCommandEmpty className="px-2 text-muted-foreground">No results</EditorCommandEmpty>
             <EditorCommandList>
-              {suggestionItems.map((item: any) => ( // should type 
+              {suggestionItems.map((item: SuggestionItem) => ( 
                 <EditorCommandItem
                   value={item.title}
-                  onCommand={(val) => item.command(val)}
+                  onCommand={(val) => item.command && item.command(val)} // check if command exists first 
                   className={`flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-accent aria-selected:bg-accent`}
                   key={item.title}
                 >
@@ -98,7 +96,7 @@ const NovelTailwindEditor = () => {
                   </div>
                   <div>
                     <p className="font-medium">{item.title}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                       {item.description}
                     </p>
                   </div>

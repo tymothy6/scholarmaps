@@ -2,7 +2,7 @@ import { Extension } from "@tiptap/core";
 import Suggestion from "@tiptap/suggestion";
 import { ReactRenderer } from "@tiptap/react";
 import tippy from "tippy.js";
-import { EditorCommandOut } from "../components/editor-command";
+import { EditorCommandOut } from "../headless/editor-command";
 import type { ReactNode } from "react";
 import type { Editor, Range } from "@tiptap/core";
 

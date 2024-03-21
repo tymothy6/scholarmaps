@@ -8,18 +8,15 @@ import {
   StarterKit,
   Placeholder,
   Typography,
-  Heading,
   AIHighlight,
 } from "./extensions/index";
 import { UploadImagesPlugin } from "./plugins";
 
 import { cx } from "class-variance-authority";
 
-
 const aiHighlight = AIHighlight;
 const placeholder = Placeholder; 
 const typography = Typography;
-const heading = Heading;
 const tiptapLink = TiptapLink.configure({
   HTMLAttributes: {
     class: cx(
@@ -114,7 +111,6 @@ export const defaultExtensions = [
   starterKit,
   placeholder,
   typography,
-  heading,
   tiptapLink,
   tiptapImage,
   updatedImage,

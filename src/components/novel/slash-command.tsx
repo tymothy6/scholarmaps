@@ -17,7 +17,7 @@ import {
   export const suggestionItems = createSuggestionItems([
     {
       title: "Text",
-      description: "Just start typing with plain text.",
+      description: "Just start typing with plain text",
       searchTerms: ["p", "paragraph"],
       icon: <Text size={18} />,
       command: ({ editor, range }) => {
@@ -31,7 +31,7 @@ import {
     },
     {
       title: "To-do List",
-      description: "Track tasks with a to-do list.",
+      description: "Track tasks with a to-do list",
       searchTerms: ["todo", "task", "list", "check", "checkbox"],
       icon: <CheckSquare size={18} />,
       command: ({ editor, range }) => {
@@ -40,7 +40,7 @@ import {
     },
     {
       title: "Heading 1",
-      description: "Big section heading.",
+      description: "Large section heading",
       searchTerms: ["title", "big", "large"],
       icon: <Heading1 size={18} />,
       command: ({ editor, range }) => {
@@ -54,7 +54,7 @@ import {
     },
     {
       title: "Heading 2",
-      description: "Medium section heading.",
+      description: "Medium section heading",
       searchTerms: ["subtitle", "medium"],
       icon: <Heading2 size={18} />,
       command: ({ editor, range }) => {
@@ -68,7 +68,7 @@ import {
     },
     {
       title: "Heading 3",
-      description: "Small section heading.",
+      description: "Small section heading",
       searchTerms: ["subtitle", "small"],
       icon: <Heading3 size={18} />,
       command: ({ editor, range }) => {
@@ -82,7 +82,7 @@ import {
     },
     {
       title: "Bullet List",
-      description: "Create a simple bullet list.",
+      description: "Create a bullet list",
       searchTerms: ["unordered", "point"],
       icon: <List size={18} />,
       command: ({ editor, range }) => {
@@ -91,7 +91,7 @@ import {
     },
     {
       title: "Numbered List",
-      description: "Create a list with numbering.",
+      description: "Create a numbered list",
       searchTerms: ["ordered"],
       icon: <ListOrdered size={18} />,
       command: ({ editor, range }) => {
@@ -100,7 +100,7 @@ import {
     },
     {
       title: "Quote",
-      description: "Capture a quote.",
+      description: "Capture a quote",
       searchTerms: ["blockquote"],
       icon: <TextQuote size={18} />,
       command: ({ editor, range }) =>
@@ -114,7 +114,7 @@ import {
     },
     {
       title: "Code",
-      description: "Capture a code snippet.",
+      description: "Capture a code snippet",
       searchTerms: ["codeblock"],
       icon: <Code size={18} />,
       command: ({ editor, range }) =>
@@ -122,7 +122,7 @@ import {
     },
     {
       title: "Image",
-      description: "Upload an image from your computer.",
+      description: "Upload an image from your computer",
       searchTerms: ["photo", "picture", "media"],
       icon: <ImageIcon size={18} />,
       command: ({ editor, range }) => {

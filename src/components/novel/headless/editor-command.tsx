@@ -3,7 +3,7 @@ import { useEffect, useRef, forwardRef, createContext } from "react";
 import { Command } from "cmdk";
 import { queryAtom, rangeAtom } from "../utils/atoms";
 import { novelStore } from "../utils/store";
-import type tunnel from "tunnel-rat";
+import tunnel from "tunnel-rat";
 import type { ComponentPropsWithoutRef, FC } from "react";
 import type { Range } from "@tiptap/core";
 
