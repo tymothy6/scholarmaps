@@ -16,6 +16,7 @@ import { useDebouncedCallback } from "use-debounce";
 import { defaultExtensions } from "./extensions";
 import { slashCommand, suggestionItems } from "./slash-command";
 import { handleCommandNavigation, type SuggestionItem } from "./extensions/slash-command";
+import { ImageResizer } from "./extensions/index";
 
 import { NodeSelector } from "./selectors/node-selector";
 import { LinkSelector } from "./selectors/link-selector";
@@ -50,9 +51,15 @@ const NovelTailwindEditor = () => {
   // Load initial content
   useEffect(() => {
     const content = window.localStorage.getItem("novel-content");
-    if (content) setInitialContent(JSON.parse(content));
-    else setInitialContent(defaultEditorContent);
+
+    if (content) {
+      setInitialContent(JSON.parse(content));
+    } else {
+      console.log("Default content loaded: ", defaultEditorContent)
+    } setInitialContent(defaultEditorContent);
   }, []);
+
+  if (!initialContent) return null;
 
   return (
     <div className="relative w-full">
@@ -77,9 +84,10 @@ const NovelTailwindEditor = () => {
           handleDrop: (view, event, _slice, moved) =>
             handleImageDrop(view, event, moved, uploadFn),
           attributes: {
-            class: `prose prose-lg dark:prose-invert prose-headings:font-title prose-headings:text-primary font-default focus:outline-none max-w-full`,
+            class: `prose prose-lg dark:prose-invert prose-headings:font-title prose-headings:text-foreground font-default focus:outline-none max-w-full`,
           }
         }}
+        slotAfter={<ImageResizer />}
       >
         <EditorCommand className="z-50 h-auto max-h-[330px] overflow-y-auto rounded-md border border-muted bg-background px-1 py-2 shadow-md transition-all">
             <EditorCommandEmpty className="px-2 text-muted-foreground">No results</EditorCommandEmpty>

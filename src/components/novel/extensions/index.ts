@@ -12,10 +12,17 @@ import { InputRule } from "@tiptap/core";
 import { Markdown } from "tiptap-markdown";
 import Highlight from "@tiptap/extension-highlight";
 import Typography from "@tiptap/extension-typography";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { common, createLowlight } from "lowlight";
 import UpdatedImage from "./updated-image";
 import CustomKeymap from "./custom-keymap";
 import DragAndDrop from "./drag-and-drop";
 import { ImageResizer } from "./image-resizer";
+
+const lowlight = createLowlight(common);
+const CodeBlockLowLightExtension = CodeBlockLowlight.configure({
+  lowlight,
+});
 
 const PlaceholderExtension = Placeholder.configure({
   placeholder: ({ node }) => {
@@ -69,6 +76,7 @@ const TypographyExtension = Typography.configure({
 });
 
 export {
+  CodeBlockLowLightExtension as CodeBlockLowlight,
   PlaceholderExtension as Placeholder,
   TypographyExtension as Typography,
   simpleExtensions,

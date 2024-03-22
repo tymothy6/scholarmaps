@@ -2,7 +2,7 @@ import { EditorBubble, useEditor } from "novel";
 import React, { Fragment, useEffect, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { AISelector } from "./ai-selector";
-import { Sparkle } from "lucide-react";
+import { SparklesIcon } from "lucide-react";
 import {} from "../plugins";
 import { removeAIHighlight } from "../extensions/ai-highlight";
 
@@ -41,7 +41,7 @@ const GenerativeMenuSwitch = ({
             onClick={() => onOpenChange(true)}
             size="sm"
           >
-            <Sparkle className="h-5 w-5" />
+            <SparklesIcon className="h-4 w-4" />
             Ask AI
           </Button>
           {children}

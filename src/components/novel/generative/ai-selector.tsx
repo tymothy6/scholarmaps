@@ -11,9 +11,10 @@ import AISelectorCommands from "./ai-selector-commands";
 import AICompletionCommands from "./ai-completion-command";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { ArrowUp, Sparkle, Loader } from "lucide-react";
+import { ArrowUp, Loader, Sparkles } from "lucide-react";
 
 import { addAIHighlight } from "../extensions/index";
+import { LightningBoltIcon } from "@radix-ui/react-icons";
 
 interface AISelectorProps {
   open: boolean;
@@ -26,7 +27,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
 
   const { completion, complete, isLoading } = useCompletion({
     // id: "novel",
-    api: "/api/generate",
+    api: "/api/novel/generate",
     onResponse: (response) => {
       if (response.status === 429) {
         toast.error("You have reached your request limit for the day.");
@@ -54,10 +55,10 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
 
       {isLoading && (
         <div className="flex h-12 w-full items-center px-4 text-sm font-medium text-muted-foreground text-purple-500">
-          <Sparkle className="mr-2 h-4 w-4 shrink-0  " />
+          <Sparkles className="mr-2 h-4 w-4 shrink-0  " />
           AI is thinking
           <div className="ml-2 mt-1">
-            <Loader className="animate-spin"/>
+            <Loader className="w-4 h-4 animate-spin"/>
           </div>
         </div>
       )}
@@ -96,7 +97,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
                   }
               }}
             >
-              <ArrowUp className="h-4 w-4" />
+             { inputValue ? <LightningBoltIcon className="h-4 w-4" /> : <ArrowUp className="h-4 w-4" /> }
             </Button>
           </div>
           {hasCompletion ? (

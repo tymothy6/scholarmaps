@@ -8,10 +8,19 @@ import {
   StarterKit,
   Placeholder,
   AIHighlight,
+  CodeBlockLowlight,
 } from "./extensions/index";
 import { UploadImagesPlugin } from "./plugins";
 
 import { cx } from "class-variance-authority";
+
+const codeBlock = CodeBlockLowlight.configure({
+  HTMLAttributes: {
+    class: cx(
+      "rounded-md bg-muted text-muted-foreground border p-5 font-mono font-medium",
+    ),
+  },
+});
 
 const aiHighlight = AIHighlight;
 const placeholder = Placeholder; 
@@ -88,16 +97,10 @@ const starterKit = StarterKit.configure({
       class: cx("border-l-4 border-primary"),
     },
   },
-  codeBlock: {
-    HTMLAttributes: {
-      class: cx(
-        "rounded-md bg-muted text-muted-foreground border p-5 font-mono font-medium",
-      ),
-    },
-  },
+  codeBlock: false,
   code: {
     HTMLAttributes: {
-      class: cx("rounded-md bg-muted  px-1.5 py-1 font-mono font-medium"),
+      class: cx("rounded-md bg-muted text-muted-foreground px-1.5 py-1 font-mono font-medium"),
       spellcheck: "false",
     },
   },
@@ -111,6 +114,7 @@ const starterKit = StarterKit.configure({
 
 export const defaultExtensions = [
   starterKit,
+  codeBlock,
   placeholder,
   tiptapLink,
   tiptapImage,

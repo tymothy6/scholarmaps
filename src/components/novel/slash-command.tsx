@@ -9,6 +9,7 @@ import {
     Text,
     TextQuote,
     ImageIcon,
+    MessageSquare,
   } from "lucide-react";
   import { createSuggestionItems } from "./extensions/slash-command";
   import { Command, renderItems } from "./extensions/slash-command";

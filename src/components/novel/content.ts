@@ -3,8 +3,8 @@ export const defaultEditorContent = {
     content: [
       {
         type: "heading",
-        attrs: { level: 2 },
-        content: [{ type: "text", text: "Introducing Novel" }],
+        attrs: { level: 1 },
+        content: [{ type: "text", text: "Novel" }],
       },
       {
         type: "paragraph",
@@ -58,7 +58,7 @@ export const defaultEditorContent = {
       },
       {
         type: "heading",
-        attrs: { level: 3 },
+        attrs: { level: 2 },
         content: [{ type: "text", text: "Installation" }],
       },
       {
@@ -68,7 +68,7 @@ export const defaultEditorContent = {
       },
       {
         type: "heading",
-        attrs: { level: 3 },
+        attrs: { level: 2 },
         content: [{ type: "text", text: "Usage" }],
       },
       {
@@ -83,7 +83,7 @@ export const defaultEditorContent = {
       },
       {
         type: "heading",
-        attrs: { level: 3 },
+        attrs: { level: 2 },
         content: [{ type: "text", text: "Features" }],
       },
       {
@@ -144,7 +144,7 @@ export const defaultEditorContent = {
       { type: "horizontalRule" },
       {
         type: "heading",
-        attrs: { level: 3 },
+        attrs: { level: 2 },
         content: [{ type: "text", text: "Learn more" }],
       },
       {

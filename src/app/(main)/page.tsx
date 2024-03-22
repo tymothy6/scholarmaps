@@ -32,7 +32,7 @@ export default async function Home() {
             <div className="grid gap-4 w-full">
                 <DashboardCards />
                 <LineChartCard />
-                <h2 className="hidden sm:block text-lg lg:text-xl font-semibold mt-2">Notes</h2>
+                <h2 className="hidden sm:block text-lg lg:text-xl font-semibold mt-2">Notepad</h2>
                 <NovelTailwindEditor />
                 <h2 className="hidden sm:block text-lg lg:text-xl font-semibold mt-2">Bookmarks</h2>
                 <Card className="hidden sm:block">
