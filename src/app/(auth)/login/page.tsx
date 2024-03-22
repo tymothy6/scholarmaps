@@ -9,6 +9,7 @@ import { buttonVariants } from '@/components/ui/button'
 
 import { LoginAuth } from '@/components/auth/login-auth'
 import { LoginTestimonialCarousel } from '@/components/patterns/login-carousel'
+import { BoxIcon } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: "Login",
@@ -37,7 +38,10 @@ export default function Login() {
             className="object-cover"
           />
           <div className="w-full h-full z-20 flex flex-col justify-between items-start text-2xl font-hubotSans font-medium">
-            Scholar Maps
+            <div className="flex gap-4">
+              <BoxIcon className="h-8 w-8" /> 
+              Scholar Maps
+            </div>
             <LoginTestimonialCarousel className="w-full flex items-center justify-center" />
           </div>
 

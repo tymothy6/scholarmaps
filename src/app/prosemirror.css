@@ -95,6 +95,7 @@
     position: relative;
     top: 5px;
     border: 2px solid hsl(var(--border));
+    border-radius: 0.25em;
     margin-right: 0.3rem;
     display: grid;
     place-content: center;

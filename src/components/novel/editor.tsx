@@ -59,12 +59,12 @@ const NovelTailwindEditor = () => {
     } setInitialContent(defaultEditorContent);
   }, []);
 
-  if (!initialContent) return null;
+  if (!initialContent) return null; // wait for initial content to load
 
   return (
     <div className="relative w-full">
-    <div className="absolute right-5 top-5 z-10 rounded-lg bg-accent px-2 py-1 text-sm text-muted-foreground">
-        {saveStatus}
+    <div className="absolute top-4 right-4 w-max z-10 rounded-lg bg-accent px-2 py-1 text-sm text-muted-foreground">
+      {saveStatus}
     </div>
     <EditorRoot>
       <EditorContent
@@ -84,7 +84,7 @@ const NovelTailwindEditor = () => {
           handleDrop: (view, event, _slice, moved) =>
             handleImageDrop(view, event, moved, uploadFn),
           attributes: {
-            class: `prose prose-lg dark:prose-invert prose-headings:font-title prose-headings:text-foreground font-default focus:outline-none max-w-full`,
+            class: `prose prose-slate prose-lg dark:prose-invert prose-headings:font-title prose-headings:text-foreground font-default focus:outline-none max-w-full`,
           }
         }}
         slotAfter={<ImageResizer />}
