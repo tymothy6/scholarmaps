@@ -1,4 +1,5 @@
-import { NextAuthOptions } from 'next-auth';
+import { type NextAuthOptions } from 'next-auth';
+import { type JWT } from 'next-auth/jwt';
 import prisma from './prisma-db'
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import GithubProvider from 'next-auth/providers/github';
@@ -6,11 +7,36 @@ import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcrypt';
 
+interface AuthUser {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+}
+
+interface CustomJWT extends JWT {
+  id?: string;
+}
+
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt',
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token as CustomJWT;
+    },
+    async session({ session, token }) {
+      if (session?.user) {
+        session.user.id = token.id as string;
+      }
+      return session;
+    },
   },
   // debug: process.env.NODE_ENV === 'development',
   // Configure one or more authentication providers here
@@ -29,7 +55,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "text", placeholder: "name@example.com" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials: Record<string, string> | undefined, req): Promise<AuthUser> {
         // check to see if email and password is in db
         if(!credentials?.email || !credentials?.password) {
           throw new Error('Please enter email and password')
@@ -52,7 +78,13 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Incorrect password')
         }
 
-        return user;
+        // return user
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+        };
       }
     }),
   ],

@@ -27,7 +27,13 @@ import GenerativeMenuSwitch from "./generative/generative-menu-switch";
 import { handleImageDrop, handleImagePaste } from "./plugins";
 import { uploadFn } from "./image-upload";
 
+import { PrismaClient } from "@prisma/client";
+import { useSession } from "next-auth/react";
+
+import { toast } from "sonner";
+
 const extensions = [ ...defaultExtensions, slashCommand ];
+const prisma = new PrismaClient();
 
 const NovelTailwindEditor = () => {
   const [initialContent, setInitialContent] = useState<JSONContent | null>(null);
@@ -38,26 +44,84 @@ const NovelTailwindEditor = () => {
   const [openColor, setOpenColor] = useState(false);
   const [openAI, setOpenAI] = useState(false);
 
+  const session = useSession();
+  const userId = session.data?.user?.id;
+
   const debouncedUpdates = useDebouncedCallback(
     async (editor: EditorInstance) => {
       const json = editor.getJSON();
-
-      window.localStorage.setItem("novel-content", JSON.stringify(json));
-      setSaveStatus("Saved");
+      
+      if (userId) {
+        try {
+          await prisma.novelEditorHistory.upsert({
+            where: { id: userId },
+            update: { 
+              content: json,
+              updatedAt: new Date(),
+            },
+            create: {
+              userId,
+              content: json,
+            },
+          });
+          
+          setSaveStatus("Saved");
+        } catch (error) {
+          console.error("Failed to save content: ", error);
+          setSaveStatus("Unsaved");
+        }
+      } else {
+        console.warn("User not authenticated. Content will not be saved.");
+        setSaveStatus("Unsaved");
+      }
     },
     500,
   );
 
-  // Load initial content
+  // Load initial content from database or set default
   useEffect(() => {
-    const content = window.localStorage.getItem("novel-content");
+    const fetchInitialContent = async () => {
+      if (userId) {
+        try {
+          const history = await prisma.novelEditorHistory.findUnique({
+            where: { id: userId },
+          });
 
-    if (content) {
-      setInitialContent(JSON.parse(content));
-    } else {
-      console.log("Default content loaded: ", defaultEditorContent)
-    } setInitialContent(defaultEditorContent);
-  }, []);
+          if (history) {
+            setInitialContent(history.content as JSONContent);
+          } else {
+            setInitialContent(defaultEditorContent);
+            toast.info('No saved content found. Start editing to save.');
+          }
+        } catch (error) {
+          console.error("Failed to fetch content: ", error);
+          setInitialContent(defaultEditorContent);
+          toast.error('Failed to load your saved notes 🥹');
+        }
+      } else {
+        const content = window.localStorage.getItem("novel-content");
+        if (content) {
+          setInitialContent(JSON.parse(content)); // content is a string in local storage
+        } else {
+          setInitialContent(defaultEditorContent);
+          toast.info('Default content loaded. Sign in to save your notes.');
+        }
+      }
+    };
+
+      fetchInitialContent();
+  }, [userId]);
+
+  // Default content loading from local storage
+  // useEffect(() => {
+  //   const content = window.localStorage.getItem("novel-content");
+
+  //   if (content) {
+  //     setInitialContent(JSON.parse(content));
+  //   } else {
+  //     console.log("Default content loaded: ", defaultEditorContent)
+  //   } setInitialContent(defaultEditorContent);
+  // }, []);
 
   if (!initialContent) return null; // wait for initial content to load
 
