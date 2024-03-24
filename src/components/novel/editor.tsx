@@ -27,16 +27,14 @@ import GenerativeMenuSwitch from "./generative/generative-menu-switch";
 import { handleImageDrop, handleImagePaste } from "./plugins";
 import { uploadFn } from "./image-upload";
 
-import { PrismaClient } from "@prisma/client";
 import { useSession } from "next-auth/react";
-
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const extensions = [ ...defaultExtensions, slashCommand ];
-const prisma = new PrismaClient();
 
 const NovelTailwindEditor = () => {
-  const [initialContent, setInitialContent] = useState<JSONContent | null>(null);
+  // const [initialContent, setInitialContent] = useState<JSONContent | null>(null);
   const [saveStatus, setSaveStatus] = useState("Saved");
 
   const [openNode, setOpenNode] = useState(false);
@@ -44,73 +42,88 @@ const NovelTailwindEditor = () => {
   const [openColor, setOpenColor] = useState(false);
   const [openAI, setOpenAI] = useState(false);
 
+  const queryClient = useQueryClient();
   const session = useSession();
   const userId = session.data?.user?.id;
+
+  // Query functions
+  const fetchInitialContent = async () => {
+    try {
+      const response = await fetch("/api/novel/load", {
+        method: "GET",
+        headers: { "userId": userId || "" },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch content');
+      }
+
+      const data = await response.json();
+      return data.content;
+    } catch (error) {
+      console.error('Failed to fetch content:', error);
+      throw error;
+    }
+  };
+
+  const saveContent = async (content: JSONContent) => {
+    try {
+      const response = await fetch("/api/novel/save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "userId": userId || "",
+        },
+        body: JSON.stringify({ content }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save content');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Failed to save content:', error);
+      throw error;
+    }
+  }
+
+  const { data: initialContent, isLoading, isError } = useQuery({
+    queryKey: ['editorContent', userId],
+    queryFn: fetchInitialContent,
+    enabled: !!userId,
+    initialData: defaultEditorContent,
+  });
+
+  useEffect(() => {
+    const data = queryClient.getQueryData(['editorContent', userId]);
+    if (!userId && data === defaultEditorContent) {
+      toast.info('Please sign in to save your notes 📝');
+    }
+  }, [queryClient, userId])
+
+  const { mutate: saveContentMutation } = useMutation({
+    mutationFn: saveContent,
+    onSuccess: () => {
+      if (userId) {
+      queryClient.invalidateQueries({ queryKey: ['editorContent', userId] });
+      }
+      setSaveStatus("Saved");
+    },
+    onError: () => {
+      setSaveStatus("Unsaved");
+      toast.error('Failed to save your notes. Please try again later 🥹');
+    },
+  });
 
   const debouncedUpdates = useDebouncedCallback(
     async (editor: EditorInstance) => {
       const json = editor.getJSON();
-      
-      if (userId) {
-        try {
-          await prisma.novelEditorHistory.upsert({
-            where: { id: userId },
-            update: { 
-              content: json,
-              updatedAt: new Date(),
-            },
-            create: {
-              userId,
-              content: json,
-            },
-          });
-          
-          setSaveStatus("Saved");
-        } catch (error) {
-          console.error("Failed to save content: ", error);
-          setSaveStatus("Unsaved");
-        }
-      } else {
-        console.warn("User not authenticated. Content will not be saved.");
-        setSaveStatus("Unsaved");
-      }
+      saveContentMutation(json);
     },
     500,
   );
-
-  // Load initial content from database or set default
-  useEffect(() => {
-    const fetchInitialContent = async () => {
-      if (userId) {
-        try {
-          const history = await prisma.novelEditorHistory.findUnique({
-            where: { id: userId },
-          });
-
-          if (history) {
-            setInitialContent(history.content as JSONContent);
-          } else {
-            setInitialContent(defaultEditorContent);
-            toast.info('No saved content found. Start editing to save.');
-          }
-        } catch (error) {
-          console.error("Failed to fetch content: ", error);
-          setInitialContent(defaultEditorContent);
-          toast.error('Failed to load your saved notes 🥹');
-        }
-      } else {
-        const content = window.localStorage.getItem("novel-content");
-        if (content) {
-          setInitialContent(JSON.parse(content)); // content is a string in local storage
-        } else {
-          setInitialContent(defaultEditorContent);
-          toast.info('Default content loaded. Sign in to save your notes.');
-        }
-      }
-    };
-
-      fetchInitialContent();
-  }, [userId]);
 
   // Default content loading from local storage
   // useEffect(() => {
@@ -123,7 +136,7 @@ const NovelTailwindEditor = () => {
   //   } setInitialContent(defaultEditorContent);
   // }, []);
 
-  if (!initialContent) return null; // wait for initial content to load
+  // if (!initialContent) return null; // wait for initial content to load
 
   return (
     <div className="relative w-full">

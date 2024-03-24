@@ -156,7 +156,7 @@
     background-position: center;
     width: 1.2rem;
     height: 1.5rem;
-    z-index: 50;
+    z-index: 10;
     cursor: grab;
   
     &:hover {
