@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '@/lib/prisma-db';
 
 export async function GET(request: NextRequest) {
   const userId = request.headers.get('userId');
-  const route = request.nextUrl.pathname;
+  const route = request.headers.get('route');
 
-  if (!userId) {
-    return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
+  if (!userId || !route) {
+    return NextResponse.json({ error: 'User ID and route is required' }, { status: 400 });
   }
 
   try {

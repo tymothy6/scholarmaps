@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '@/lib/prisma-db';
 
 export async function POST(request: NextRequest) {
     const userId = request.headers.get('userId');
-    const route = request.nextUrl.pathname;
-    const { content } = await request.json();
+    const { content, route } = await request.json();
   
     if (!userId || !content) {
       return NextResponse.json({ error: 'User ID and content are required' }, { status: 400 });
@@ -14,7 +11,12 @@ export async function POST(request: NextRequest) {
   
     try {
       await prisma.novelEditorHistory.upsert({
-        where: { userId_route: { userId, route } },
+        where: { 
+          userId_route: { 
+            userId, 
+            route
+           } 
+        },
         update: {
           content,
           updatedAt: new Date(),

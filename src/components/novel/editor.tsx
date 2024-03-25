@@ -51,7 +51,10 @@ const NovelTailwindEditor = () => {
     try {
       const response = await fetch("/api/novel/load", {
         method: "GET",
-        headers: { "userId": userId || "" },
+        headers: { 
+          "userId": userId || "",
+          "route": window.location.pathname, // include the current route
+        },
       });
 
       if (!response.ok) {
@@ -74,7 +77,10 @@ const NovelTailwindEditor = () => {
           "Content-Type": "application/json",
           "userId": userId || "",
         },
-        body: JSON.stringify({ content }),
+        body: JSON.stringify({ 
+          content,
+          route: window.location.pathname, // include the current route
+         }),
       });
 
       if (!response.ok) {
