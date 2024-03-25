@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 
 export async function GET(request: NextRequest) {
   const userId = request.headers.get('userId');
+  const route = request.nextUrl.pathname;
 
   if (!userId) {
     return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
@@ -12,7 +13,12 @@ export async function GET(request: NextRequest) {
 
   try {
     const history = await prisma.novelEditorHistory.findUnique({
-      where: { id: userId },
+      where: { 
+        userId_route: {
+          userId,
+          route,
+        }
+       },
     });
 
     if (!history) {

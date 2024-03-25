@@ -47,9 +47,12 @@ model Account {
 model NovelEditorHistory {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String   @db.ObjectId
+  route     String   
   content   Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique ([userId, route])
 }

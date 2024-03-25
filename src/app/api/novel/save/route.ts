@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
     const userId = request.headers.get('userId');
+    const route = request.nextUrl.pathname;
     const { content } = await request.json();
   
     if (!userId || !content) {
@@ -13,13 +14,14 @@ export async function POST(request: NextRequest) {
   
     try {
       await prisma.novelEditorHistory.upsert({
-        where: { id: userId },
+        where: { userId_route: { userId, route } },
         update: {
           content,
           updatedAt: new Date(),
         },
         create: {
           userId,
+          route,
           content,
         },
       });
