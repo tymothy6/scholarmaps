@@ -11,7 +11,6 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { toast } from "sonner"
 
 // Reusable component to make any column header sortable & hideable
 import { DataTableColumnHeader } from "@/components/patterns/table-column-header"

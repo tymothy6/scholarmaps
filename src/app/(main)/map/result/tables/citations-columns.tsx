@@ -13,6 +13,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { 
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { toast } from "sonner"
 
 import { DataTableColumnHeader } from "@/components/patterns/table-column-header"
@@ -94,7 +100,22 @@ export const columns: ColumnDef<PaperCitationResult>[] = [
             const authors = row.getValue("authors");
 
             if (Array.isArray(authors)) {
-                return authors.map((author) => author.name).join(", ");
+                return (
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger className="flex transition-colors rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+                        <div className="p-2 w-[200px]">
+                          <p className="text-left truncate text-sm">{authors.map(author => author.name).join(", ")}</p>
+                        </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" className="max-w-[200px] lg:max-w-[400px]">
+                          <p className="text-sm text-primary-foreground">
+                            {authors.map(author => author.name).join(", ")}
+                          </p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+                );
             } else {
                 return <div className="p-2">N/A</div>;
             }

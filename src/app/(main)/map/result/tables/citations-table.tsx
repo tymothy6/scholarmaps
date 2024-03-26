@@ -41,10 +41,10 @@ import {
 // Reusable table components
 import { DataTablePagination } from "@/components/patterns/table-pagination"
 import { DataTableViewOptions } from "@/components/patterns/table-column-toggle"
-import { DataTableFacetedFilter } from "@/components/patterns/table-faceted-filter"
+// import { DataTableFacetedFilter } from "@/components/patterns/table-faceted-filter"
 
 import { RotateCcwIcon } from "lucide-react"
-import { results } from "../../../tables/dashboard-columns"
+// import { results } from "../../../tables/dashboard-columns"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -168,8 +168,9 @@ export function CitationResultTable<TData, TValue>({
                 </TableBody>
             </Table>
             </div>
-                <div className="flex items-center p-4 w-full">
+                <div className="flex items-center space-x-4 p-4 w-full">
                     <DataTableViewOptions table={table} />
+                    <DataTablePagination table={table} />
                 </div>
             </div>
         </Card>

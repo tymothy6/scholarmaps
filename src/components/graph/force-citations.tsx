@@ -164,7 +164,7 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
                 width={dimensions.width}    
                 height={dimensions.height}
                 minZoom={1}
-                linkColor={() => resolvedTheme === 'dark' ? 'gray' : 'lightgray'}
+                linkColor={() => resolvedTheme === 'dark' ? '#475569' : '#d1d5db'}
                 linkWidth={1}
                 onNodeClick={(node) => {
                     if (!menuOpen) {
@@ -210,10 +210,10 @@ export default function CitationGraph({ graphData, seedPaperId }: { graphData: C
                         <TooltipTrigger asChild>
                             <div className="absolute top-4 left-4 px-4 py-2 text-primary-foreground bg-primary rounded-sm border-primary shadow-sm">
                                 <h3 className="text-sm font-medium">{hoverNode.name}</h3>
-                                <p className="text-sm">{hoverNode.val6} ({hoverNode.val3})</p>
-                                <p className="text-sm">Influential citation count: <span className="font-mono">{hoverNode.val}</span></p>
-                                <p className="text-sm">Citation count: <span className="font-mono">{hoverNode.val2}</span></p>
-                                <p className="text-sm">Reference count: <span className="font-mono">{hoverNode.val4}</span></p>
+                                <p className="text-sm text-primary-foreground">{hoverNode.val6} ({hoverNode.val3})</p>
+                                <p className="text-sm text-primary-foreground">Influential citation count: <span className="font-mono">{hoverNode.val}</span></p>
+                                <p className="text-sm text-primary-foreground">Citation count: <span className="font-mono">{hoverNode.val2}</span></p>
+                                <p className="text-sm text-primary-foreground">Reference count: <span className="font-mono">{hoverNode.val4}</span></p>
                             </div>
                         </TooltipTrigger>
                     </Tooltip>
