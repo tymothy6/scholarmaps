@@ -27,24 +27,22 @@ import GenerativeMenuSwitch from "./generative/generative-menu-switch";
 import { handleImageDrop, handleImagePaste } from "./plugins";
 import { uploadFn } from "./image-upload";
 
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react"; // use server-side session instead
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+
 
 const extensions = [ ...defaultExtensions, slashCommand ];
 
 const NovelTailwindEditor = () => {
-  // const [initialContent, setInitialContent] = useState<JSONContent | null>(null);
   const [saveStatus, setSaveStatus] = useState("Saved");
-
   const [openNode, setOpenNode] = useState(false);
   const [openLink, setOpenLink] = useState(false);
   const [openColor, setOpenColor] = useState(false);
   const [openAI, setOpenAI] = useState(false);
-
   const queryClient = useQueryClient();
-  const session = useSession();
-  const userId = session.data?.user?.id;
 
   // Query functions
   const fetchInitialContent = async () => {
@@ -52,7 +50,6 @@ const NovelTailwindEditor = () => {
       const response = await fetch("/api/novel/load", {
         method: "GET",
         headers: { 
-          "userId": userId || "",
           "route": window.location.pathname, // include the current route
         },
       });
@@ -75,7 +72,6 @@ const NovelTailwindEditor = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "userId": userId || "",
         },
         body: JSON.stringify({ 
           content,
@@ -96,25 +92,14 @@ const NovelTailwindEditor = () => {
   }
 
   const { data: initialContent, isLoading, isError } = useQuery({
-    queryKey: ['editorContent', userId],
+    queryKey: ['editorContent'],
     queryFn: fetchInitialContent,
-    enabled: !!userId,
-    initialData: defaultEditorContent,
   });
-
-  useEffect(() => {
-    const data = queryClient.getQueryData(['editorContent', userId]);
-    if (!userId && data === defaultEditorContent) {
-      toast.info('Please sign in to save your notes 📝');
-    }
-  }, [queryClient, userId])
 
   const { mutate: saveContentMutation } = useMutation({
     mutationFn: saveContent,
     onSuccess: () => {
-      if (userId) {
-      queryClient.invalidateQueries({ queryKey: ['editorContent', userId] });
-      }
+      queryClient.invalidateQueries({ queryKey: ['editorContent'] });
       setSaveStatus("Saved");
     },
     onError: () => {
@@ -131,18 +116,17 @@ const NovelTailwindEditor = () => {
     500,
   );
 
-  // Default content loading from local storage
-  // useEffect(() => {
-  //   const content = window.localStorage.getItem("novel-content");
+  useEffect(() => {
+    if (isError) {
+      toast.error('Failed to load your notes. Please try again later 🥹');
+    }
+  }, [isError]);
 
-  //   if (content) {
-  //     setInitialContent(JSON.parse(content));
-  //   } else {
-  //     console.log("Default content loaded: ", defaultEditorContent)
-  //   } setInitialContent(defaultEditorContent);
-  // }, []);
-
-  // if (!initialContent) return null; // wait for initial content to load
+  if (isLoading) { 
+    return (
+      <Skeleton className="h-[500px] w-full border rounded-lg shadow" />
+    );
+  }
 
   return (
     <div className="relative w-full">
@@ -151,9 +135,9 @@ const NovelTailwindEditor = () => {
     </div>
     <EditorRoot>
       <EditorContent
-        initialContent={initialContent || undefined}
+        initialContent={initialContent || defaultEditorContent} // if api/novel/load returns null show default content
         extensions={extensions}
-        className="relative min-h-[500px] w-full border bg-background sm:rounded-lg sm:border sm:shadow"
+        className="relative min-h-[500px] w-full border bg-background rounded-lg shadow"
         onUpdate={({ editor }) => {
           debouncedUpdates(editor);
           setSaveStatus("Unsaved");

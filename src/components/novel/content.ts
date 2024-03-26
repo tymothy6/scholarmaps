@@ -69,21 +69,6 @@ export const defaultEditorContent = {
       {
         type: "heading",
         attrs: { level: 2 },
-        content: [{ type: "text", text: "Usage" }],
-      },
-      {
-        type: "codeBlock",
-        attrs: { language: null },
-        content: [
-          {
-            type: "text",
-            text: 'import { Editor } from "novel";\n\nexport default function App() {\n  return (\n     <Editor />\n  )\n}',
-          },
-        ],
-      },
-      {
-        type: "heading",
-        attrs: { level: 2 },
         content: [{ type: "text", text: "Features" }],
       },
       {
@@ -131,16 +116,6 @@ export const defaultEditorContent = {
           },
         ],
       },
-      {
-        type: "image",
-        attrs: {
-          src: "https://public.blob.vercel-storage.com/pJrjXbdONOnAeZAZ/banner-2wQk82qTwyVgvlhTW21GIkWgqPGD2C.png",
-          alt: "banner.png",
-          title: "banner.png",
-          width: null,
-          height: null,
-        },
-      },
       { type: "horizontalRule" },
       {
         type: "heading",
@@ -157,7 +132,7 @@ export const defaultEditorContent = {
               {
                 type: "paragraph",
                 content: [
-                  { type: "text", text: "Star us on " },
+                  { type: "text", text: "Star on " },
                   {
                     type: "text",
                     marks: [
@@ -194,33 +169,8 @@ export const defaultEditorContent = {
                         },
                       },
                     ],
-                    text: "NPM package",
+                    text: "npm package",
                   },
-                ],
-              },
-            ],
-          },
-          {
-            type: "taskItem",
-            attrs: { checked: false },
-            content: [
-              {
-                type: "paragraph",
-                content: [
-                  {
-                    type: "text",
-                    marks: [
-                      {
-                        type: "link",
-                        attrs: {
-                          href: "https://vercel.com/templates/next.js/novel",
-                          target: "_blank",
-                        },
-                      },
-                    ],
-                    text: "Deploy your own",
-                  },
-                  { type: "text", text: " to Vercel" },
                 ],
               },
             ],

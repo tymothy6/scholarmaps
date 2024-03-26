@@ -65,7 +65,7 @@ export function DataTableViewOptions<TData>({
           })}
       </DropdownMenuContent>
       <TooltipContent>
-        <p className="text-sm">Toggle columns</p>
+        <p className="text-sm text-primary-foreground">Toggle columns</p>
       </TooltipContent>
     </DropdownMenu>
     </Tooltip>

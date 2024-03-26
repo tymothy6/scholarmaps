@@ -51,8 +51,8 @@ import {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex w-[50px] sm:w-[100px] items-center justify-center text-sm font-medium text-muted-foreground">
-            <p><span className="hidden sm:inline">Page </span> {table.getState().pagination.pageIndex + 1} of{" "}
+          <div className="flex w-[50px] sm:w-[100px] items-center justify-center">
+            <p className="text-sm font-medium text-muted-foreground"><span className="hidden sm:inline">Page </span> {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}</p>
           </div>
           <div className="flex items-center space-x-2">

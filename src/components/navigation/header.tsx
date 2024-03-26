@@ -127,7 +127,7 @@ export function PageHeader () {
                   <MenuIcon className="h-6 w-6" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="left" className="w-64 bg-slate-950">
+                <SheetContent side="left" className="w-64 bg-slate-950 border-0">
                 <div className="w-full">
                 <div className="flex flex-col justify-start gap-2 w-full">
                     <BoxIcon className="ml-2 mt-2 h-8 w-8 text-slate-200" />

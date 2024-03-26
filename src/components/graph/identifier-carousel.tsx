@@ -78,7 +78,7 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                             height={32}
                             alt="DOI logo"
                             />
-                            <h2 className="font-semibold">DOI</h2>
+                            <h2 className="font-semibold text-base">DOI</h2>
                             <p className="italic text-sm text-muted-foreground">10.1038/nature12373</p>
                         </Card>
                     </CarouselItem>
@@ -90,7 +90,7 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                             height={32}
                             alt="PubMed logo"
                             />
-                            <h2 className="font-semibold">PubMed</h2>
+                            <h2 className="font-semibold text-base">PubMed</h2>
                             <p className="italic text-sm text-muted-foreground">23883930</p>
                         </Card>
                     </CarouselItem>
@@ -102,7 +102,7 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                             height={32}
                             alt="Uppercase X"
                             />
-                            <h2 className="font-semibold">arXiv</h2>
+                            <h2 className="font-semibold text-base">arXiv</h2>
                             <p className="italic text-sm text-muted-foreground">1403.7138</p>
                         </Card>
                     </CarouselItem>
@@ -114,7 +114,7 @@ export function PaperIdentifierCarousel({ className }: { className?: string}) {
                             height={32}
                             alt="Semantic Scholar logo"
                             />
-                            <h2 className="font-semibold">Semantic Scholar</h2>
+                            <h2 className="font-semibold text-base">Semantic Scholar</h2>
                             <p className="italic text-sm text-muted-foreground">256194545</p>
                         </Card>
                     </CarouselItem>

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import type { Viewport } from 'next'
 import localFont from 'next/font/local'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
@@ -16,6 +17,10 @@ const hubotSans = localFont({
   display: 'swap',
   variable: '--font-hubot-sans',
 })
+
+export const viewport: Viewport = {
+  themeColor: '#0F172A',
+}
 
 export const metadata: Metadata = {
   title: {
