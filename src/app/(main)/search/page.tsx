@@ -10,7 +10,14 @@ export async function generateMetadata({ searchParams }: { searchParams: {[key: 
     return { title, description };
 }
 
-interface SearchResponse { total: number; offset: number; next: number; data: SearchPaperResult[]; }
+interface SearchResponse { 
+    total: number; 
+    offset: number; 
+    next: number; 
+    data: SearchPaperResult[];
+    createdAt: Date | null;
+    updatedAt: Date | null;
+ }
 
 async function getSearchResults(searchQuery: string): Promise<SearchResponse> {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
@@ -28,7 +35,7 @@ async function getSearchResults(searchQuery: string): Promise<SearchResponse> {
         return data;
     } catch (error) {
         console.error('Error fetching search results:', error);
-        return { total: 0, offset: 0, next: 0, data: [] };
+        return { total: 0, offset: 0, next: 0, data: [], createdAt: null, updatedAt: null};
     }
 }
 

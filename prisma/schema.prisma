@@ -22,6 +22,7 @@ model User {
 
   accounts Account[]
   editorHistory NovelEditorHistory[]
+  searchQueries SearchQuery[]
 }
 
 model Account {
@@ -41,6 +42,51 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+}
+
+model SearchQuery {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  query     String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  searchResponse SearchResponse?
+}
+
+model SearchResponse {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  total     Int
+  offset    Int
+  next      Int
+  data      SearchPaperResult[]
+  searchQuery SearchQuery @relation(fields: [searchQueryId], references: [id], onDelete: Cascade)
+  searchQueryId String @unique @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SearchPaperResult {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  paperId   String
+  title     String
+  url       String
+  abstract  String
+  year      Int
+  referenceCount Int
+  citationCount Int
+  influentialCitationCount Int
+  tldr      Json?
+  journal   Json?
+  authors   Json
+  publicationTypes String[]
+  isOpenAccess Boolean
+  openAccessPdf Json?
+  searchResponse SearchResponse @relation(fields: [searchResponseId], references: [id], onDelete: Cascade)
+  searchResponseId String @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 

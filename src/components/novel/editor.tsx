@@ -33,7 +33,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
-
 const extensions = [ ...defaultExtensions, slashCommand ];
 
 const NovelTailwindEditor = () => {
@@ -124,7 +123,13 @@ const NovelTailwindEditor = () => {
 
   if (isLoading) { 
     return (
-      <Skeleton className="h-[500px] w-full border rounded-lg shadow" />
+      <div className="w-full h-[500px] border shadow rounded-lg p-8 flex flex-col gap-4">
+        <Skeleton className="h-8 w-32" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-full" />
+      </div>
     );
   }
 
