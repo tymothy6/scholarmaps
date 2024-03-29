@@ -293,7 +293,7 @@ export function SearchResultTable<TData, TValue>({
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={columns.length} className="h-36 text-center">
+                  <TableCell colSpan={columns.length} className="h-36 lg:h-72 text-center">
                     No results.
                   </TableCell>
                 </TableRow>

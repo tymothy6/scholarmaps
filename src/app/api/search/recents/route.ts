@@ -14,10 +14,17 @@ export async function GET(req: NextRequest) {
             },
             orderBy: { createdAt: 'desc' },
             take: 10,
-            include: {
+            select: {
+                query: true,
+                createdAt: true,
                 searchResponse: {
-                    include: {
+                    select: {
+                        total: true,
+                        offset: true,
+                        next: true,
                         data: true,
+                        createdAt: true,
+                        updatedAt: true,
                     },
                 },
             },

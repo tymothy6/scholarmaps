@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import { SearchPaperResult, columns } from './tables/search-columns'
 import { SearchResultTable } from './tables/search-table'
 import { SearchTableSkeleton } from './search-skeleton'
+import { RecentSearches } from './recents'
 
 export async function generateMetadata({ searchParams }: { searchParams: {[key: string]: string | undefined } }) {
     const title = searchParams['query'] ? `Search results for ${searchParams['query']}` : 'Search';
@@ -39,30 +40,73 @@ async function getSearchResults(searchQuery: string): Promise<SearchResponse> {
     }
 }
 
+export interface RecentSearchResponse {
+    query: string;
+    createdAt: Date;
+    searchResponse: SearchResponse | null; // can be null if there is no response for a given query
+}
+
+async function getRecentSearches(): Promise<RecentSearchResponse[]> {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const url = `${baseUrl}/api/search/recents`;
+
+    try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`Recent searches API responded with status code ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        if (data === null) { // if no recent searches
+            return [];
+        } else if (Array.isArray(data)) { // if the response is already an array of >1 queries
+            return data;
+        } else {
+            return [data]; // if only one recent search query
+        }
+    } catch (error) {
+        console.error('Error fetching recent searches:', error);
+        return [];
+    }
+}
+
 interface SearchProps { searchParams: { [key: string]: string | undefined } }
 
 export default async function Search( { searchParams }: SearchProps ) {
     const searchQuery = searchParams['query'] || '';
+    const recentSearches = await getRecentSearches();
 
     async function SearchResultsCard() {
         let results: SearchPaperResult[] = [];
+        let timestamp: Date | null = null;
+
         if (searchQuery) {
             const response = await getSearchResults(searchQuery);
             results = response.data;
+            timestamp = response.createdAt;
         }
 
         return (
-            <SearchResultTable columns={columns} data={results} />
+            <div className="flex flex-col gap-2">
+                {timestamp && <p className="text-sm font-medium text-muted-foreground">Last updated: {timestamp.toLocaleString()}</p>}
+                <SearchResultTable columns={columns} data={results} />
+            </div>
         )
     }
     
     return (
         <section className="bg-background p-4 absolute top-10 lg:left-[16.666%] lg:p-8 flex flex-col gap-2 w-full overflow-x-hidden lg:w-5/6">
-            <h1 className="mt-2 lg:mt-0 text-xl lg:text-2xl font-semibold lg:font-bold">Results {searchQuery ? <span>for<span className="ml-2 px-2 py-1 text-lg lg:text-xl border bg-secondary rounded font-mono">{searchQuery}</span></span> : ''}</h1>
+            <h1 className="mt-2 lg:mt-0 text-xl lg:text-2xl font-semibold lg:font-bold">Search {searchQuery ? <span>for<span className="ml-2 px-2 py-1 text-lg lg:text-xl border bg-secondary rounded font-mono">{searchQuery}</span></span> : ''}</h1>
             <div className="w-full">
-                <Suspense fallback={<SearchTableSkeleton />}>
-                   <SearchResultsCard />
-                </Suspense>
+                { searchQuery ?
+                    <Suspense fallback={<SearchTableSkeleton />}>
+                    <SearchResultsCard />
+                    </Suspense>
+                :
+                    <RecentSearches recentSearches={recentSearches} />
+                }
             </div>
         </section>
     )

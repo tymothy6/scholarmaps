@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma-db';
+import { authOptions } from '@/lib/auth';
+import { getServerSession } from 'next-auth/next';
 import { type SearchPaperResult } from '@/app/(main)/search/tables/search-columns';
 
 export async function GET(req: NextRequest) {
     const searchQuery = req.nextUrl.searchParams.get('query') || ''; // defaults to empty string
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
+
+    if (!userId) {
+        return NextResponse.json({ error: 'User ID is required. Please authenticate before issuing your request.' }, { status: 400 });
+    };
 
     try {
         // Check if the search query exists in the database
@@ -57,20 +65,65 @@ export async function GET(req: NextRequest) {
                 const queryData = await prisma.searchQuery.create({
                     data: {
                         query: searchQuery,
+                        userId: userId,  
+                        searchResponse: {
+                            create: {
+                                total: data.total,
+                                offset: data.offset,
+                                next: data.next,
+                                data: [],
+                            },
+                        },
                     },
                 });
 
                 const responseData = {
                     message: 'No results found for the given search query.',
                     createdAt: queryData.createdAt,
+                    updatedAt: queryData.searchResponse.updatedAt,
                 };
 
                 return NextResponse.json(responseData);
             }
 
             // Save the search query and response to the database
-            const queryData = await prisma.searchQuery.create({
-                data: {
+            const queryData = await prisma.searchQuery.upsert({
+                where: {
+                    query: searchQuery,
+                    userId: userId,
+                },
+                update: {
+                    searchResponse: {
+                        create: {
+                            total: data.total,
+                            offset: data.offset,
+                            next: data.next,
+                            data: {
+                                create: data.data.map((result: SearchPaperResult) => ({
+                                    paperId: result.paperId,
+                                    url: result.url,
+                                    title: result.title,
+                                    abstract: result.abstract,
+                                    year: result.year,
+                                    referenceCount: result.referenceCount,
+                                    citationCount: result.citationCount,
+                                    influentialCitationCount: result.influentialCitationCount,
+                                    tldr: result.tldr,
+                                    journal: result.journal,
+                                    authors: result.authors,
+                                    publicationTypes: {
+                                        create: result.publicationTypes.map((type: string) => ({
+                                            type,
+                                        })),
+                                    },
+                                    isOpenAccess: result.isOpenAccess,
+                                    openAccessPdf: result.openAccessPdf,
+                                })),
+                            },
+                        },
+                    },
+                },
+                create: {
                     query: searchQuery,
                     searchResponse: {
                         create: {
@@ -90,7 +143,11 @@ export async function GET(req: NextRequest) {
                                     tldr: result.tldr,
                                     journal: result.journal,
                                     authors: result.authors,
-                                    publicationTypes: result.publicationTypes,
+                                    publicationTypes: {
+                                        create: result.publicationTypes.map((type: string) => ({
+                                            type,
+                                        })),
+                                    },
                                     isOpenAccess: result.isOpenAccess,
                                     openAccessPdf: result.openAccessPdf,
                                 })),
@@ -104,8 +161,10 @@ export async function GET(req: NextRequest) {
                             data: true,
                         },
                     },
-                },
+                }
             });
+
+            console.log(JSON.stringify(queryData, null, 2)); // debug
 
             const responseData = {
                 total: queryData.searchResponse.total,
@@ -124,6 +183,7 @@ export async function GET(req: NextRequest) {
 
             // Save the search query to the database
             const queryData = await prisma.searchQuery.create({
+                userId: userId,
                 data: {
                     query: searchQuery,
                 },

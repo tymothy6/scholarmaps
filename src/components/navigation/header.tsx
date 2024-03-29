@@ -250,7 +250,7 @@ export function PageHeader () {
                 type="search"
                 value={searchQuery}
                 onChange={handleInputChange}
-                placeholder="Search Semantic Scholar..."
+                placeholder="Search over 214m papers from all fields of science..."
                 disabled={isSearchLoading} 
                 />
                 <Button variant="secondary" size="icon" type="submit" disabled={isSearchLoading} className="px-2">

@@ -47,7 +47,7 @@ model Account {
 model SearchQuery {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String   @db.ObjectId
-  query     String
+  query     String   @unique
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
