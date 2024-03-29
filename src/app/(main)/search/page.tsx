@@ -64,7 +64,7 @@ async function getRecentSearches(): Promise<RecentSearchResponse[]> {
         } else if (Array.isArray(data)) { // if the response is already an array of >1 queries
             return data;
         } else {
-            return [data]; // if only one recent search query
+            return [data]; // if only one recent query
         }
     } catch (error) {
         console.error('Error fetching recent searches:', error);

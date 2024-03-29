@@ -86,116 +86,124 @@ export async function GET(req: NextRequest) {
                 return NextResponse.json(responseData);
             }
 
-            // Save the search query and response to the database
-            const queryData = await prisma.searchQuery.upsert({
-                where: {
-                    query: searchQuery,
-                    userId: userId,
-                },
-                update: {
-                    searchResponse: {
-                        create: {
-                            total: data.total,
-                            offset: data.offset,
-                            next: data.next,
-                            data: {
-                                create: data.data.map((result: SearchPaperResult) => ({
-                                    paperId: result.paperId,
-                                    url: result.url,
-                                    title: result.title,
-                                    abstract: result.abstract,
-                                    year: result.year,
-                                    referenceCount: result.referenceCount,
-                                    citationCount: result.citationCount,
-                                    influentialCitationCount: result.influentialCitationCount,
-                                    tldr: result.tldr,
-                                    journal: result.journal,
-                                    authors: result.authors,
-                                    publicationTypes: {
-                                        create: result.publicationTypes.map((type: string) => ({
-                                            type,
-                                        })),
-                                    },
-                                    isOpenAccess: result.isOpenAccess,
-                                    openAccessPdf: result.openAccessPdf,
-                                })),
+            try {
+                // Save the search query and response to the database
+                const queryData = await prisma.searchQuery.upsert({
+                    where: {
+                        query: searchQuery,
+                        userId: userId,
+                    },
+                    update: {
+                        searchResponse: {
+                            create: {
+                                total: data.total,
+                                offset: data.offset,
+                                next: data.next,
+                                data: {
+                                    create: data.data.map((result: SearchPaperResult) => ({
+                                        paperId: result.paperId,
+                                        url: result.url,
+                                        title: result.title,
+                                        abstract: result.abstract,
+                                        year: result.year,
+                                        referenceCount: result.referenceCount,
+                                        citationCount: result.citationCount,
+                                        influentialCitationCount: result.influentialCitationCount,
+                                        tldr: result.tldr,
+                                        journal: result.journal,
+                                        authors: result.authors,
+                                        publicationTypes: {
+                                            create: result.publicationTypes.map((type: string) => ({
+                                                type,
+                                            })),
+                                        },
+                                        isOpenAccess: result.isOpenAccess,
+                                        openAccessPdf: result.openAccessPdf,
+                                    })),
+                                },
                             },
                         },
                     },
-                },
-                create: {
-                    query: searchQuery,
-                    searchResponse: {
-                        create: {
-                            total: data.total,
-                            offset: data.offset,
-                            next: data.next,
-                            data: {
-                                create: data.data.map((result: SearchPaperResult) => ({
-                                    paperId: result.paperId,
-                                    url: result.url,
-                                    title: result.title,
-                                    abstract: result.abstract,
-                                    year: result.year,
-                                    referenceCount: result.referenceCount,
-                                    citationCount: result.citationCount,
-                                    influentialCitationCount: result.influentialCitationCount,
-                                    tldr: result.tldr,
-                                    journal: result.journal,
-                                    authors: result.authors,
-                                    publicationTypes: {
-                                        create: result.publicationTypes.map((type: string) => ({
-                                            type,
-                                        })),
-                                    },
-                                    isOpenAccess: result.isOpenAccess,
-                                    openAccessPdf: result.openAccessPdf,
-                                })),
+                    create: {
+                        query: searchQuery,
+                        searchResponse: {
+                            create: {
+                                total: data.total,
+                                offset: data.offset,
+                                next: data.next,
+                                data: {
+                                    create: data.data.map((result: SearchPaperResult) => ({
+                                        paperId: result.paperId,
+                                        url: result.url,
+                                        title: result.title,
+                                        abstract: result.abstract,
+                                        year: result.year,
+                                        referenceCount: result.referenceCount,
+                                        citationCount: result.citationCount,
+                                        influentialCitationCount: result.influentialCitationCount,
+                                        tldr: result.tldr,
+                                        journal: result.journal,
+                                        authors: result.authors,
+                                        publicationTypes: {
+                                            create: result.publicationTypes.map((type: string) => ({
+                                                type,
+                                            })),
+                                        },
+                                        isOpenAccess: result.isOpenAccess,
+                                        openAccessPdf: result.openAccessPdf,
+                                    })),
+                                },
                             },
                         },
                     },
-                },
-                include: {
-                    searchResponse: {
-                        include: {
-                            data: true,
+                    include: {
+                        searchResponse: {
+                            include: {
+                                data: true,
+                            },
                         },
-                    },
-                }
-            });
+                    }
+                });
 
-            console.log(JSON.stringify(queryData, null, 2)); // debug
+                const responseData = {
+                    total: queryData.searchResponse.total,
+                    offset: queryData.searchResponse.offset,
+                    next: queryData.searchResponse.next,
+                    data: queryData.searchResponse.data,
+                    createdAt: queryData.createdAt,
+                    updatedAt: queryData.searchResponse.updatedAt,
+                };
 
-            const responseData = {
-                total: queryData.searchResponse.total,
-                offset: queryData.searchResponse.offset,
-                next: queryData.searchResponse.next,
-                data: queryData.searchResponse.data,
-                createdAt: queryData.createdAt,
-                updatedAt: queryData.searchResponse.updatedAt,
-            };
-
-            return NextResponse.json(responseData);
+                return NextResponse.json(responseData);
+            } catch (error) {
+                console.error('Error saving search query to database:', error);
+                return NextResponse.json({ error: 'Failed to save search query to database.' }, { status: 500 });
+            }
         } else {
             // Case: API call failed
             const errorData = await response.json();
             console.error('Error from Semantic Scholar API:', errorData);
 
-            // Save the search query to the database
-            const queryData = await prisma.searchQuery.create({
-                userId: userId,
-                data: {
-                    query: searchQuery,
-                },
-            });
+            try {
+                // Save the search query to the database
+                const queryData = await prisma.searchQuery.create({
+                    userId: userId,
+                    data: {
+                        query: searchQuery,
+                    },
+                });
 
-            const responseData = {
-                message: 'Failed to fetch data from the Semantic Scholar API.',
-                error: errorData,
-                createdAt: queryData.createdAt,
-            };
+                const responseData = {
+                    message: 'Failed to fetch data from the Semantic Scholar API.',
+                    error: errorData,
+                    createdAt: queryData.createdAt,
+                };
 
-            return NextResponse.json(responseData, { status: response.status });
+                return NextResponse.json(responseData, { status: response.status });
+            } catch (error) {
+                console.error('Error saving search query to database:', error);
+                return NextResponse.json({ error: 'Failed to save search query to database.' }, { status: 500 });
+            }
         }
     } catch (error) {
         console.error('Error in paper search route handler:', error);
