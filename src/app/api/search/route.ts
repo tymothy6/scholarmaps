@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth/next';
 import { type SearchPaperResult } from '@/app/(main)/search/tables/search-columns';
 
 export async function GET(req: NextRequest) {
-    const searchQuery = req.nextUrl.searchParams.get('query') || ''; // defaults to empty string
+    const urlQuery = req.nextUrl.searchParams.get('query') || ''; // defaults to empty string
     const session = await getServerSession(authOptions);
     const userId = session?.user?.id;
 
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
         // Check if the search query exists in the database
         const existingQuery = await prisma.searchQuery.findUnique({
             where: {
-                query: searchQuery,
+                query: urlQuery,
             },
             include: {
                 searchResponse: {
@@ -43,8 +43,8 @@ export async function GET(req: NextRequest) {
 
         // If the search query doesn't exist, send new Semantic Scholar API request
         const queryParams = new URLSearchParams({
-            query: searchQuery,
-            limit: '100', // Must be <= 100 for paper relevance search
+            query: urlQuery,
+            // limit: '100', // Must be <= 100 for paper relevance search
             fields: 'paperId,url,title,abstract,year,referenceCount,citationCount,influentialCitationCount,tldr,journal,authors,publicationTypes,isOpenAccess,openAccessPdf',
         });
 
@@ -64,7 +64,7 @@ export async function GET(req: NextRequest) {
                 // Case: no results found for the given search query
                 const queryData = await prisma.searchQuery.create({
                     data: {
-                        query: searchQuery,
+                        query: urlQuery,
                         userId: userId,  
                         searchResponse: {
                             create: {
@@ -90,7 +90,7 @@ export async function GET(req: NextRequest) {
                 // Save the search query and response to the database
                 const queryData = await prisma.searchQuery.upsert({
                     where: {
-                        query: searchQuery,
+                        query: urlQuery,
                         userId: userId,
                     },
                     update: {
@@ -125,7 +125,7 @@ export async function GET(req: NextRequest) {
                         },
                     },
                     create: {
-                        query: searchQuery,
+                        query: urlQuery,
                         searchResponse: {
                             create: {
                                 total: data.total,
@@ -189,7 +189,7 @@ export async function GET(req: NextRequest) {
                 const queryData = await prisma.searchQuery.create({
                     userId: userId,
                     data: {
-                        query: searchQuery,
+                        query: urlQuery,
                     },
                 });
 
@@ -201,6 +201,7 @@ export async function GET(req: NextRequest) {
 
                 return NextResponse.json(responseData, { status: response.status });
             } catch (error) {
+                console.log('Error saving search query to database:', error);
                 console.error('Error saving search query to database:', error);
                 return NextResponse.json({ error: 'Failed to save search query to database.' }, { status: 500 });
             }
