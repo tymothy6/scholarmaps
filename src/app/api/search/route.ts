@@ -57,43 +57,21 @@ export async function GET(req: NextRequest) {
         });
 
         if (response.ok) {
-            // If the API call was successful
+            // Case: the API call is successful
             const data = await response.json();
 
-            if (data.data.length === 0) {
-                // Case: no results found for the given search query
-                const queryData = await prisma.searchQuery.create({
-                    data: {
-                        query: urlQuery,
-                        userId: userId,  
-                        searchResponse: {
-                            create: {
-                                total: data.total,
-                                offset: data.offset,
-                                next: data.next,
-                                data: [],
-                            },
-                        },
-                    },
-                });
-
-                const responseData = {
-                    message: 'No results found for the given search query.',
-                    createdAt: queryData.createdAt,
-                    updatedAt: queryData.searchResponse.updatedAt,
-                };
-
-                return NextResponse.json(responseData);
-            }
-
             try {
-                // Save the search query and response to the database
+                // (1) Save the search query and response to the database
                 const queryData = await prisma.searchQuery.upsert({
                     where: {
                         query: urlQuery,
-                        userId: userId,
                     },
                     update: {
+                        user: {
+                            connect: {
+                                id: userId,
+                            },
+                        },
                         searchResponse: {
                             create: {
                                 total: data.total,
@@ -126,6 +104,11 @@ export async function GET(req: NextRequest) {
                     },
                     create: {
                         query: urlQuery,
+                        user: {
+                            connect: {
+                                id: userId,
+                            },
+                        },
                         searchResponse: {
                             create: {
                                 total: data.total,
@@ -165,6 +148,7 @@ export async function GET(req: NextRequest) {
                     }
                 });
 
+                // (2) Return the search response to the client 
                 const responseData = {
                     total: queryData.searchResponse.total,
                     offset: queryData.searchResponse.offset,
@@ -180,19 +164,24 @@ export async function GET(req: NextRequest) {
                 return NextResponse.json({ error: 'Failed to save search query to database.' }, { status: 500 });
             }
         } else {
-            // Case: API call failed
+            // Case: API call fails
             const errorData = await response.json();
             console.error('Error from Semantic Scholar API:', errorData);
 
             try {
-                // Save the search query to the database
+                // (1) Save the search query to the database
                 const queryData = await prisma.searchQuery.create({
-                    userId: userId,
                     data: {
                         query: urlQuery,
+                        user: {
+                            connect: {
+                                id: userId,
+                            },
+                        },
                     },
                 });
 
+                // (2) Return an error response to the client
                 const responseData = {
                     message: 'Failed to fetch data from the Semantic Scholar API.',
                     error: errorData,
@@ -201,7 +190,6 @@ export async function GET(req: NextRequest) {
 
                 return NextResponse.json(responseData, { status: response.status });
             } catch (error) {
-                console.log('Error saving search query to database:', error);
                 console.error('Error saving search query to database:', error);
                 return NextResponse.json({ error: 'Failed to save search query to database.' }, { status: 500 });
             }

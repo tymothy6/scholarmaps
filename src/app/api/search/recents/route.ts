@@ -10,7 +10,9 @@ export async function GET(req: NextRequest) {
     try {
         const recentSearches = await prisma.searchQuery.findMany({
             where: {
-                userId: userId,
+                user: {
+                    id: userId,
+                },
             },
             orderBy: { createdAt: 'desc' },
             take: 10,

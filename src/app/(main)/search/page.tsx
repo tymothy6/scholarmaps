@@ -4,6 +4,7 @@ import { SearchPaperResult, columns } from './tables/search-columns'
 import { SearchResultTable } from './tables/search-table'
 import { SearchTableSkeleton } from './search-skeleton'
 import { RecentSearches } from './recents'
+import { StringValidation } from 'zod'
 
 export async function generateMetadata({ searchParams }: { searchParams: {[key: string]: string | undefined } }) {
     const title = searchParams['query'] ? `Search results for ${searchParams['query']}` : 'Search';
@@ -20,6 +21,13 @@ interface SearchResponse {
     updatedAt: Date | null;
  }
 
+// Shape of the response from a failed API call
+interface ErrorResponse {
+    message: string;
+    error: JSON;
+    createdAt: Date | null;
+ }
+
 async function getSearchResults(searchQuery: string): Promise<SearchResponse> {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const queryParams = new URLSearchParams({ query: searchQuery });
@@ -33,10 +41,11 @@ async function getSearchResults(searchQuery: string): Promise<SearchResponse> {
         }
 
         const data = await response.json();
+        // console.log ('getSearchResults response:', data);
         return data;
     } catch (error) {
         console.error('Error fetching search results:', error);
-        return { total: 0, offset: 0, next: 0, data: [], createdAt: null, updatedAt: null};
+        return { total: 0, offset: 0, next: 0, data: [], createdAt: null, updatedAt: new Date()};
     }
 }
 
@@ -61,10 +70,8 @@ async function getRecentSearches(): Promise<RecentSearchResponse[]> {
 
         if (data === null) { // if no recent searches
             return [];
-        } else if (Array.isArray(data)) { // if the response is already an array of >1 queries
-            return data;
         } else {
-            return [data]; // if only one recent query
+            return data;
         }
     } catch (error) {
         console.error('Error fetching recent searches:', error);
@@ -76,11 +83,18 @@ interface SearchProps { searchParams: { [key: string]: string | undefined } }
 
 export default async function Search( { searchParams }: SearchProps ) {
     const searchQuery = searchParams['query'] || '';
-    const recentSearches = await getRecentSearches();
+
+    async function RecentSearchesCard() {
+        let recentSearches: RecentSearchResponse[] = [];
+
+        recentSearches = await getRecentSearches();
+
+        return <RecentSearches recentSearches={recentSearches} />;
+    }
 
     async function SearchResultsCard() {
         let results: SearchPaperResult[] = [];
-        let timestamp: Date | null = null;
+        let timestamp: Date | null = new Date();
 
         if (searchQuery) {
             const response = await getSearchResults(searchQuery);
@@ -105,7 +119,7 @@ export default async function Search( { searchParams }: SearchProps ) {
                     <SearchResultsCard />
                     </Suspense>
                 :
-                    <RecentSearches recentSearches={recentSearches} />
+                    <RecentSearchesCard />
                 }
             </div>
         </section>
