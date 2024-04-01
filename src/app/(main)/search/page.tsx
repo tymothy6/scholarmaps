@@ -64,7 +64,7 @@ export interface RecentSearchResponse {
 
 async function getRecentSearches(): Promise<RecentSearchResponse[]> {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const url = `${baseUrl}/api/search/recents`;
+    const url = `${baseUrl}/api/recent-searches`;
 
     try {
         const response = await fetch(url);
@@ -73,12 +73,13 @@ async function getRecentSearches(): Promise<RecentSearchResponse[]> {
             throw new Error(`Recent searches API responded with status code ${response.status}: ${response.statusText}`);
         }
 
-        const data = await response.json();
+        const data: RecentSearchResponse[] = await response.json();
 
-        if (data === null) { // if no recent searches
-            return [];
-        } else {
+        if (Array.isArray(data)) {
             return data;
+        } else {
+            console.warn('Recent searches API returned unexpected data:', data);
+            return [];
         }
     } catch (error) {
         console.error('Error fetching recent searches:', error);
@@ -91,12 +92,10 @@ interface SearchProps { searchParams: { [key: string]: string | undefined } }
 export default async function Search( { searchParams }: SearchProps ) {
     const searchQuery = searchParams['query'] || '';
 
-    async function RecentSearchesCard() {
-        let recentSearches: RecentSearchResponse[] = [];
+    let recentSearches: RecentSearchResponse[] = [];
 
+    if (!searchQuery) {
         recentSearches = await getRecentSearches();
-
-        return <RecentSearches recentSearches={recentSearches} />;
     }
 
     async function SearchResultsCard() {
@@ -139,10 +138,10 @@ export default async function Search( { searchParams }: SearchProps ) {
             <div className="w-full">
                 {searchQuery ?
                     <Suspense fallback={<SearchTableSkeleton />}>
-                    <SearchResultsCard />
+                        <SearchResultsCard />
                     </Suspense>
                 :
-                    <RecentSearchesCard />
+                    <RecentSearches recentSearches={recentSearches} />
                 }
             </div>
         </section>
