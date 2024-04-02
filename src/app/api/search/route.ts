@@ -1,17 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma-db';
-import { authOptions } from '@/lib/auth';
-import { getServerSession } from 'next-auth/next';
 import { type SearchPaperResult } from '@/app/(main)/search/tables/search-columns';
 
-export async function GET(req: NextRequest) {
-    const urlQuery = req.nextUrl.searchParams.get('query') || ''; // defaults to empty string
-    const session = await getServerSession(authOptions);
-    const userId = session?.user?.id;
-
-    if (!userId) {
-        return NextResponse.json({ error: 'User ID is required. Please authenticate before issuing your request.' }, { status: 400 });
-    };
+export async function GET(request: NextRequest) {
+    const urlQuery = request.nextUrl.searchParams.get('query') || ''; 
+    const userId = request.nextUrl.searchParams.get('userId') || '';
 
     try {
         // Check if the search query exists in the database
@@ -73,7 +66,7 @@ export async function GET(req: NextRequest) {
                             },
                         },
                         searchResponse: {
-                            create: {
+                            update: {
                                 total: data.total,
                                 offset: data.offset,
                                 next: data.next,

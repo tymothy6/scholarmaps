@@ -9,16 +9,16 @@ export function RecentSearches ({ recentSearches }:{ recentSearches: RecentSearc
     return (
         <div className="flex flex-col gap-2 w-full mt-2">
             <h3>Recent searches</h3>
-                <ul>
+                <ul className="flex gap-2">
                     {recentSearches.length > 0 ? (
                     recentSearches.map((search, index) => (
                         <li key={index}>
-                            <Card className="w-max p-4">{search.query}</Card>
+                            <Card className="w-max p-4 text-sm font-medium">{search.query}</Card>
                         </li>
                     ))
                     ) : (
                         <li>
-                            <Card className="w-max p-4">
+                            <Card className="w-max p-4 text-sm font-medium">
                                 No recent searches found 🥹
                             </Card>
                         </li>

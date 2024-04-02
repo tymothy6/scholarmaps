@@ -1,5 +1,8 @@
 import { Suspense } from 'react'
 
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/lib/auth';
+
 import { SearchPaperResult, columns } from './tables/search-columns'
 import { SearchResultTable } from './tables/search-table'
 import { SearchTableSkeleton } from './search-skeleton'
@@ -30,13 +33,16 @@ interface SearchResponse {
 // Shape of the response from a failed call
 interface ErrorResponse {
     message: string;
-    error: JSON;
+    error: {
+        message: string;
+        code: number;
+    };
     createdAt: Date | null;
  }
 
-async function getSearchResults(searchQuery: string): Promise<SearchResponse | ErrorResponse> {
+async function getSearchResults(searchQuery: string, userId: string | undefined): Promise<SearchResponse | ErrorResponse> {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const queryParams = new URLSearchParams({ query: searchQuery });
+    const queryParams = new URLSearchParams({ query: searchQuery, userId: userId || '' });
     const url = `${baseUrl}/api/search?${queryParams.toString()}`;
 
     try {
@@ -90,6 +96,8 @@ async function getRecentSearches(): Promise<RecentSearchResponse[]> {
 interface SearchProps { searchParams: { [key: string]: string | undefined } }
 
 export default async function Search( { searchParams }: SearchProps ) {
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
     const searchQuery = searchParams['query'] || '';
 
     let recentSearches: RecentSearchResponse[] = [];
@@ -102,15 +110,17 @@ export default async function Search( { searchParams }: SearchProps ) {
         let results: SearchPaperResult[] = [];
         let timestamp: Date | null = new Date();
         let errorMessage: string | null = null;
+        let errorCode: number | null = null;
 
         if (searchQuery) {
-            const response = await getSearchResults(searchQuery);
+            const response = await getSearchResults(searchQuery, userId);
 
             if ('data' in response) { // successful response
                 results = response.data;
                 timestamp = response.createdAt;
             } else {
                 errorMessage = response.message; // error response
+                errorCode = response.error.code;
             }
         }
 
@@ -119,7 +129,7 @@ export default async function Search( { searchParams }: SearchProps ) {
                 {errorMessage ? (
                     <Alert variant="destructive">
                         <AlertCircle className="w-4 h-4" />
-                        <AlertTitle>Error</AlertTitle>
+                        <AlertTitle>Error ({errorCode}) </AlertTitle>
                         <AlertDescription>{errorMessage}</AlertDescription>
                     </Alert>
                 ) : (
