@@ -72,6 +72,19 @@ export async function POST(req: Request): Promise<Response> {
         content: `The existing text is: ${prompt}`,
       },
     ])
+    .with("simplify", () => [
+      {
+        role: "system",
+        content:
+          "You are an AI writing assistant that simplifies existing text. " +
+          "Limit your response to no more than 200 characters, but make sure to construct complete sentences." +
+          "Use Markdown formatting when appropriate. Avoid redundant use of bold or italic marks.",
+      },
+      {
+        role: "user",
+        content: `The existing text is: ${prompt}`,
+      },
+    ])
     .with("fix", () => [
       {
         role: "system",
@@ -79,6 +92,175 @@ export async function POST(req: Request): Promise<Response> {
           "You are an AI writing assistant that fixes grammar and spelling errors in existing text. " +
           "Limit your response to no more than 200 characters, but make sure to construct complete sentences." +
           "Use Markdown formatting when appropriate. Avoid redundant use of bold or italic marks.",
+      },
+      {
+        role: "user",
+        content: `The existing text is: ${prompt}`,
+      },
+    ])
+    .with("tone.professional", () => [
+      {
+        role: "system",
+        content:
+          "You are an AI writing assistant that changes the tone of existing text to be more professional. " +
+          "Limit your response to no more than 200 characters, but make sure to construct complete sentences." +
+          "Use Markdown formatting when appropriate. Avoid redundant use of bold or italic marks.",
+      },
+      {
+        role: "user",
+        content: `The existing text is: ${prompt}`,
+      },
+    ])
+    .with("tone.casual", () => [
+      {
+        role: "system",
+        content:
+          "You are an AI writing assistant that changes the tone of existing text to be more casual. " +
+          "Limit your response to no more than 200 characters, but make sure to construct complete sentences." +
+          "Use Markdown formatting when appropriate. Avoid redundant use of bold or italic marks.",
+      },
+      {
+        role: "user",
+        content: `The existing text is: ${prompt}`,
+      },
+    ])
+    .with("tone.straightforward", () => [
+      {
+        role: "system",
+        content:
+          "You are an AI writing assistant that changes the tone of existing text to be more straightforward. " +
+          "Limit your response to no more than 200 characters, but make sure to construct complete sentences." +
+          "Use Markdown formatting when appropriate. Avoid redundant use of bold or italic marks.",
+      },
+      {
+        role: "user",
+        content: `The existing text is: ${prompt}`,
+      },
+    ])
+    .with("tone.casual", () => [
+      {
+        role: "system",
+        content:
+          "You are an AI writing assistant that changes the tone of existing text to be more casual. " +
+          "Limit your response to no more than 200 characters, but make sure to construct complete sentences." +
+          "Use Markdown formatting when appropriate. Avoid redundant use of bold or italic marks.",
+      },
+      {
+        role: "user",
+        content: `The existing text is: ${prompt}`,
+      },
+    ])
+    .with("tone.confident", () => [
+      {
+        role: "system",
+        content:
+          "You are an AI writing assistant that changes the tone of existing text to be more confident. " +
+          "Limit your response to no more than 200 characters, but make sure to construct complete sentences." +
+          "Use Markdown formatting when appropriate. Avoid redundant use of bold or italic marks.",
+      },
+      {
+        role: "user",
+        content: `The existing text is: ${prompt}`,
+      },
+    ])
+    .with("tone.friendly", () => [
+      {
+        role: "system",
+        content:
+          "You are an AI writing assistant that changes the tone of existing text to be more friendly. " +
+          "Limit your response to no more than 200 characters, but make sure to construct complete sentences." +
+          "Use Markdown formatting when appropriate. Avoid redundant use of bold or italic marks.",
+      },
+      {
+        role: "user",
+        content: `The existing text is: ${prompt}`,
+      },
+    ])
+    .with("write.brainstorm", () => [
+      {
+        role: "system",
+        content:
+          "You are an AI writing assistant that generates text based on a prompt. " +
+          "Limit your response to no more than 200 characters, but make sure to construct complete sentences." +
+          "Use Markdown formatting when appropriate.",
+      },
+      {
+        role: "user",
+        content: `The prompt is: ${prompt}`,
+      },
+    ])
+    .with("write.outline", () => [
+      {
+        role: "system",
+        content:
+          "You are an AI writing assistant that creates an outline based on a prompt. " +
+          "Limit your response to no more than 200 characters, but make sure to construct complete sentences." +
+          "Use Markdown formatting when appropriate.",
+      },
+      {
+        role: "user",
+        content: `The prompt is: ${prompt}`,
+      },
+    ])
+    .with("write.todo", () => [
+      {
+        role: "system",
+        content:
+          "You are an AI writing assistant that creates a to-do list based on a prompt. " +
+          "Limit your response to no more than 200 characters, but make sure to construct complete sentences." +
+          "Use Markdown formatting when appropriate.",
+      },
+      {
+        role: "user",
+        content: `The prompt is: ${prompt}`,
+      },
+    ])
+    .with("write.pros", () => [
+      {
+        role: "system",
+        content:
+          "You are an AI writing assistant that lists pros and cons based on a prompt. " +
+          "Limit your response to no more than 200 characters, but make sure to construct complete sentences." +
+          "Use Markdown formatting when appropriate.",
+      },
+      {
+        role: "user",
+        content: `The prompt is: ${prompt}`,
+      },
+    ])
+    .with("summarize", () => [
+      {
+        role: "system",
+        content:
+          "You are an AI writing assistant that summarizes existing text. " +
+          "Limit your response to no more than 300 characters, but make sure to construct complete sentences." +
+          "Use Markdown formatting when appropriate.",
+      },
+      {
+        role: "user",
+        content: `The existing text is: ${prompt}`,
+      },
+    ])
+    .with("explain", () => [
+      {
+        role: "system",
+        content:
+          "You are an AI writing assistant that explains existing text. " +
+          "Limit your response to no more than 300 characters, but make sure to construct complete sentences." +
+          "Use Markdown formatting when appropriate.",
+      },
+      {
+        role: "user",
+        content: `The existing text is: ${prompt}`,
+      },
+    ])
+    .with("action", () => [
+      {
+        role: "system",
+        content:
+          "You are an AI writing assistant that finds action items in existing text. " +
+          "Limit your response to no more than 300 characters, but make sure to construct complete sentences." +
+          "Use Markdown formatting when appropriate.",
       },
       {
         role: "user",

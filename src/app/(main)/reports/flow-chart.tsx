@@ -109,14 +109,14 @@ export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
                 <ResizablePanelGroup direction="horizontal">
                     <ResizablePanel defaultSize={70}>
                         <div className="flex w-full h-max items-center justify-start p-1 border-b">
-                            <span className="font-mono text-sm font-semibold">Editor</span>
+                            <span className="ml-2 font-mono text-sm font-semibold">Editor</span>
                         </div>
                         <NovelReportsEditor />
                     </ResizablePanel>
                     <ResizableHandle />
                     <ResizablePanel defaultSize={30} className="flex flex-col">
                         <div className="flex w-full h-max items-center justify-start p-1 border-b">
-                            <span className="font-mono text-sm font-semibold">Output</span>
+                            <span className="ml-2 font-mono text-sm font-semibold">Output</span>
                         </div>
                         <div className="flex w-full h-full items-center justify-center p-1 border-b">
                             {/* Render output here */}
