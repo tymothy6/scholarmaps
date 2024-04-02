@@ -22,16 +22,22 @@ export async function GET(request: NextRequest) {
         });
 
         if (existingQuery) {
-            // If the search query exists, return existing data
-            const response = {
-                total: existingQuery.searchResponse.total,
-                offset: existingQuery.searchResponse.offset,
-                next: existingQuery.searchResponse.next,
-                data: existingQuery.searchResponse.data,
-                createdAt: existingQuery.createdAt, 
-                updatedAt: existingQuery.searchResponse.updatedAt,
+            // Check if the response associated with the query has data
+            if (existingQuery.searchResponse && existingQuery.searchResponse.data.length > 0) {
+                // Return existing data
+                const response = {
+                    total: existingQuery.searchResponse.total,
+                    offset: existingQuery.searchResponse.offset,
+                    next: existingQuery.searchResponse.next,
+                    data: existingQuery.searchResponse.data,
+                    createdAt: existingQuery.createdAt, 
+                    updatedAt: existingQuery.searchResponse.updatedAt,
+                };
+                return NextResponse.json(response);
+            } else {
+                // If the response has no data, refetch
+                console.log(`Search query "${urlQuery}" exists in the database, but has no stored data. Refetching...`)
             };
-            return NextResponse.json(response);
         }
 
         // If the search query doesn't exist, send new Semantic Scholar API request
@@ -75,21 +81,17 @@ export async function GET(request: NextRequest) {
                                         paperId: result.paperId,
                                         url: result.url,
                                         title: result.title,
-                                        abstract: result.abstract,
+                                        abstract: result.abstract ?? '',
                                         year: result.year,
                                         referenceCount: result.referenceCount,
                                         citationCount: result.citationCount,
                                         influentialCitationCount: result.influentialCitationCount,
-                                        tldr: result.tldr,
-                                        journal: result.journal,
+                                        tldr: result.tldr ?? {},
+                                        journal: result.journal ?? {},
                                         authors: result.authors,
-                                        publicationTypes: {
-                                            create: result.publicationTypes.map((type: string) => ({
-                                                type,
-                                            })),
-                                        },
-                                        isOpenAccess: result.isOpenAccess,
-                                        openAccessPdf: result.openAccessPdf,
+                                        publicationTypes: result.publicationTypes ?? [],
+                                        isOpenAccess: result.isOpenAccess ?? false,
+                                        openAccessPdf: result.openAccessPdf ?? '',
                                     })),
                                 },
                             },
@@ -112,21 +114,17 @@ export async function GET(request: NextRequest) {
                                         paperId: result.paperId,
                                         url: result.url,
                                         title: result.title,
-                                        abstract: result.abstract,
+                                        abstract: result.abstract ?? '',
                                         year: result.year,
                                         referenceCount: result.referenceCount,
                                         citationCount: result.citationCount,
                                         influentialCitationCount: result.influentialCitationCount,
-                                        tldr: result.tldr,
-                                        journal: result.journal,
+                                        tldr: result.tldr ?? {},
+                                        journal: result.journal ?? {},
                                         authors: result.authors,
-                                        publicationTypes: {
-                                            create: result.publicationTypes.map((type: string) => ({
-                                                type,
-                                            })),
-                                        },
-                                        isOpenAccess: result.isOpenAccess,
-                                        openAccessPdf: result.openAccessPdf,
+                                        publicationTypes: result.publicationTypes ?? [],
+                                        isOpenAccess: result.isOpenAccess ?? false,
+                                        openAccessPdf: result.openAccessPdf ?? '',
                                     })),
                                 },
                             },
@@ -163,8 +161,18 @@ export async function GET(request: NextRequest) {
 
             try {
                 // (1) Save the search query to the database
-                const queryData = await prisma.searchQuery.create({
-                    data: {
+                const queryData = await prisma.searchQuery.upsert({
+                    where: {
+                        query: urlQuery,
+                    },
+                    update: {
+                        user: {
+                            connect: {
+                                id: userId,
+                            },
+                        },
+                    },
+                    create: {
                         query: urlQuery,
                         user: {
                             connect: {

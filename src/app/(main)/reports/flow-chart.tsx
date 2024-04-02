@@ -23,6 +23,8 @@ import 'reactflow/dist/style.css';
 
 import { useFlowContext } from './context/flow-provider';
 
+import NovelReportsEditor from '@/components/novel/report-editor';
+
 import JobNode from './job-node';
 import CompletionNode from './completion-node';
 import ChatNode from './chat-node';
@@ -103,20 +105,21 @@ export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
                 </div>
             </ResizablePanel>
             <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={25}>
+            <ResizablePanel defaultSize={25} maxSize={70}>
                 <ResizablePanelGroup direction="horizontal">
                     <ResizablePanel defaultSize={70}>
                         <div className="flex w-full h-max items-center justify-start p-1 border-b">
-                            <span className="font-mono text-sm font-semibold">Output</span>
+                            <span className="font-mono text-sm font-semibold">Editor</span>
                         </div>
+                        <NovelReportsEditor />
                     </ResizablePanel>
-                    <ResizableHandle withHandle />
+                    <ResizableHandle />
                     <ResizablePanel defaultSize={30} className="flex flex-col">
                         <div className="flex w-full h-max items-center justify-start p-1 border-b">
-                            <span className="font-mono text-sm font-semibold">Logs</span>
+                            <span className="font-mono text-sm font-semibold">Output</span>
                         </div>
                         <div className="flex w-full h-full items-center justify-center p-1 border-b">
-                            {/* Render logs here */}
+                            {/* Render output here */}
                         </div>
                         <Input className="w-full rounded-none border-x-0 h-6 font-mono" />
                     </ResizablePanel>

@@ -72,7 +72,7 @@ model SearchPaperResult {
   paperId   String
   title     String
   url       String
-  abstract  String
+  abstract  String?
   year      Int
   referenceCount Int
   citationCount Int

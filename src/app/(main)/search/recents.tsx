@@ -13,12 +13,12 @@ export function RecentSearches ({ recentSearches }:{ recentSearches: RecentSearc
                     {recentSearches.length > 0 ? (
                     recentSearches.map((search, index) => (
                         <li key={index}>
-                            <Card className="w-max p-4 text-sm font-medium">{search.query}</Card>
+                            <Card className="w-max p-4 text-sm font-medium hover:bg-muted">{search.query}</Card>
                         </li>
                     ))
                     ) : (
                         <li>
-                            <Card className="w-max p-4 text-sm font-medium">
+                            <Card className="w-max p-4 text-sm font-medium hover:bg-muted">
                                 No recent searches found 🥹
                             </Card>
                         </li>
