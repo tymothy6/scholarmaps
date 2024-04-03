@@ -30,8 +30,6 @@ import CompletionNode from './completion-node';
 import ChatNode from './chat-node';
 import PaperSearchNode from './search-node';
 
-import { WandIcon } from 'lucide-react';
-
 // Define nodeTypes outside of the component to avoid re-renders
 const nodeTypes = { 
     jobNode: JobNode,
@@ -76,7 +74,7 @@ export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
             direction="vertical"
             className="w-full min-h-[100vh]"
             >
-            <ResizablePanel defaultSize={75}>
+            <ResizablePanel defaultSize={60}>
                 <div className="w-full h-full">
                     <ReactFlow 
                         nodes={nodes} 
@@ -101,7 +99,7 @@ export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
                 </div>
             </ResizablePanel>
             <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={25} maxSize={70}>
+            <ResizablePanel defaultSize={40} minSize={20} maxSize={70}>
                 <ResizablePanelGroup direction="horizontal">
                     <ResizablePanel defaultSize={75}>
                         <div className="flex w-full h-max items-center justify-start p-1 border-b">

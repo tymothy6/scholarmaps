@@ -28,6 +28,11 @@ const ResizableHandle = ({
   <ResizablePrimitive.PanelResizeHandle
     className={cn(
       "relative flex w-px items-center justify-center bg-border after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 data-[panel-group-direction=vertical]:h-px data-[panel-group-direction=vertical]:w-full data-[panel-group-direction=vertical]:after:left-0 data-[panel-group-direction=vertical]:after:h-1 data-[panel-group-direction=vertical]:after:w-full data-[panel-group-direction=vertical]:after:-translate-y-1/2 data-[panel-group-direction=vertical]:after:translate-x-0 [&[data-panel-group-direction=vertical]>div]:rotate-90",
+      "before:absolute before:bg-transparent before:transition-colors before:duration-200 hover:before:bg-novel-blue",
+      "before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2", 
+      "hover:before:w-2 hover:before:h-full", // Set the size of the overlay for horizontal handles
+      "data-[panel-group-direction=vertical]:before:left-0 data-[panel-group-direction=vertical]:before:top-1/2 data-[panel-group-direction=vertical]:before:translate-x-0 data-[panel-group-direction=vertical]:before:-translate-y-1/2", 
+      "hover:before:data-[panel-group-direction=vertical]:w-full hover:before:data-[panel-group-direction=vertical]:h-2", // Set the size of the overlay for vertical handles
       className
     )}
     {...props}

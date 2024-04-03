@@ -127,7 +127,7 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
 
 
   return (
-    <ScrollArea className="h-[150px] lg:h-[300px]">
+    <ScrollArea className="h-[150px] lg:h-[275px]">
       <CommandGroup heading="Edit or review selection">
       {selectedOption !== "tone" && (
           <>

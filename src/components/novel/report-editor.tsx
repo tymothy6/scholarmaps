@@ -124,7 +124,7 @@ const NovelReportsEditor = () => {
 
   if (isLoading) { 
     return (
-      <div className="w-full h-[500px] border shadow rounded-lg p-8 flex flex-col gap-4">
+      <div className="w-full h-max p-8 flex flex-col gap-4">
         <Skeleton className="h-8 w-32" />
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-full" />

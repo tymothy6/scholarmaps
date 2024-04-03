@@ -47,10 +47,28 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
 
   const hasCompletion = completion.length > 0;
 
+  const handleCompletion = () => {
+    if (completion)
+    return complete(completion, {
+      body: { option: "zap", command: inputValue },
+    }).then(() => setInputValue(""));
+  
+    if (editor) {
+      const slice = editor.state.selection.content();
+      const text = editor.storage.markdown.serializer.serialize(
+        slice.content,
+      );
+
+      complete(text, {
+        body: { option: "zap", command: inputValue },
+      }).then(() => setInputValue(""));
+    }
+  }
+
   return (
     <Command className="w-[375px]">
       {hasCompletion && (
-        <div className="flex max-h-[400px]">
+        <div className="flex max-h-[200px]">
           <ScrollArea>
             <div className="prose p-2 px-4 prose-sm prose-slate">
               <Markdown>{completion}</Markdown>
@@ -82,6 +100,11 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
               }
               onFocus={() => editor && addAIHighlight(editor)}
               className="h-12"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleCompletion();
+                }
+              }}
             />
             <TooltipProvider>
               <Tooltip>
@@ -89,29 +112,13 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
                   <Button
                     size="icon"
                     className="absolute right-2 top-1/2 h-6 w-6 -translate-y-1/2 rounded-full bg-purple-500 hover:bg-purple-900"
-                    onClick={() => {
-                      if (completion)
-                        return complete(completion, {
-                          body: { option: "zap", command: inputValue },
-                        }).then(() => setInputValue(""));
-                      
-                        if (editor) {
-                          const slice = editor.state.selection.content();
-                          const text = editor.storage.markdown.serializer.serialize(
-                          slice.content,
-                          );
-
-                          complete(text, {
-                              body: { option: "zap", command: inputValue },
-                            }).then(() => setInputValue(""));
-                        }
-                    }}
+                    onClick={handleCompletion}
                   >
                   { inputValue ? 
-                  <LightningBoltIcon className="h-4 w-4" /> 
-                  : 
-                  <ArrowUp className="h-4 w-4" />
-                    }
+                    <LightningBoltIcon className="h-4 w-4" /> 
+                    : 
+                    <ArrowUp className="h-4 w-4" />
+                  }
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
