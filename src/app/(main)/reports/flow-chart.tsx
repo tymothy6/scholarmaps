@@ -88,11 +88,7 @@ export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
                         className="bg-background"
                         {...variantProps}
                     >
-                        <Controls>
-                            <ControlButton onClick={() => alert('Something magical just happened. ✨')}>
-                                <WandIcon />
-                            </ControlButton>
-                        </Controls>
+                        <Controls />
                         <MiniMap 
                             pannable 
                             zoomable
@@ -107,16 +103,16 @@ export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={25} maxSize={70}>
                 <ResizablePanelGroup direction="horizontal">
-                    <ResizablePanel defaultSize={70}>
+                    <ResizablePanel defaultSize={75}>
                         <div className="flex w-full h-max items-center justify-start p-1 border-b">
-                            <span className="ml-2 font-mono text-sm font-semibold">Editor</span>
+                            <span className="ml-2 font-mono text-xs uppercase font-semibold">Editor</span>
                         </div>
                         <NovelReportsEditor />
                     </ResizablePanel>
                     <ResizableHandle />
-                    <ResizablePanel defaultSize={30} className="flex flex-col">
+                    <ResizablePanel defaultSize={25} minSize={10} className="flex flex-col">
                         <div className="flex w-full h-max items-center justify-start p-1 border-b">
-                            <span className="ml-2 font-mono text-sm font-semibold">Output</span>
+                            <span className="ml-2 font-mono text-xs uppercase font-semibold">Output</span>
                         </div>
                         <div className="flex w-full h-full items-center justify-center p-1 border-b">
                             {/* Render output here */}

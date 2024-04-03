@@ -21,6 +21,19 @@ const GenerativeMenuSwitch = ({
   useEffect(() => {
     if (!open) removeAIHighlight(editor!);
   }, [open, editor]);
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        onOpenChange(!open);
+      }
+    }
+
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
+
   return (
     <EditorBubble
       tippyOptions={{
@@ -36,13 +49,14 @@ const GenerativeMenuSwitch = ({
       {!open && (
         <Fragment>
           <Button
-            className="gap-1 rounded-none text-sm text-purple-500"
+            className="gap-1 rounded-none text-sm text-purple-500 border-r"
             variant="ghost"
             onClick={() => onOpenChange(true)}
             size="sm"
           >
             <SparklesIcon className="h-4 w-4" />
             Ask AI
+            <span className="ml-1 px-1 py-[1px] border rounded bg-muted text-[0.65rem] tracking-widest text-muted-foreground ">⌘J</span>
           </Button>
           {children}
         </Fragment>

@@ -78,22 +78,22 @@ const toneOptions = [
 const writeOptions = [
   {
     value: "brainstorm",
-    label: "Brainstorm ideas",
+    label: "Brainstorm ideas...",
     icon: Pen,
   },
   {
     value: "outline",
-    label: "Create an outline",
+    label: "Create an outline...",
     icon: Pen,
   },
   {
     value: "todo",
-    label: "Create a to-do list",
+    label: "Create a to-do list...",
     icon: Pen,
   },
   {
     value: "pros",
-    label: "List pros & cons",
+    label: "List pros & cons...",
     icon: Pen,
   },
 ]

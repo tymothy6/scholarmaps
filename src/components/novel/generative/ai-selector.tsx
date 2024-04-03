@@ -48,7 +48,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
   const hasCompletion = completion.length > 0;
 
   return (
-    <Command className="w-[350px]">
+    <Command className="w-[375px]">
       {hasCompletion && (
         <div className="flex max-h-[400px]">
           <ScrollArea>
@@ -81,6 +81,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
                   : "Ask AI to edit or generate..."
               }
               onFocus={() => editor && addAIHighlight(editor)}
+              className="h-12"
             />
             <TooltipProvider>
               <Tooltip>
@@ -115,7 +116,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
                 </TooltipTrigger>
                 <TooltipContent>
                   <div className="text-sm">
-                    { inputValue ? "Zap text" : "Ask AI" }
+                    { inputValue ? "Zap text ↵" : "Ask AI ↵" }
                   </div>
                 </TooltipContent>
               </Tooltip>
