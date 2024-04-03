@@ -99,7 +99,7 @@ export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
                 </div>
             </ResizablePanel>
             <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={40} minSize={20} maxSize={70}>
+            <ResizablePanel defaultSize={40} minSize={20} maxSize={80}>
                 <ResizablePanelGroup direction="horizontal">
                     <ResizablePanel defaultSize={75}>
                         <div className="flex w-full h-max items-center justify-start p-1 border-b">

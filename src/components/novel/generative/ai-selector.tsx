@@ -68,7 +68,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
   return (
     <Command className="w-[375px]">
       {hasCompletion && (
-        <div className="flex max-h-[200px]">
+        <div className="flex max-h-[200px] border-b">
           <ScrollArea>
             <div className="prose p-2 px-4 prose-sm prose-slate">
               <Markdown>{completion}</Markdown>

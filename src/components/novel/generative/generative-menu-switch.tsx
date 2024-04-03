@@ -56,7 +56,7 @@ const GenerativeMenuSwitch = ({
           >
             <SparklesIcon className="h-4 w-4" />
             Ask AI
-            <span className="ml-1 px-1 py-[1px] border rounded bg-muted text-[0.65rem] tracking-widest text-muted-foreground ">⌘J</span>
+            <span className="ml-1 px-1 py-[1px] border rounded bg-muted text-[0.65rem] font-[300] tracking-widest text-muted-foreground ">⌘J</span>
           </Button>
           {children}
         </Fragment>

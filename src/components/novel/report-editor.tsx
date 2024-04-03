@@ -140,7 +140,7 @@ const NovelReportsEditor = () => {
       {saveStatus}
     </div>
     <EditorRoot>
-    <ScrollArea className="h-[67vh] w-full">
+    <ScrollArea className="h-[77vh] w-full">
       <EditorContent
         initialContent={initialContent || defaultEditorContent} // if api/novel/load returns null show default content
         extensions={extensions}
