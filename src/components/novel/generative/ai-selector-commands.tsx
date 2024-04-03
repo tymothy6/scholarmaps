@@ -1,4 +1,5 @@
 import React from "react";
+import { useCommandState } from "cmdk";
 import { CommandGroup, CommandItem, CommandSeparator } from "@/components/ui/command";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -104,6 +105,7 @@ interface AISelectorCommandsProps {
 
 const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
   const { editor } = useEditor();
+  const state = useCommandState((state) => state);
   const [selectedOption, setSelectedOption] = React.useState<string | null>(null);
 
   const handleSelection = (value: string) => {
@@ -125,9 +127,12 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
     setSelectedOption(null);
   };
 
+  const hasItems = state.search.length === 0 || state.filtered.count > 0; // When search is empty, hide the menu
 
   return (
-    <ScrollArea className="h-[150px] lg:h-[275px]">
+    <>
+    {hasItems && (
+    <ScrollArea className="h-[150px] lg:h-[250px] border-t">
       <CommandGroup heading="Edit or review selection">
       {selectedOption !== "tone" && (
           <>
@@ -267,6 +272,8 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
         ))}
       </CommandGroup>
     </ScrollArea>
+    )}
+    </>
   );
 };
 
