@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
+import { formatTimestamp } from '@/lib/timestamp';
 
 import { SearchPaperResult, columns } from './tables/search-columns'
 import { SearchResultTable } from './tables/search-table'
@@ -125,7 +126,7 @@ export default async function Search( { searchParams }: SearchProps ) {
         }
 
         return (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-0">
                 {errorMessage ? (
                     <Alert variant="destructive" className="mt-2 dark:bg-destructive">
                         <AlertCircle className="w-4 h-4 dark:text-destructive-foreground" />
@@ -134,7 +135,10 @@ export default async function Search( { searchParams }: SearchProps ) {
                     </Alert>
                 ) : (
                     <>
-                        {timestamp && <p className="mt-2 text-sm font-medium text-muted-foreground">Last updated: {timestamp.toLocaleString()}</p>}
+                        {timestamp && 
+                            <p className="mt-2 text-sm font-medium text-muted-foreground">
+                                Last updated: {formatTimestamp(timestamp)}
+                            </p>}
                         <SearchResultTable columns={columns} data={results} />
                     </>
                 )}

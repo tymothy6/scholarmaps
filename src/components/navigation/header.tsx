@@ -91,7 +91,7 @@ export function PageHeader () {
       e.preventDefault();
 
       try {
-      window.location.href = `/search?query=${searchQuery}`;
+        router.push(`/search?query=${searchQuery}`);
       } catch (error) {
         console.error('Error submitting search query:', error);
         toast.error('Error submitting search query. Please try again.');
@@ -130,7 +130,7 @@ export function PageHeader () {
                 <SheetContent side="left" className="w-64 bg-slate-950 border-0">
                 <div className="w-full">
                 <div className="flex flex-col justify-start gap-2 w-full">
-                    <BoxIcon className="ml-2 mt-2 h-8 w-8 text-slate-200" />
+                    <BoxIcon className="ml-4 mt-4 h-8 w-8 text-slate-200" />
                 <nav className="mt-16">
                   <ul className="space-y-2">
                   <li>
@@ -167,15 +167,6 @@ export function PageHeader () {
                 >
                     <FileBarChart className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/reports') ? 'text-slate-200' : 'text-slate-400'}`} />
                     <span className={`group-hover:text-gray-200 ${isActive('/reports') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium`}>Reports</span>
-                </Link>
-                </li>
-                <li>
-                <Link
-                    className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/team') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
-                    href="/team"
-                >
-                    <UsersIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/team') ? 'text-slate-200' : 'text-slate-400'}`} />
-                    <span className={`group-hover:text-gray-200 ${isActive('/team') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium`}>Team</span>
                 </Link>
                 </li>
                   </ul>

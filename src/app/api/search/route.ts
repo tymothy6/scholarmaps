@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
         // If the search query doesn't exist, send new Semantic Scholar API request
         const queryParams = new URLSearchParams({
             query: urlQuery,
-            // limit: '100', // Must be <= 100 for paper relevance search
+            limit: '100', // Must be <= 100 for paper relevance search
             fields: 'paperId,url,title,abstract,year,referenceCount,citationCount,influentialCitationCount,tldr,journal,authors,publicationTypes,isOpenAccess,openAccessPdf',
         });
 

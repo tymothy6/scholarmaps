@@ -1,11 +1,14 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
+import { Suspense } from "react";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { useTheme } from "next-themes"
+import { useQuery } from "@tanstack/react-query";
+import { RecentSearchResponse } from "@/app/(main)/search/page";
+import { RecentSearchesNavbarSkeleton } from "./nav-skeleton";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -41,12 +44,41 @@ export function Sidebar () {
 
     return path !== '/' && pathname.startsWith(path) && (pathname[path.length] === '/' || pathname.length === path.length);
   };
-  
 
+  const fetchRecentSearches = async () => {
+    try {
+      const response = await fetch("/api/recent-searches", {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch recent searches');
+      }
+
+      const data: RecentSearchResponse[] = await response.json();
+
+        if (Array.isArray(data)) {
+            return data;
+        } else {
+            console.warn('Recent searches API returned unexpected data:', data);
+            return [];
+        }
+
+    } catch (error) {
+      console.error('Failed to fetch recent searches:', error);
+      throw error;
+    }
+  };
+
+  const { data: recentSearches, isLoading } = useQuery({
+    queryKey: ['recentSearch'],
+    queryFn: fetchRecentSearches,
+  });
+  
     return (
         <aside className="hidden lg:z-[10] lg:fixed lg:top-0 lg:flex lg:flex-col lg:justify-between bg-slate-950 dark:bg-slate-200 w-1/6 h-[100vh] border-r p-4">
         <div className="flex flex-col justify-start gap-2">
-          <BoxIcon className="ml-2 mt-2 h-8 w-8 text-slate-200" />
+          <BoxIcon className="ml-4 mt-4 h-8 w-8 text-slate-200" />
         <nav className="mt-16">
           <ul className="space-y-2">
             <li>
@@ -59,13 +91,30 @@ export function Sidebar () {
               </Link>
             </li>
             <li>
-              <Link
-                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/search') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
-                href="/search"
-              >
-                <SearchIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/search') ? 'text-slate-200' : 'text-slate-400'}`} />
-                <span className={`group-hover:text-gray-200 ${isActive('/search') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium`}>Search</span>
-              </Link>
+              <div className="flex flex-col items-start">
+                <Link
+                  className={`group flex w-full items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/search') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
+                  href="/search"
+                >
+                  <SearchIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/search') ? 'text-slate-200' : 'text-slate-400'}`} />
+                  <span className={`group-hover:text-gray-200 ${isActive('/search') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium`}>Search</span>
+                </Link>
+                <Suspense fallback={<RecentSearchesNavbarSkeleton />}>
+                  {recentSearches ? (
+                    <div className="mt-4 w-full border-l border-gray-600 ml-4 pl-2 pr-8">
+                      {recentSearches.slice(0,8).map((search) => (
+                        <Link
+                          key={search.query}
+                          href={`/search?query=${search.query}`}
+                          className={`group flex items-center gap-3 py-1 px-2 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive(`/search?query=${search.query}`) ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
+                        >
+                          <span className={`group-hover:text-gray-200 ${isActive(`/search?query=${search.query}`) ? 'text-slate-200' : 'text-slate-400'} text-[13px] font-regular truncate`}>{search.query}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </Suspense>
+              </div>
             </li>
             <li>
               <Link
@@ -83,15 +132,6 @@ export function Sidebar () {
               >
                 <FileBarChart className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/reports') ? 'text-slate-200' : 'text-slate-400'}`} />
                 <span className={`group-hover:text-gray-200 ${isActive('/reports') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium`}>Reports</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                className={`group flex items-center gap-3 py-2 px-3 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/team') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
-                href="/team"
-              >
-                <UsersIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/team') ? 'text-slate-200' : 'text-slate-400'}`} />
-                <span className={`group-hover:text-gray-200 ${isActive('/team') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium`}>Team</span>
               </Link>
             </li>
           </ul>
