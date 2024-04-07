@@ -58,7 +58,34 @@ module.exports = {
         },
         novel: {
           DEFAULT: "var(--novel-highlight-default)",
+          gray: "var(--novel-highlight-gray)",
+          red: "var(--novel-highlight-red)",
+          green: "var(--novel-highlight-green)",
+          yellow: "var(--novel-highlight-yellow)",
+          purple: "var(--novel-highlight-purple)",
+          orange: "var(--novel-highlight-orange)",
+          pink: "var(--novel-highlight-pink)",
           blue: "var(--novel-highlight-blue)",
+        },
+        success: {
+          DEFAULT: "var(--success-bg)",
+          foreground: "var(--success-text)",
+          border: "var(--success-border)",
+        },
+        error: {
+          DEFAULT: "var(--error-bg)",
+          foreground: "var(--error-text)",
+          border: "var(--error-border)",
+        },
+        warning: {
+          DEFAULT: "var(--warning-bg)",
+          foreground: "var(--warning-text)",
+          border: "var(--warning-border)",
+        },
+        info: {
+          DEFAULT: "var(--info-bg)",
+          foreground: "var(--info-text)",
+          border: "var(--info-border)",
         },
       },
       borderRadius: {

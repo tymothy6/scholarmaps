@@ -128,10 +128,10 @@ export default async function Search( { searchParams }: SearchProps ) {
         return (
             <div className="flex flex-col gap-0">
                 {errorMessage ? (
-                    <Alert variant="destructive" className="mt-2 dark:bg-destructive">
-                        <AlertCircle className="w-4 h-4 dark:text-destructive-foreground" />
-                        <AlertTitle className="dark:text-destructive-foreground">Error ({errorCode}) </AlertTitle>
-                        <AlertDescription className="dark:text-destructive-foreground">{errorMessage}</AlertDescription>
+                    <Alert variant="destructive" className="mt-2 dark:bg-error dark:border-error-border">
+                        <AlertCircle className="w-4 h-4 dark:text-error-foreground" />
+                        <AlertTitle className="dark:text-error-foreground">Error ({errorCode}) </AlertTitle>
+                        <AlertDescription className="dark:text-error-foreground">{errorMessage}</AlertDescription>
                     </Alert>
                 ) : (
                     <>
@@ -147,7 +147,7 @@ export default async function Search( { searchParams }: SearchProps ) {
     }
     
     return (
-        <section className="bg-background p-4 absolute top-10 lg:left-[16.666%] lg:p-8 flex flex-col gap-2 w-full overflow-x-hidden lg:w-5/6">
+        <section className="p-4 lg:p-8 flex flex-col gap-2">
             <h1 className="mt-2 lg:mt-0 text-xl lg:text-2xl font-semibold lg:font-bold">Search {searchQuery ? <span>for<span className="ml-2 px-2 py-1 text-lg lg:text-xl border bg-secondary rounded font-mono">{searchQuery}</span></span> : ''}</h1>
             <div className="w-full">
                 {searchQuery ?

@@ -131,7 +131,7 @@ export function PageHeader () {
                 <div className="w-full">
                 <div className="flex flex-col justify-start gap-2 w-full">
                     <BoxIcon className="ml-4 mt-4 h-8 w-8 text-slate-200" />
-                <nav className="mt-16">
+                <nav className="mt-12">
                   <ul className="space-y-2">
                   <li>
                 <Link

@@ -3,6 +3,8 @@
 import * as React from "react";
 import { Suspense } from "react";
 
+import { motion } from "framer-motion";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes"
@@ -19,6 +21,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 import { 
   BoxIcon,
@@ -26,14 +34,15 @@ import {
   SearchIcon, 
   RouteIcon, 
   FileBarChart, 
-  UsersIcon, 
+  ArrowLeftToLineIcon, 
   SettingsIcon,
-  MonitorIcon 
+  MonitorIcon, 
+  ArrowRightFromLineIcon
 } from "lucide-react";
 
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 
-export function Sidebar () {
+export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: boolean, toggleSidebar: () => void }){
   const pathname = usePathname();
   const { setTheme } = useTheme();
 
@@ -74,12 +83,17 @@ export function Sidebar () {
     queryKey: ['recentSearch'],
     queryFn: fetchRecentSearches,
   });
-  
+
     return (
-        <aside className="hidden lg:z-[10] lg:fixed lg:top-0 lg:flex lg:flex-col lg:justify-between bg-slate-950 dark:bg-slate-200 w-1/6 h-[100vh] border-r p-4">
+      <motion.aside 
+      initial={{ width: "var(--sidebar-width-open)" }}
+      animate={{ width: isSidebarOpen ? "var(--sidebar-width-open)" : "var(--sidebar-width-closed)" }}
+      transition={{ duration: 0.3 }}
+      className="hidden lg:z-[10] lg:fixed lg:top-0 lg:flex lg:flex-col lg:justify-between bg-slate-950 dark:bg-slate-200 w-1/6 h-[100vh] border-r p-4"
+      >
         <div className="flex flex-col justify-start gap-2">
-          <BoxIcon className="ml-4 mt-4 h-8 w-8 text-slate-200" />
-        <nav className="mt-16">
+            <BoxIcon className="h-6 w-6 text-slate-200 ml-3 mt-3" />
+        <nav className="mt-12">
           <ul className="space-y-2">
             <li>
               <Link
@@ -87,7 +101,9 @@ export function Sidebar () {
                 href="/"
               >
                 <HomeIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/') ? 'text-slate-200' : 'text-slate-400'}`} />
+                { isSidebarOpen && (
                 <span className={`group-hover:text-gray-200 ${isActive('/') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium`}>Dashboard</span>
+                )}
               </Link>
             </li>
             <li>
@@ -97,13 +113,15 @@ export function Sidebar () {
                   href="/search"
                 >
                   <SearchIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/search') ? 'text-slate-200' : 'text-slate-400'}`} />
+                  { isSidebarOpen && (
                   <span className={`group-hover:text-gray-200 ${isActive('/search') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium`}>Search</span>
+                  )}
                 </Link>
-                <Suspense fallback={<RecentSearchesNavbarSkeleton />}>
-                  {recentSearches ? (
+                  {recentSearches && isSidebarOpen ? (
+                    <Suspense fallback={<RecentSearchesNavbarSkeleton />}>
                     <div className="mt-4 w-full border-l border-gray-600 ml-4 pl-2 pr-8">
                       {recentSearches.slice(0,8).map((search) => (
-                        <Link
+                        <Link  
                           key={search.query}
                           href={`/search?query=${search.query}`}
                           className={`group flex items-center gap-3 py-1 px-2 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive(`/search?query=${search.query}`) ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
@@ -112,8 +130,8 @@ export function Sidebar () {
                         </Link>
                       ))}
                     </div>
+                    </Suspense>
                   ) : null}
-                </Suspense>
               </div>
             </li>
             <li>
@@ -122,7 +140,9 @@ export function Sidebar () {
                 href="/map"
               >
                 <RouteIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/map') ? 'text-slate-200' : 'text-slate-400'}`} />
+                { isSidebarOpen && (
                 <span className={`group-hover:text-gray-200 ${isActive('/map') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium`}>Map</span>
+                )}
               </Link>
             </li>
             <li>
@@ -131,11 +151,14 @@ export function Sidebar () {
                 href="/reports"
               >
                 <FileBarChart className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/reports') ? 'text-slate-200' : 'text-slate-400'}`} />
+                { isSidebarOpen && (
                 <span className={`group-hover:text-gray-200 ${isActive('/reports') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium`}>Reports</span>
+                )}
               </Link>
             </li>
           </ul>
         </nav>
+        { isSidebarOpen && (
         <nav className="mt-8">
           <h3 className="text-[13px] text-slate-400 font-medium tracking-wide pl-3 pb-2">Your teams</h3>
           <ul className="space-y-2">
@@ -177,15 +200,20 @@ export function Sidebar () {
             </li>
           </ul>
         </nav>
+        )}
         </div>
+        <div className="flex items-center gap-2 pr-2 w-full">
+        { isSidebarOpen && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="group flex justify-start items-center gap-3 py-2 px-3 rounded hover:bg-slate-900 data-[state=open]:bg-slate-900 data-[state=open]:text-slate-200">
+          <Button variant="ghost" className="w-full group flex justify-start items-center gap-3 py-2 px-3 rounded hover:bg-slate-900 data-[state=open]:bg-slate-900 data-[state=open]:text-slate-200">
             <SettingsIcon className="w-5 h-5 text-slate-400 group-hover:text-slate-200" />
+            { isSidebarOpen && (
             <span className="text-slate-400 group-hover:text-gray-200 font-medium">Settings</span>
+            )}
           </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent align="start">
             <DropdownMenuLabel>Theme</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => setTheme("light")}>
@@ -202,6 +230,29 @@ export function Sidebar () {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        </aside>
+        )}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+              variant="ghost" 
+              size="icon" 
+              className="rounded-lg w-10 group hover:bg-slate-900"
+              onClick={toggleSidebar}
+              >
+                { isSidebarOpen ? 
+                  <ArrowLeftToLineIcon className="w-[1.2rem] h-[1.2rem] text-slate-400 group-hover:text-slate-200" />
+                  : 
+                  <ArrowRightFromLineIcon className="w-[1.2rem] h-[1.2rem] text-slate-400 group-hover:text-slate-200" />
+                }
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent align="end" className="text-sm">
+              { isSidebarOpen ? 'Collapse sidebar' : 'Expand' }
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        </div>
+      </motion.aside>
     )
 }

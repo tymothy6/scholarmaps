@@ -8,7 +8,7 @@ export async function generateMetadata({ searchParams }: { searchParams: {[key: 
 
 export default function Reports() {
     return (
-        <section className="bg-background absolute lg:left-[16.666%] flex flex-col gap-2 w-full overflow-x-hidden lg:w-5/6">
+        <section className="flex flex-col gap-2">
             <FlowChart variant="figma" />
         </section>
     )
