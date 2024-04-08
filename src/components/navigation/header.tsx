@@ -1,8 +1,8 @@
 "use client"
 
-import * as React from "react"
+import * as React from "react";
 
-import Link from "next/link"
+import Link from "next/link";
 
 import { useRouter, usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
@@ -73,7 +73,7 @@ import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
-export function PageHeader () {
+export function PageHeader ({ isSidebarOpen }: { isSidebarOpen: boolean}) {
     const session = useSession();
     const router = useRouter();
     const pathname = usePathname();
@@ -117,8 +117,13 @@ export function PageHeader () {
     const alternateRoutes = ["/reports"];
     const isAlternateRoute = alternateRoutes.some((route) => pathname.startsWith(route));
 
-    return (
-        <header className="fixed top-0 left-0 z-[49] w-full lg:w-5/6 lg:left-[16.666%] h-max">
+      return (
+          <header
+          className={`fixed top-0 z-[9] h-max transition-all duration-300 ${isSidebarOpen ? 
+            'w-[var(--content-width-open)] left-[var(--content-left-open)]' :
+            'w-[var(--content-width-closed)] left-[var(--content-left-closed)]'
+          }`}
+          >
           <div className="flex items-center w-full p-2 bg-background shadow-sm border-b">
             <div className="flex gap-2 w-full">
               <Sheet>

@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { PageHeader } from "@/components/navigation/header"; 
 import { Sidebar } from "@/components/navigation/sidebar";
 
@@ -17,25 +16,16 @@ export default function DashboardLayout({
     return (
         <main>
           <FlowProvider>
-            <PageHeader />
+            <PageHeader isSidebarOpen={isSidebarOpen} />
             <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-              <AnimatePresence>
-                <motion.div
-                key="content"
-                initial={{
-                  width: "var(--content-width-open)",
-                  left: "var(--content-left-open)",
-                }}
-                animate={{
-                  width: isSidebarOpen ? "var(--content-width-open)" : "var(--content-width-closed)",
-                  left: isSidebarOpen ? "var(--content-left-open)" : "var(--content-left-closed)",
-                }}
-                transition={{ duration: 0.3 }}
-                className="absolute top-10 w-full lg:w-auto"
-                >
-                  {children}
-                </motion.div> 
-              </AnimatePresence>
+              <div
+                className={`absolute top-10 w-full lg:w-auto transition-all duration-300 ${isSidebarOpen ?
+                  "w-[var(--content-width-open)] left-[var(--content-left-open)]" : 
+                  "w-[var(--content-width-closed)] left-[var(--content-left-closed)]" }
+                `}
+              >
+                {children}
+              </div> 
           </FlowProvider>
         </main>
 
