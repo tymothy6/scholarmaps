@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 
 import { type RecentSearchResponse } from './page';
+import { formatMMDDTimestamp } from '@/lib/timestamp';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { toast } from 'sonner';
@@ -31,7 +32,7 @@ export function RecentSearches ({ recentSearches }:{ recentSearches: RecentSearc
                             onClick={() => handleClick(search.query)} 
                             className="w-max p-4 text-sm font-medium border text-foreground bg-background hover:bg-muted"
                             >
-                                {search.query}
+                                <span>{search.query}</span>
                             </Button>
                         </li>
                     ))

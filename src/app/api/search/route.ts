@@ -76,9 +76,9 @@ export async function GET(request: NextRequest) {
                             },
                             searchResponse: {
                                 create: {
-                                    total: data.total,
-                                    offset: data.offset,
-                                    next: data.next,
+                                    total: data.total ?? 0,
+                                    offset: data.offset ?? 0,
+                                    next: data.next ?? 0,
                                     data: {
                                         create: data.data.map((result: SearchPaperResult) => ({
                                             paperId: result.paperId,
@@ -118,9 +118,9 @@ export async function GET(request: NextRequest) {
                             },
                             searchResponse: {
                                 create: {
-                                    total: data.total,
-                                    offset: data.offset,
-                                    next: data.next,
+                                    total: data.total ?? 0,
+                                    offset: data.offset ?? 0,
+                                    next: data.next ?? 0,
                                     data: {
                                         create: data.data.map((result: SearchPaperResult) => ({
                                             paperId: result.paperId,

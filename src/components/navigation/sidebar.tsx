@@ -87,7 +87,7 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
         isSidebarOpen ? "w-[var(--sidebar-width-open)]" : "w-[var(--sidebar-width-closed)]"}`}
       >
         <div className="flex flex-col justify-start gap-2">
-            <BoxIcon className="h-6 w-6 text-slate-200 ml-3 mt-3" />
+            <BoxIcon className={` ${isSidebarOpen ? 'h-10 w-10' : 'h-6 w-6'} transition-all duration-300 text-slate-200 ml-3 mt-3`} />
         <nav className="mt-12">
           <ul className="space-y-2">
             <li>
@@ -118,7 +118,7 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
                 </Link>
                 { isLoading ? <RecentSearchesNavbarSkeleton /> :
                   <div
-                  className={`${isSidebarOpen ? 'block' : 'hidden'} mt-2 w-full`}
+                  className={`${isSidebarOpen ? 'block' : 'hidden'} transition-all duration-300 mt-2 w-full`}
                   >
                       {(recentSearches ?? []).slice(0,8).map((search) => (
                         <Link  
@@ -169,8 +169,8 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
                 className="group flex items-center gap-2 py-2 px-3 rounded transition-colors duration-300 hover:bg-slate-900"
                 href="#"
               >
-                <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[10px] font-mono">T</kbd>
-                <span className={`text-slate-400 group-hover:text-gray-200 text-sm font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 w-full" : "opacity-0 max-w-0"}`}>Tailwind Bio</span>
+                <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[11px] font-mono">T</kbd>
+                <span className={`text-slate-400 group-hover:text-gray-200 text-[13px] font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 w-full" : "opacity-0 max-w-0"}`}>Tailwind Bio</span>
               </Link>
             </li>
             <li>
@@ -178,8 +178,8 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
                 className="group flex items-center gap-2 py-2 px-3 rounded transition-colors duration-300 hover:bg-slate-900"
                 href="#"
               >
-                <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[10px] font-mono">V</kbd>
-                <span className={`text-slate-400 group-hover:text-gray-200 text-sm font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 w-full" : "opacity-0 max-w-0"}`}>Vercel Labs</span>
+                <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[11px] font-mono">V</kbd>
+                <span className={`text-slate-400 group-hover:text-gray-200 text-[13px] font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 w-full" : "opacity-0 max-w-0"}`}>Vercel Labs</span>
               </Link>
             </li>
             <li>
@@ -187,8 +187,8 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
                 className="group flex items-center gap-2 py-2 px-3 rounded transition-colors duration-300 hover:bg-slate-900"
                 href="#"
               >
-                <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[10px] font-mono">A</kbd>
-                <span className={`text-slate-400 group-hover:text-gray-200 text-sm font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 w-full" : "opacity-0 max-w-0"}`}>AstraZeneca</span>
+                <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[11px] font-mono">A</kbd>
+                <span className={`text-slate-400 group-hover:text-gray-200 text-[13px] font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 w-full" : "opacity-0 max-w-0"}`}>AstraZeneca</span>
               </Link>
             </li>
             <li>
@@ -196,14 +196,14 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
                 className="group flex items-center gap-2 py-2 px-3 rounded transition-colors duration-300 hover:bg-slate-900"
                 href="#"
               >
-                <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[10px] font-mono">N</kbd>
-                <span className={`text-slate-400 group-hover:text-gray-200 text-sm font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 w-full" : "opacity-0 max-w-0"}`}>Novartis</span>
+                <kbd className="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-slate-500 text-[11px] font-mono">N</kbd>
+                <span className={`text-slate-400 group-hover:text-gray-200 text-[13px] font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 w-full" : "opacity-0 max-w-0"}`}>Novartis</span>
               </Link>
             </li>
           </ul>
         </nav>
         </div>
-        <div className="flex items-center justify-center gap-2 w-full">
+        <div className="flex items-center justify-between gap-2 w-full">
         { isSidebarOpen && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -238,7 +238,7 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
               <Button 
               variant="ghost" 
               size="icon" 
-              className="rounded-lg w-12 group hover:bg-slate-900"
+              className={`rounded-lg ${isSidebarOpen ? 'w-12' : 'w-10'} group hover:bg-slate-900`}
               onClick={toggleSidebar}
               >
                 { isSidebarOpen ? 

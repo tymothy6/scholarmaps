@@ -118,7 +118,7 @@ export default async function Search( { searchParams }: SearchProps ) {
 
             if ('data' in response) { // successful response
                 results = response.data;
-                timestamp = response.createdAt;
+                timestamp = response.updatedAt; // use updatedAt as the timestamp
             } else {
                 errorMessage = response.error.message;
                 errorCode = response.error.code;
@@ -128,10 +128,10 @@ export default async function Search( { searchParams }: SearchProps ) {
         return (
             <div className="flex flex-col gap-0">
                 {errorMessage ? (
-                    <Alert variant="destructive" className="mt-2 dark:bg-error dark:border-error-border">
-                        <AlertCircle className="w-4 h-4 dark:text-error-foreground" />
-                        <AlertTitle className="dark:text-error-foreground">Error ({errorCode}) </AlertTitle>
-                        <AlertDescription className="dark:text-error-foreground">{errorMessage}</AlertDescription>
+                    <Alert variant="destructive" className="mt-2">
+                        <AlertCircle className="w-4 h-4" />
+                        <AlertTitle>Error ({errorCode}) </AlertTitle>
+                        <AlertDescription>{errorMessage}</AlertDescription>
                     </Alert>
                 ) : (
                     <>
