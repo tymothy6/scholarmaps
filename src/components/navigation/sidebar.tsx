@@ -124,7 +124,7 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
                         <Link  
                           key={search.query}
                           href={`/search?query=${search.query}`}
-                          className={`group flex items-center gap-3 py-1 ml-4 px-2 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive(`/search?query=${search.query}`) ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
+                          className={`group flex items-center gap-3 py-1 mx-4 px-2 rounded transition-colors duration-300 hover:bg-gray-900 ${isActive(`/search?query=${search.query}`) ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
                         >
                           <span className={`group-hover:text-gray-200 ${isActive(`/search?query=${search.query}`) ? 'text-slate-200' : 'text-slate-400'} text-[13px] font-regular truncate`}>{search.query}</span>
                         </Link>

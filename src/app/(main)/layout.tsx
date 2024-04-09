@@ -19,7 +19,7 @@ export default function DashboardLayout({
             <PageHeader isSidebarOpen={isSidebarOpen} />
             <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
               <div
-                className={`absolute top-10 w-full lg:w-auto transition-all duration-300 ${isSidebarOpen ?
+                className={`absolute top-10 w-full transition-all duration-300 ${isSidebarOpen ?
                   "w-[var(--content-width-open)] left-[var(--content-left-open)]" : 
                   "w-[var(--content-width-closed)] left-[var(--content-left-closed)]" }
                 `}

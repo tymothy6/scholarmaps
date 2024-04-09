@@ -61,83 +61,174 @@ export async function GET(request: NextRequest) {
 
             try {
                 // (1) Save the search query and response to the database
-                const queryData = await prisma.searchQuery.upsert({
-                    where: {
-                        query: urlQuery,
-                    },
-                    update: {
-                        user: {
-                            connect: {
-                                id: userId,
-                            },
-                        },
-                        searchResponse: {
-                            update: {
-                                total: data.total,
-                                offset: data.offset,
-                                next: data.next,
-                                data: {
-                                    create: data.data.map((result: SearchPaperResult) => ({
-                                        paperId: result.paperId,
-                                        url: result.url,
-                                        title: result.title,
-                                        abstract: result.abstract ?? '',
-                                        year: result.year,
-                                        referenceCount: result.referenceCount,
-                                        citationCount: result.citationCount,
-                                        influentialCitationCount: result.influentialCitationCount,
-                                        tldr: result.tldr ?? {},
-                                        journal: result.journal ?? {},
-                                        authors: result.authors,
-                                        publicationTypes: result.publicationTypes ?? [],
-                                        isOpenAccess: result.isOpenAccess ?? false,
-                                        openAccessPdf: result.openAccessPdf ?? '',
-                                    })),
-                                },
-                            },
-                        },
-                    },
-                    create: {
-                        query: urlQuery,
-                        user: {
-                            connect: {
-                                id: userId,
-                            },
-                        },
-                        searchResponse: {
-                            create: {
-                                total: data.total,
-                                offset: data.offset,
-                                next: data.next,
-                                data: {
-                                    create: data.data.map((result: SearchPaperResult) => ({
-                                        paperId: result.paperId,
-                                        url: result.url,
-                                        title: result.title,
-                                        abstract: result.abstract ?? '',
-                                        year: result.year,
-                                        referenceCount: result.referenceCount,
-                                        citationCount: result.citationCount,
-                                        influentialCitationCount: result.influentialCitationCount,
-                                        tldr: result.tldr ?? {},
-                                        journal: result.journal ?? {},
-                                        authors: result.authors,
-                                        publicationTypes: result.publicationTypes ?? [],
-                                        isOpenAccess: result.isOpenAccess ?? false,
-                                        openAccessPdf: result.openAccessPdf ?? '',
-                                    })),
-                                },
-                            },
-                        },
-                    },
-                    include: {
-                        searchResponse: {
-                            include: {
-                                data: true,
-                            },
-                        },
-                    }
+                const existingQuery = await prisma.searchQuery.findUnique({
+                    where: { query: urlQuery },
                 });
+
+                let queryData;
+                // If an existing query exists, update it and create a new search response
+                if (existingQuery) {
+                    queryData = await prisma.searchQuery.update({
+                        where: { query: urlQuery },
+                        data: {
+                            user: {
+                                connect: { id: userId },
+                            },
+                            searchResponse: {
+                                create: {
+                                    total: data.total,
+                                    offset: data.offset,
+                                    next: data.next,
+                                    data: {
+                                        create: data.data.map((result: SearchPaperResult) => ({
+                                            paperId: result.paperId,
+                                            url: result.url,
+                                            title: result.title,
+                                            abstract: result.abstract ?? '',
+                                            year: result.year,
+                                            referenceCount: result.referenceCount,
+                                            citationCount: result.citationCount,
+                                            influentialCitationCount: result.influentialCitationCount,
+                                            tldr: result.tldr ?? {},
+                                            journal: result.journal ?? {},
+                                            authors: result.authors,
+                                            publicationTypes: result.publicationTypes ?? [],
+                                            isOpenAccess: result.isOpenAccess ?? false,
+                                            openAccessPdf: result.openAccessPdf ?? '',
+                                            })),
+                                    },
+                                },
+                            },
+                        },
+                        include: {
+                            searchResponse: {
+                                include: {
+                                    data: true,
+                                },
+                            },
+                        },
+                    });
+                } else {
+                    // If the query doesn't exist, create a new query and search response
+                    queryData = await prisma.searchQuery.create({
+                        data: {
+                            query: urlQuery,
+                            user: {
+                                connect: { id: userId },
+                            },
+                            searchResponse: {
+                                create: {
+                                    total: data.total,
+                                    offset: data.offset,
+                                    next: data.next,
+                                    data: {
+                                        create: data.data.map((result: SearchPaperResult) => ({
+                                            paperId: result.paperId,
+                                            url: result.url,
+                                            title: result.title,
+                                            abstract: result.abstract ?? '',
+                                            year: result.year,
+                                            referenceCount: result.referenceCount,
+                                            citationCount: result.citationCount,
+                                            influentialCitationCount: result.influentialCitationCount,
+                                            tldr: result.tldr ?? {},
+                                            journal: result.journal ?? {},
+                                            authors: result.authors,
+                                            publicationTypes: result.publicationTypes ?? [],
+                                            isOpenAccess: result.isOpenAccess ?? false,
+                                            openAccessPdf: result.openAccessPdf ?? '',
+                                            })),
+                                    },
+                                },
+                            },
+                        },
+                        include: {
+                            searchResponse: {
+                                include: {
+                                    data: true,
+                                },
+                            },
+                        },
+                    });
+                }
+                
+                // const queryData = await prisma.searchQuery.upsert({
+                //     where: {
+                //         query: urlQuery,
+                //     },
+                //     update: {
+                //         user: {
+                //             connect: {
+                //                 id: userId,
+                //             },
+                //         },
+                //         searchResponse: {
+                //             update: {
+                //                 total: data.total,
+                //                 offset: data.offset,
+                //                 next: data.next,
+                //                 data: {
+                //                     create: data.data.map((result: SearchPaperResult) => ({
+                //                         paperId: result.paperId,
+                //                         url: result.url,
+                //                         title: result.title,
+                //                         abstract: result.abstract ?? '',
+                //                         year: result.year,
+                //                         referenceCount: result.referenceCount,
+                //                         citationCount: result.citationCount,
+                //                         influentialCitationCount: result.influentialCitationCount,
+                //                         tldr: result.tldr ?? {},
+                //                         journal: result.journal ?? {},
+                //                         authors: result.authors,
+                //                         publicationTypes: result.publicationTypes ?? [],
+                //                         isOpenAccess: result.isOpenAccess ?? false,
+                //                         openAccessPdf: result.openAccessPdf ?? '',
+                //                     })),
+                //                 },
+                //             },
+                //         },
+                //     },
+                //     create: {
+                //         query: urlQuery,
+                //         user: {
+                //             connect: {
+                //                 id: userId,
+                //             },
+                //         },
+                //         searchResponse: {
+                //             create: {
+                //                 total: data.total,
+                //                 offset: data.offset,
+                //                 next: data.next,
+                //                 data: {
+                //                     create: data.data.map((result: SearchPaperResult) => ({
+                //                         paperId: result.paperId,
+                //                         url: result.url,
+                //                         title: result.title,
+                //                         abstract: result.abstract ?? '',
+                //                         year: result.year,
+                //                         referenceCount: result.referenceCount,
+                //                         citationCount: result.citationCount,
+                //                         influentialCitationCount: result.influentialCitationCount,
+                //                         tldr: result.tldr ?? {},
+                //                         journal: result.journal ?? {},
+                //                         authors: result.authors,
+                //                         publicationTypes: result.publicationTypes ?? [],
+                //                         isOpenAccess: result.isOpenAccess ?? false,
+                //                         openAccessPdf: result.openAccessPdf ?? '',
+                //                     })),
+                //                 },
+                //             },
+                //         },
+                //     },
+                //     include: {
+                //         searchResponse: {
+                //             include: {
+                //                 data: true,
+                //             },
+                //         },
+                //     }
+                // });
 
                 // (2) Return the search response to the client 
                 const responseData = {
