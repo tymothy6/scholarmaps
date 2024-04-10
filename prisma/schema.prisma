@@ -23,6 +23,7 @@ model User {
   accounts Account[]
   editorHistory NovelEditorHistory[]
   searchQueries SearchQuery[]
+  searchBookmarks SearchBookmark[]
 }
 
 model Account {
@@ -69,7 +70,7 @@ model SearchResponse {
 
 model SearchPaperResult {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  paperId   String
+  paperId   String   @unique
   title     String
   url       String
   abstract  String?
@@ -87,6 +88,19 @@ model SearchPaperResult {
   searchResponseId String @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  bookmarks SearchBookmark[]
+}
+
+model SearchBookmark {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  paperId   String   
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  paper SearchPaperResult @relation(fields: [paperId], references: [paperId])
+
+  @@unique([userId, paperId])
 }
 
 

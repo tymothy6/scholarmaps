@@ -39,6 +39,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { toast } from "sonner"
 
 import {
   ColumnDef,
@@ -174,6 +175,30 @@ export function SearchResultTable<TData, TValue>({
   };
 
   const filteredResults = table.getFilteredRowModel().rows?.length;
+
+  // const isSelected = row.getIsSelected();
+
+  // const handleBookmark = async() => {
+  //     const paperId = row.original.paperId;
+
+  //     try { 
+  //         const response = await fetch('/api/bookmarks/create', {
+  //             method: 'POST',
+  //             headers: {
+  //                 'Content-Type': 'application/json',
+  //             },
+  //             body: JSON.stringify({ paperId }),
+  //         });
+
+  //         if (response.ok) {
+  //             toast.message('Bookmark added ✅');
+  //         } else {
+  //             toast.error('Failed to add bookmark ❌');
+  //         }
+  //     } catch (error) {
+  //         console.error('Error saving bookmark:', error);
+  //     }
+  // };
 
   return (
     <div>

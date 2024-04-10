@@ -255,7 +255,7 @@ export function AbstractCell ({ row }: { row: Row<SearchPaperResult> }) {
 }
 
 export function ActionsCell ({ row }: { row: Row<SearchPaperResult> }) {
-    const result = row.original
+    const result = row.original;
 
         return (
             <DropdownMenu>
