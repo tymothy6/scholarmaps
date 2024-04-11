@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma-db';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
+import { SearchPaperResult } from '@prisma/client';
 
 export async function POST(request: NextRequest) {
     const session = await getServerSession(authOptions);
@@ -17,17 +18,43 @@ export async function POST(request: NextRequest) {
     }
 
     try { 
-        // (1) Create bookmarks
-        const createResult = await prisma.searchBookmark.createMany({
-            data: paperIds.map((paperId) => ({
+        // (1) Check for existing bookmarks
+        const existingBookmarks = await prisma.searchBookmark.findMany({
+            where: {
+                userId: session.user.id,
+                paperId: {
+                    in: paperIds,
+                },
+            },
+            select: {
+                paperId: true,
+            },
+        });
+
+        const existingPaperIds = existingBookmarks.map((bookmark: SearchPaperResult) => bookmark.paperId);
+        const newPaperIds = paperIds.filter((paperId) => !existingPaperIds.includes(paperId));
+
+        // (2) Create bookmarks & update the paper results
+        const createdBookmarks = await prisma.searchBookmark.createMany({
+            data: newPaperIds.map((paperId) => ({
                 userId: session.user.id,
                 paperId,
             })),
-            skipDuplicates: true,
         });
 
-        // (2) Return response with duplicates skipped
-        const createdCount = createResult.count;
+        await prisma.searchPaperResult.updateMany({
+            where: {
+                paperId: {
+                    in: newPaperIds,
+                },
+            },
+            data: {
+                bookmarked: true,
+            },
+        });
+
+        // (3) Return response with counts
+        const createdCount = createdBookmarks.count;
         const skippedCount = paperIds.length - createdCount;
 
         return NextResponse.json({

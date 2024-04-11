@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-        // (1) Delete bookmarks
+        // (1) Delete bookmarks & update the paper results
         const deleteResult = await prisma.searchBookmark.deleteMany({
             where: {
                 userId: session.user.id,
@@ -27,6 +27,17 @@ export async function POST(request: NextRequest) {
             },
         });
 
+        await prisma.searchPaperResult.updateMany({
+            where: {
+                paperId: {
+                    in: paperIds,
+                },
+            },
+            data: {
+                bookmarked: false,
+            },
+        });
+        
         // (2) Return response
         const deletedCount = deleteResult.count;
 

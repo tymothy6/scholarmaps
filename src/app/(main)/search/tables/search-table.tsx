@@ -4,6 +4,8 @@ import * as React from "react"
 
 import { useMediaQuery } from "@/lib/use-media-query"
 
+import { type SearchPaperResult } from "./search-columns"
+
 import { Button } from "@/components/ui/button"
 import { 
   Card
@@ -100,7 +102,7 @@ const filters: Filter[] = [
   }
 ]
 
-export function SearchResultTable<TData, TValue>({
+export function SearchResultTable<TData extends SearchPaperResult, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -213,7 +215,10 @@ export function SearchResultTable<TData, TValue>({
               </Popover>
             </Tooltip>
           </TooltipProvider>
-          <BookmarkAction<TData> selectedRows={selectedRows} />
+          <BookmarkAction<TData> 
+          selectedRows={selectedRows}
+          data={data}
+           />
           </div>
         ) : 
         (

@@ -53,7 +53,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 
-import { InfoIcon, MoreHorizontalIcon, NavigationIcon, Link2Icon, BookmarkPlusIcon, XIcon, FileSearchIcon } from 'lucide-react';
+import { BookmarkIcon, InfoIcon, MoreHorizontalIcon, NavigationIcon, Link2Icon, BookmarkPlusIcon, XIcon, FileSearchIcon, Delete } from 'lucide-react';
 
 async function copyToClipboard(text: string) {
     await navigator.clipboard.writeText(text);
@@ -72,7 +72,7 @@ export function TitleCell ({ row }: { row: Row<SearchPaperResult> }) {
 
         if (isDesktop) {
             return (
-                <div className="pl-0 pr-2 py-2">
+                <div className="pl-0 pr-2 py-2 relative">
                     <HoverCard>
                         <HoverCardTrigger asChild>
                             <Button variant="link" className="w-max whitespace-normal h-max focus-visible:ring-0" asChild>
@@ -105,6 +105,7 @@ export function TitleCell ({ row }: { row: Row<SearchPaperResult> }) {
                             </div>
                         </HoverCardContent>
                     </HoverCard>
+                    { result.bookmarked && <BookmarkIcon className="h-4 w-4 absolute top-2 right-0" /> }
                 </div>
             )
         }
@@ -257,6 +258,49 @@ export function AbstractCell ({ row }: { row: Row<SearchPaperResult> }) {
 export function ActionsCell ({ row }: { row: Row<SearchPaperResult> }) {
     const result = row.original;
 
+    const handleCreate = async (paperId: string) => {
+        try {
+          const response = await fetch('/api/bookmarks/create', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ paperId }),
+          });
+    
+          if (!response.ok) {
+            throw new Error('Failed to create bookmark');
+          }
+    
+          toast.message('Bookmark created successfully');
+        } catch (error) {
+          console.error('Error creating bookmark:', error);
+          toast.error('Failed to create bookmark');
+        }
+      };
+    
+      const handleDelete = async (paperId: string) => {
+        try {
+          const response = await fetch('/api/bookmarks/delete', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ paperId }),
+          });
+    
+          if (!response.ok) {
+            throw new Error('Failed to delete bookmark');
+          }
+    
+          toast.message('Bookmark deleted successfully');
+        } catch (error) {
+          console.error('Error deleting bookmark:', error);
+          toast.error('Failed to delete bookmark');
+        }
+      };
+    
+
         return (
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -289,10 +333,20 @@ export function ActionsCell ({ row }: { row: Row<SearchPaperResult> }) {
                         <Link2Icon className="mr-2 h-4 w-4" />
                         Copy paper URL
                     </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => alert(`Saving ${result.title}`)}>
+                    <DropdownMenuItem 
+                        onClick={() => handleCreate(result.paperId)}
+                    >
                         <BookmarkPlusIcon className="mr-2 h-4 w-4" />
-                        Save
+                        Bookmark
                     </DropdownMenuItem>
+                    { result.bookmarked && 
+                    <DropdownMenuItem 
+                        onClick={() => handleDelete(result.paperId)}
+                    >
+                        <Delete className="mr-2 h-4 w-4 text-destructive" />
+                        <span className="text-destructive">Remove bookmark</span>
+                    </DropdownMenuItem>
+                    }
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onSelect={() => alert(`Deleting ${result.title}`)}>
                         <XIcon className="mr-2 h-4 w-4" />

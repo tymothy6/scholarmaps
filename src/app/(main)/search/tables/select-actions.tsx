@@ -13,13 +13,23 @@ import {
     TooltipContent,
 } from "@/components/ui/tooltip"
 import { toast } from "sonner"
-import { Bookmark, Delete } from "lucide-react";
+import { BookmarkPlus, Delete } from "lucide-react";
 
-interface BookmarkActionProps<TData> {
+interface BookmarkActionProps<TData extends SearchPaperResult> {
     selectedRows: Row<TData>[];
+    data: TData[];
 }
 
-export function BookmarkAction<TData>({ selectedRows }: BookmarkActionProps<TData>) {
+export function BookmarkAction<TData extends SearchPaperResult>({ 
+    selectedRows,
+    data
+ }: BookmarkActionProps<TData>) {
+
+    // Check if selected rows have bookmarked items
+    const itemsBookmarked = selectedRows.some((row) =>
+        data.find((paper) => paper.paperId === row.original.paperId)?.bookmarked
+    );
+
     const handleCreate = async () => {
         try {
             const paperIds = selectedRows.map((row) => (row.original as SearchPaperResult).paperId);
@@ -36,7 +46,7 @@ export function BookmarkAction<TData>({ selectedRows }: BookmarkActionProps<TDat
               }
 
             const data = await response.json();
-            toast.message(`✅ ${data.message}`);
+            toast.success(`✅ ${data.message}`);
         } catch (error) {
           console.error('Error creating bookmarks:', error);
           toast.error('Failed to create bookmarks.');
@@ -59,7 +69,7 @@ export function BookmarkAction<TData>({ selectedRows }: BookmarkActionProps<TDat
               }
             
               const data = await response.json();
-              toast.message(`✅ ${data.message}`);
+              toast.success(`✅ ${data.message}`);
         } catch (error) {
           console.error('Error deleting bookmarks:', error);
           toast.error('Failed to delete bookmarks.');
@@ -77,11 +87,12 @@ export function BookmarkAction<TData>({ selectedRows }: BookmarkActionProps<TDat
                         onClick={handleCreate} 
                         disabled={selectedRows.length === 0}
                         className="border-dashed border-primary/50 px-2">
-                            <Bookmark className="h-4 w-4" />
+                            <BookmarkPlus className="h-4 w-4" />
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent className="text-sm">Create bookmark</TooltipContent>
                 </Tooltip>
+                {itemsBookmarked && (
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button 
@@ -96,6 +107,7 @@ export function BookmarkAction<TData>({ selectedRows }: BookmarkActionProps<TDat
                     </TooltipTrigger>
                     <TooltipContent className="text-sm">Delete bookmark</TooltipContent>
                 </Tooltip>
+                )}
             </TooltipProvider>
         </div>
       )
