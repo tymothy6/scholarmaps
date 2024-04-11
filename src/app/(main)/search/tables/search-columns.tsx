@@ -47,6 +47,7 @@ export type SearchPaperResult = {
     url: string // URL to the open access PDF
     status: string
   } 
+  bookmarked: boolean // whether the paper is bookmarked by the current user
 }
 
 // Type guard functions

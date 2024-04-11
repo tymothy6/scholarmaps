@@ -10,32 +10,31 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ message: 'User ID is required. Please authenticate before issuing your request.'}, { status: 401 })
     }
 
-    const { paperId } = await request.json();
+    const { paperIds } = await request.json();
+
+    if (!Array.isArray(paperIds)) {
+        return NextResponse.json({ message: 'Invalid request.' }, { status: 400 });
+    }
 
     try { 
-        // (1) Check if the bookmark already exists
-        const existingBookmark = await prisma.searchBookmark.findFirst({
-            where: {
+        // (1) Create bookmarks
+        const createResult = await prisma.searchBookmark.createMany({
+            data: paperIds.map((paperId) => ({
                 userId: session.user.id,
                 paperId,
-            },
+            })),
+            skipDuplicates: true,
         });
 
-        if (existingBookmark) {
-            return NextResponse.json({ message: 'Bookmark already exists.' }, { status: 400 });
-        } else {
-            // (2) Create the bookmark
-            await prisma.searchBookmark.create({
-                data: {
-                    userId: session.user.id,
-                    paperId,
-                },
-            });
-        }
+        // (2) Return response with duplicates skipped
+        const createdCount = createResult.count;
+        const skippedCount = paperIds.length - createdCount;
 
-        return NextResponse.json({ message: 'Bookmark added successfully.' }, { status: 200 });
+        return NextResponse.json({
+            message: `${createdCount} bookmarks created successfully. ${skippedCount} duplicates were skipped.`,
+        }, { status: 200 });
     } catch (error) {
-        console.error('Failed to add bookmark:', error);
-        return NextResponse.json({ message: 'Failed to add bookmark.' }, { status: 500 });
+        console.error('Failed to add bookmarks:', error);
+        return NextResponse.json({ message: 'Failed to add bookmarks.' }, { status: 500 });
     }
 }

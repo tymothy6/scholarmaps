@@ -67,6 +67,8 @@ import {
 import { DataTablePagination } from "@/components/patterns/table-pagination"
 import { DataTableViewOptions } from "@/components/patterns/table-column-toggle"
 
+import { BookmarkAction } from "./select-actions"
+
 import { FilterIcon, RotateCcwIcon } from "lucide-react"
 
 interface DataTableProps<TData, TValue> {
@@ -116,6 +118,7 @@ export function SearchResultTable<TData, TValue>({
 
 
   const isDesktop = useMediaQuery("(min-width: 768px)");
+
   const [visibleColumns, setVisibleColumns] = React.useState({
     select: true,
     journal: true,
@@ -175,30 +178,7 @@ export function SearchResultTable<TData, TValue>({
   };
 
   const filteredResults = table.getFilteredRowModel().rows?.length;
-
-  // const isSelected = row.getIsSelected();
-
-  // const handleBookmark = async() => {
-  //     const paperId = row.original.paperId;
-
-  //     try { 
-  //         const response = await fetch('/api/bookmarks/create', {
-  //             method: 'POST',
-  //             headers: {
-  //                 'Content-Type': 'application/json',
-  //             },
-  //             body: JSON.stringify({ paperId }),
-  //         });
-
-  //         if (response.ok) {
-  //             toast.message('Bookmark added ✅');
-  //         } else {
-  //             toast.error('Failed to add bookmark ❌');
-  //         }
-  //     } catch (error) {
-  //         console.error('Error saving bookmark:', error);
-  //     }
-  // };
+  const selectedRows = table.getSelectedRowModel().flatRows;
 
   return (
     <div>
@@ -212,15 +192,16 @@ export function SearchResultTable<TData, TValue>({
             table.getColumn(selectedFilter.value)?.setFilterValue(event.target.value);
           }
         }}
-        className="w-full sm:max-w-sm"
+        className="w-full sm:max-w-sm h-8"
         />
         {isDesktop ? (
+          <div className="flex items-center gap-2">
           <TooltipProvider>
             <Tooltip>
               <Popover open={open} onOpenChange={setOpen}>
                 <TooltipTrigger asChild>
                 <PopoverTrigger asChild>
-                  <Button variant="secondary" size={selectedFilter ? "default" : "icon"} className="px-2">
+                  <Button variant="secondary" size={selectedFilter ? "sm" : "icon"} className="px-2">
                     {selectedFilter ? <span><FilterIcon className="inline mr-2 h-4 w-4"/>{selectedFilter.label}</span> : <FilterIcon className="h-4 w-4"/>}
                   </Button>
                 </PopoverTrigger>
@@ -232,6 +213,8 @@ export function SearchResultTable<TData, TValue>({
               </Popover>
             </Tooltip>
           </TooltipProvider>
+          <BookmarkAction<TData> selectedRows={selectedRows} />
+          </div>
         ) : 
         (
           <Drawer open={open} onOpenChange={setOpen}>

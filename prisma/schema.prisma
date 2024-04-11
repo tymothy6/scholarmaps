@@ -89,6 +89,7 @@ model SearchPaperResult {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   bookmarks SearchBookmark[]
+  bookmarked Boolean @default(false)
 }
 
 model SearchBookmark {

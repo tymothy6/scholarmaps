@@ -10,29 +10,29 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ message: 'User ID is required. Please authenticate before issuing your request.'}, { status: 401 });
     }
 
-    const { paperId } = await request.json();
+    const { paperIds } = await request.json();
+
+    if (!Array.isArray(paperIds)) {
+        return NextResponse.json({ message: 'Invalid request.' }, { status: 400 });
+    }
 
     try {
-        // (1) Find the bookmark to delete
-        const bookmark = await prisma.searchBookmark.findFirst({
+        // (1) Delete bookmarks
+        const deleteResult = await prisma.searchBookmark.deleteMany({
             where: {
                 userId: session.user.id,
-                paperId,
+                paperId: {
+                    in: paperIds,
+                },
             },
         });
 
-        if (!bookmark) {
-            return NextResponse.json({ message: 'Bookmark not found.' }, { status: 404 });
-        }
+        // (2) Return response
+        const deletedCount = deleteResult.count;
 
-        // (2) Delete the bookmark
-        await prisma.searchBookmark.delete({
-            where: {
-                id: bookmark.id,
-            },
-        });
-
-        return NextResponse.json({ message: 'Bookmark deleted successfully.' }, { status: 200 });
+        return NextResponse.json({
+            message: `${deletedCount} bookmarks deleted successfully.`,
+        }, { status: 200 });
     } catch (error) {
         console.error('Failed to delete bookmark:', error);
         return NextResponse.json({ message: 'Failed to delete bookmark.' }, { status: 500 });

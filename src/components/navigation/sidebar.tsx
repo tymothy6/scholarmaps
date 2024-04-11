@@ -87,8 +87,8 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
         isSidebarOpen ? "w-[var(--sidebar-width-open)]" : "w-[var(--sidebar-width-closed)]"}`}
       >
         <div className="flex flex-col justify-start gap-2">
-            <BoxIcon className={` ${isSidebarOpen ? 'h-10 w-10' : 'h-6 w-6'} transition-all duration-300 text-slate-200 ml-3 mt-3`} />
-        <nav className="mt-12">
+            <BoxIcon className={` ${isSidebarOpen ? 'h-8 w-8' : 'h-6 w-6'} transition-all duration-300 text-slate-200 ml-3 mt-3`} />
+        <nav className="mt-6">
           <ul className="space-y-2">
             <li>
                 <Link
@@ -120,7 +120,7 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
                   <div
                   className={`${isSidebarOpen ? 'block' : 'hidden'} transition-all duration-300 mt-2 w-full`}
                   >
-                      {(recentSearches ?? []).slice(0,8).map((search) => (
+                      {(recentSearches ?? []).slice(0,5).map((search) => (
                         <Link  
                           key={search.query}
                           href={`/search?query=${search.query}`}
