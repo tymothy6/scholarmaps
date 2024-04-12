@@ -83,10 +83,10 @@ export function BookmarkAction<TData extends SearchPaperResult>({
                     <TooltipTrigger asChild>
                         <Button 
                         size="sm"
-                        variant="outline"
+                        variant="default"
                         onClick={handleCreate} 
                         disabled={selectedRows.length === 0}
-                        className="border-dashed border-primary/50 px-2">
+                        className="px-2">
                             <BookmarkPlus className="h-4 w-4" />
                         </Button>
                     </TooltipTrigger>

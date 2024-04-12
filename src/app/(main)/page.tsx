@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { Suspense } from 'react'
 
 import { redirect } from 'next/navigation'
 
@@ -10,10 +11,9 @@ import { Card } from '@/components/ui/card'
 import { LineChartCard } from '@/components/patterns/chart-card'
 import { DashboardCards } from '@/components/patterns/dashboard-card'
 import { 
-    type DashboardResult, 
-    columns, 
-    results 
-} from './tables/dashboard-columns'
+    type BookmarkedPaperResult, 
+    columns
+ } from './tables/dashboard-fetch-columns'
 import { DashboardResultTable } from './tables/dashboard-table'
 import { LogoutAuth } from '@/components/auth/logout-auth'
 import NovelTailwindEditor from '@/components/novel/editor'
@@ -29,6 +29,37 @@ export default async function Home() {
     if (!session) {
         redirect('/login');
     }
+
+    async function fetchBookmarks() {
+        try {
+            const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+            const url = `${baseUrl}/api/bookmarks/fetch`;
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching bookmarks:', error);
+            return { total: 0, offset: 0, next: 0, data: [], createdAt: null, updatedAt: new Date() };
+        };
+    }
+
+    async function DashboardBookmarksCard(){
+        const bookmarks: BookmarkedPaperResult[] = await fetchBookmarks();
+        return (
+            <Suspense fallback={<div>Loading...</div>}>
+                <Card>
+                    <DashboardResultTable columns={columns} data={bookmarks} />
+                </Card>
+            </Suspense>
+        )
+    }
     
     return (
         <section className="p-4 lg:p-8 flex flex-col gap-2">
@@ -39,9 +70,7 @@ export default async function Home() {
                 <h2 className="hidden sm:block text-lg lg:text-xl font-semibold mt-2">Notes</h2>
                 <NovelTailwindEditor />
                 <h2 className="hidden sm:block text-lg lg:text-xl font-semibold mt-2">Bookmarks</h2>
-                <Card className="hidden sm:block">
-                    <DashboardResultTable columns={columns} data={results} />
-                </Card>
+                <DashboardBookmarksCard />
             </div>
             <div className="p-4">
                 <LogoutAuth />

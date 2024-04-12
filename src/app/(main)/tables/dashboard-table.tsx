@@ -93,17 +93,17 @@ export function DashboardResultTable<TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+              <TableCell colSpan={columns.length} className="h-48 text-center">
+                No bookmarks found. Start a search to find some papers to save.
               </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
     </div>
-        <div className="flex justify-between items-center p-2 w-full">
-            <DataTablePagination table={table} />
+        <div className="flex items-center gap-4 p-2 w-full">
             <DataTableViewOptions table={table} />
+            <DataTablePagination table={table} />
         </div>
     </div>
   )

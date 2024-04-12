@@ -314,8 +314,12 @@ export function SearchResultTable<TData extends SearchPaperResult, TValue>({
             </TableBody>
           </Table>
         </div>
-            <div className="flex items-center gap-4 px-2 py-4 w-full">
+            <div className="flex items-center gap-4 p-4 w-full">
               <DataTableViewOptions table={table} />
+              <BookmarkAction<TData> 
+                selectedRows={selectedRows}
+                data={data}
+              />
               <DataTablePagination table={table} />
             </div>
         </div>

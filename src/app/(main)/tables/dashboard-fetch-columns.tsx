@@ -20,30 +20,31 @@ import { DataTableColumnHeader } from "@/components/patterns/table-column-header
 // Components that rely on hooks
 import { AbstractCell, ActionsCell } from "./cells"
 
-// This type is based on the shape of the data returned from the Semantic Scholar (S2) Academic Graph API
-export type DashboardPaperResult = {
-  paperId: string // A unique identifier for the paper
-  url: string // URL on the S2 website
-  title: string 
-  year: number // Year of publication
-  authors: Array<{
-    authorId: string
-    name: string // 
-  }> // An array of objects, up to 500 authors will be returned
-  abstract: string // Due to legal reasons, may be missing for some papers
-  tldr: {
-    model: string;
-    text: string; // Auto-generated short summary of the paper from the SciTLDR model
-  } 
-  referenceCount: number // Total number of papers referenced by the paper
-  citationCount: number // Total number of citations S2 has found for this paper
-  influentialCitationCount: number 
-  publicationTypes: string[] // Journal Article, Conference, Review, etc
-  journal: {
-    name: string;
-    pages?: string;
-    volume?: string;
-  }
+// Shape of the data from /api/bookmarks/fetch
+export type BookmarkedPaperResult = {
+    id: string;
+    userId: string;
+    paperId: string;
+    searchPaperResultId: string;
+    createdAt: Date;
+    searchPaperResult: {
+        id: string;
+        paperId: string;
+        title: string;
+        url: string;
+        abstract: string | null;
+        year: number;
+        referenceCount: number;
+        citationCount: number;
+        influentialCitationCount: number;
+        tldr: any | null;
+        journal: any | null;
+        authors: any;
+        publicationTypes: string[];
+        isOpenAccess: boolean;
+        openAccessPdf: any | null;
+        bookmarked: boolean;
+    };
 }
 
 // Type guard functions
@@ -66,7 +67,7 @@ function isTldrObject(value: unknown): value is { model: string; text: string } 
             'text' in obj && typeof obj.text === 'string';
   }
   
-export const columns: ColumnDef<DashboardPaperResult>[] = [
+export const columns: ColumnDef<BookmarkedPaperResult>[] = [
   {
     id: "select",
     header: ({ table }) => {
@@ -173,6 +174,7 @@ export const columns: ColumnDef<DashboardPaperResult>[] = [
   },
   {
     accessorKey: "abstract",
+    header: () => <div className="p-2">Abstract</div>,
     cell: ({ row }) => {
         <AbstractCell row={row} />
     }
