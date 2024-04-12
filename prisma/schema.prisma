@@ -70,7 +70,7 @@ model SearchResponse {
 
 model SearchPaperResult {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  paperId   String   @unique
+  paperId   String   // removed @unique because duplicate papers can be returned in search results
   title     String
   url       String
   abstract  String?
@@ -95,11 +95,12 @@ model SearchPaperResult {
 model SearchBookmark {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String   @db.ObjectId
-  paperId   String   
+  paperId   String    
+  searchPaperResultId String @db.ObjectId
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  paper SearchPaperResult @relation(fields: [paperId], references: [paperId])
+  paper SearchPaperResult @relation(fields: [searchPaperResultId], references: [id])
 
   @@unique([userId, paperId])
 }
