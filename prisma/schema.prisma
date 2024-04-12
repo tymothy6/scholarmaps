@@ -70,7 +70,7 @@ model SearchResponse {
 
 model SearchPaperResult {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  paperId   String   // removed @unique because duplicate papers can be returned in search results
+  paperId   String   // removed @unique because common papers can be returned in search results
   title     String
   url       String
   abstract  String?

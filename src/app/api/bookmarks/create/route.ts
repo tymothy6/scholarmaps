@@ -34,14 +34,29 @@ export async function POST(request: NextRequest) {
         const existingPaperIds = existingBookmarks.map((bookmark: SearchPaperResult) => bookmark.paperId);
         const newPaperIds = paperIds.filter((paperId) => !existingPaperIds.includes(paperId));
 
-        // (2) Create bookmarks & update the paper results
+        // (2) Retrieve the corresponding SearchPaperResult records for the new paperIds
+        const searchPaperResults = await prisma.searchPaperResult.findMany({
+            where: {
+                paperId: {
+                in: newPaperIds,
+            },
+            },
+            select: {
+                id: true,
+                paperId: true,
+            },
+        });
+    
+        // (3) Create new SearchBookmark records
         const createdBookmarks = await prisma.searchBookmark.createMany({
-            data: newPaperIds.map((paperId) => ({
+            data: searchPaperResults.map((result: SearchPaperResult) => ({
                 userId: session.user.id,
-                paperId,
+                paperId: result.paperId,
+                searchPaperResultId: result.id,
             })),
         });
-
+    
+        // (4) Update the bookmarked field in the corresponding SearchPaperResult records
         await prisma.searchPaperResult.updateMany({
             where: {
                 paperId: {
@@ -52,8 +67,8 @@ export async function POST(request: NextRequest) {
                 bookmarked: true,
             },
         });
-
-        // (3) Return response with counts
+  
+        // (5) Return response to client
         const createdCount = createdBookmarks.count;
         const skippedCount = paperIds.length - createdCount;
 
