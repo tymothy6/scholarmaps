@@ -333,12 +333,14 @@ export function ActionsCell ({ row }: { row: Row<SearchPaperResult> }) {
                         <Link2Icon className="mr-2 h-4 w-4" />
                         Copy paper URL
                     </DropdownMenuItem>
+                    { result.bookmarked === false && 
                     <DropdownMenuItem 
                         onClick={() => handleCreate(result.paperId)}
                     >
                         <BookmarkPlusIcon className="mr-2 h-4 w-4" />
                         Bookmark
                     </DropdownMenuItem>
+                    }
                     { result.bookmarked && 
                     <DropdownMenuItem 
                         onClick={() => handleDelete(result.paperId)}

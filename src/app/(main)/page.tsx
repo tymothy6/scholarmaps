@@ -25,21 +25,23 @@ export const metadata: Metadata = {
 
 export default async function Home() {
     const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
 
     if (!session) {
         redirect('/login');
     }
 
-    async function fetchBookmarks() {
+    async function fetchBookmarks(userId: string) {
         try {
             const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
             const url = `${baseUrl}/api/bookmarks/fetch`;
 
             const response = await fetch(url, {
-                method: 'GET',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify({ userId }),
             });
 
             const data = await response.json();
@@ -51,7 +53,8 @@ export default async function Home() {
     }
 
     async function DashboardBookmarksCard(){
-        const bookmarks: BookmarkedPaperResult[] = await fetchBookmarks();
+        const bookmarks: BookmarkedPaperResult[] = await fetchBookmarks(userId ?? '');
+
         return (
             <Suspense fallback={<div>Loading...</div>}>
                 <Card>
