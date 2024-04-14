@@ -22,6 +22,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import { toast } from "sonner"
+
 // Components for pagination controls and toggling column visibility
 import { DataTablePagination } from "@/components/patterns/table-pagination"
 import { DataTableViewOptions } from "@/components/patterns/table-column-toggle"
@@ -34,7 +36,8 @@ interface DataTableProps<TData, TValue> {
 export function DashboardResultTable<TData, TValue>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
+  error
+}: DataTableProps<TData, TValue> & { error?: string | null }) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
@@ -54,6 +57,12 @@ export function DashboardResultTable<TData, TValue>({
       rowSelection,
     }
   })
+
+  React.useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   return (
     <div>

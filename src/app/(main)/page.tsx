@@ -44,21 +44,30 @@ export default async function Home() {
                 body: JSON.stringify({ userId }),
             });
 
+            if (!response.ok) {
+                throw new Error('Error fetching bookmarks.');
+            }
+
             const data = await response.json();
-            return data;
+            return { data, error: null };
         } catch (error) {
             console.error('Error fetching bookmarks:', error);
-            return { total: 0, offset: 0, next: 0, data: [], createdAt: null, updatedAt: new Date() };
+            if (error instanceof Error) {
+                return { data: [], error: error.message };
+            } else {
+                return { data: [], error: 'An error occurred.' };
+            }
         };
     }
 
     async function DashboardBookmarksCard(){
-        const bookmarks: BookmarkedPaperResult[] = await fetchBookmarks(userId ?? '');
+        
+        const { data: bookmarks, error } = await fetchBookmarks(userId ?? '');
 
         return (
             <Suspense fallback={<div>Loading...</div>}>
                 <Card>
-                    <DashboardResultTable columns={columns} data={bookmarks} />
+                    <DashboardResultTable columns={columns} data={bookmarks} error={error} />
                 </Card>
             </Suspense>
         )
