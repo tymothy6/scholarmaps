@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { useMediaQuery } from "@/lib/use-media-query"
+// import { useMediaQuery } from "@/lib/use-media-query"
 
 import { ColumnDef } from "@tanstack/react-table"
 

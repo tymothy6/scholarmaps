@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { Row } from '@tanstack/react-table';
 
-import { DashboardPaperResult } from './dashboard-fetch-columns';
+import { type BookmarkedPaperResult } from './dashboard-fetch-columns';
 
 import { useMediaQuery } from '@/lib/use-media-query';
 
@@ -41,7 +41,7 @@ import { toast } from 'sonner';
 
 import { InfoIcon, MoreHorizontalIcon } from 'lucide-react';
 
-export function AbstractCell( { row }: { row: Row<DashboardPaperResult> }) {
+export function AbstractCell( { row }: { row: Row<BookmarkedPaperResult> }) {
     const abstract = row.getValue("abstract");
         const [open, setOpen] = React.useState(false);
         const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -92,7 +92,7 @@ export function AbstractCell( { row }: { row: Row<DashboardPaperResult> }) {
         )
 }
 
-export function ActionsCell( { row }: { row: Row<DashboardPaperResult> }) {
+export function ActionsCell( { row }: { row: Row<BookmarkedPaperResult> }) {
     async function copyToClipboard(text: string) {
         await navigator.clipboard.writeText(text);
         toast.success("Copied to clipboard");
@@ -115,14 +115,14 @@ export function ActionsCell( { row }: { row: Row<DashboardPaperResult> }) {
                     >
                         Copy S2 ID
                     </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => alert(`Editing ${result.title}`)}>
+                    <DropdownMenuItem onSelect={() => alert(`Editing ${result.searchPaperResult.title}`)}>
                         Edit
                     </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => alert(`Sharing ${result.title}`)}>
+                    <DropdownMenuItem onSelect={() => alert(`Sharing ${result.searchPaperResult.title}`)}>
                         Share
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onSelect={() => alert(`Deleting ${result.title}`)}>
+                    <DropdownMenuItem onSelect={() => alert(`Deleting ${result.searchPaperResult.title}`)}>
                         Delete
                     </DropdownMenuItem>
                 </DropdownMenuContent>
