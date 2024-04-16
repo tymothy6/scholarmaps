@@ -267,16 +267,19 @@ export function SearchResultTable<TData extends SearchPaperResult, TValue>({
         </div>
         <DataTablePagination table={table} />
       </div>
-      <Card>
+      <Card className="overflow-hidden">
         <div className="w-full">
         <div className="w-full border-b">
-          <Table>
+          <Table className="h-[700px]">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id}>
+                      <TableHead 
+                      key={header.id}
+                      className="sticky top-0 bg-background z-[2]"
+                      >
                         {header.isPlaceholder
                           ? null
                           : flexRender(

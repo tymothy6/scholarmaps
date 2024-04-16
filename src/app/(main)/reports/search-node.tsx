@@ -7,6 +7,9 @@ import { useQuery } from '@tanstack/react-query';
 import { SearchPaperResult, columns } from '../search/tables/search-columns'
 import { SearchResultTable } from '../search/tables/search-table'
 
+import { useSession } from 'next-auth/react';
+import { ObjectId } from 'mongodb';
+
 import { Handle, Position } from 'reactflow';
 
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -39,6 +42,7 @@ const searchSchema = z.object({
 })
 
 function PaperSearchNode() {
+    const { data: session } = useSession();
     const [isSheetOpen, setIsSheetOpen] = React.useState(false);
     const [searchResults, setSearchResults] = React.useState<SearchPaperResult[]>([]);
 
@@ -49,12 +53,13 @@ function PaperSearchNode() {
         },
     });
 
+    const userId = session?.user?.id;
     const paperId = searchForm.watch('paperId');
 
     const fetchSearchResults = async (paperId: string) => {
         try {
             const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-            const url = `${baseUrl}/api/search?query=${paperId}`;
+            const url = `${baseUrl}/api/search?query=${paperId}&userId=${userId}`;
             const response = await fetch(url);
         
             if (!response.ok) {
@@ -70,7 +75,7 @@ function PaperSearchNode() {
         }
     }
 
-    const { isPending, isError, refetch } = useQuery({
+    const { isPending, isLoading, isError, refetch } = useQuery({
         queryKey: ['search', paperId],
         queryFn: () => fetchSearchResults(paperId),
         enabled: false,
@@ -98,11 +103,11 @@ function PaperSearchNode() {
                     </FormItem>
                   )}
                 />
-                <Button size="icon" disabled={isPending} className="mt-1">
-                    {isPending && (
+                <Button size="icon" className="mt-1">
+                    {isLoading && (
                         <Loader2Icon className="h-4 w-4 animate-spin" />
                     )}
-                    <SearchIcon className={`w-4 h-4 ${isPending ? 'hidden' : 'block'}`} /> 
+                    <SearchIcon className={`w-4 h-4 ${isLoading ? 'hidden' : 'block'}`} /> 
                 </Button>
               </form>
             </Form>
@@ -114,7 +119,7 @@ function PaperSearchNode() {
                     <SheetTrigger asChild>
                         <Button variant="default" size="sm">Results</Button>
                     </SheetTrigger>
-                    <SheetContent side="right" className="w-[50vw]">
+                    <SheetContent side="right" className="w-3/4">
                         <SheetTitle>Results</SheetTitle>
                         <SheetDescription>
                             Search for <span className="font-mono">{paperId}</span>

@@ -67,13 +67,13 @@ export function DashboardResultTable<TData, TValue>({
   return (
     <div className="w-full">
     <div className="border-b w-full">
-      <Table>
+      <Table className="h-[300px]">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className="sticky top-0">
                     {header.isPlaceholder
                       ? null
                       : flexRender(

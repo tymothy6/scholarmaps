@@ -260,12 +260,13 @@ export function ActionsCell ({ row }: { row: Row<SearchPaperResult> }) {
 
     const handleCreate = async (paperId: string) => {
         try {
+          const paperIds = [paperId];
           const response = await fetch('/api/bookmarks/create', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ paperId }),
+            body: JSON.stringify({ paperIds }),
           });
     
           if (!response.ok) {
@@ -281,12 +282,13 @@ export function ActionsCell ({ row }: { row: Row<SearchPaperResult> }) {
     
       const handleDelete = async (paperId: string) => {
         try {
+          const paperIds = [paperId];
           const response = await fetch('/api/bookmarks/delete', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ paperId }),
+            body: JSON.stringify({ paperIds }),
           });
     
           if (!response.ok) {
