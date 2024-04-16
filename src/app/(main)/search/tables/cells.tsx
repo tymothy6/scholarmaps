@@ -77,7 +77,7 @@ export function TitleCell ({ row }: { row: Row<SearchPaperResult> }) {
                         <HoverCardTrigger asChild>
                             <Button variant="link" className="w-max whitespace-normal h-max focus-visible:ring-0" asChild>
                                 <Link href={`/search/result?paperId=${result.paperId}`}>
-                                <span className="w-72 text-left">{typeof title === 'string' ? title : 'N/A'}</span>
+                                    <span className="w-72 text-left">{typeof title === 'string' ? title : 'N/A'}</span>
                                 </Link>
                             </Button>
                         </HoverCardTrigger>
@@ -272,7 +272,7 @@ export function ActionsCell ({ row }: { row: Row<SearchPaperResult> }) {
             throw new Error('Failed to create bookmark');
           }
     
-          toast.message('Bookmark created successfully');
+          toast.success('Bookmark created successfully');
         } catch (error) {
           console.error('Error creating bookmark:', error);
           toast.error('Failed to create bookmark');
@@ -293,7 +293,7 @@ export function ActionsCell ({ row }: { row: Row<SearchPaperResult> }) {
             throw new Error('Failed to delete bookmark');
           }
     
-          toast.message('Bookmark deleted successfully');
+          toast.success('Bookmark deleted successfully');
         } catch (error) {
           console.error('Error deleting bookmark:', error);
           toast.error('Failed to delete bookmark');

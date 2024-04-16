@@ -14,8 +14,32 @@ export async function POST(request: NextRequest) {
                 userId: userId,
             },
             select: {
-                paper: true,
-            },
+                id: true,
+                userId: true,
+                paperId: true,
+                searchPaperResultId: true,
+                createdAt: true,
+                paper: {
+                  select: {
+                    id: true,
+                    paperId: true,
+                    title: true,
+                    url: true,
+                    abstract: true,
+                    year: true,
+                    referenceCount: true,
+                    citationCount: true,
+                    influentialCitationCount: true,
+                    tldr: true,
+                    journal: true,
+                    authors: true,
+                    publicationTypes: true,
+                    isOpenAccess: true,
+                    openAccessPdf: true,
+                    bookmarked: true,
+                  },
+                },
+              },
         });
 
         return NextResponse.json(bookmarks);

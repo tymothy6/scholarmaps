@@ -25,8 +25,15 @@ export function BookmarkAction<TData extends SearchPaperResult>({
     data
  }: BookmarkActionProps<TData>) {
 
-    // Check if selected rows have bookmarked items
-    const itemsBookmarked = selectedRows.some((row) =>
+    // Check if all selected rows are bookmarked 
+    // If so we should NOT show the Create button
+    const allItemsBookmarked = selectedRows.every((row) =>
+        data.find((paper) => paper.paperId === row.original.paperId)?.bookmarked
+    );
+
+    // Check if some selected rows have bookmarked items 
+    // If so we should still show the Create button
+    const someItemsBookmarked = selectedRows.some((row) =>
         data.find((paper) => paper.paperId === row.original.paperId)?.bookmarked
     );
 
@@ -46,7 +53,7 @@ export function BookmarkAction<TData extends SearchPaperResult>({
               }
 
             const data = await response.json();
-            toast.success(`✅ ${data.message}`);
+            toast.success(`${data.message}`);
         } catch (error) {
           console.error('Error creating bookmarks:', error);
           toast.error('Failed to create bookmarks.');
@@ -69,7 +76,7 @@ export function BookmarkAction<TData extends SearchPaperResult>({
               }
             
               const data = await response.json();
-              toast.success(`✅ ${data.message}`);
+              toast.success(`${data.message}`);
         } catch (error) {
           console.error('Error deleting bookmarks:', error);
           toast.error('Failed to delete bookmarks.');
@@ -79,6 +86,7 @@ export function BookmarkAction<TData extends SearchPaperResult>({
       return (
         <div className="flex items-center gap-2">
             <TooltipProvider>
+              {!allItemsBookmarked && (
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button 
@@ -92,7 +100,8 @@ export function BookmarkAction<TData extends SearchPaperResult>({
                     </TooltipTrigger>
                     <TooltipContent className="text-sm">Create bookmark</TooltipContent>
                 </Tooltip>
-                {itemsBookmarked && (
+              )}
+              {someItemsBookmarked && (
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button 

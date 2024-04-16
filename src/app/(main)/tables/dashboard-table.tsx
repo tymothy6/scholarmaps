@@ -65,8 +65,8 @@ export function DashboardResultTable<TData, TValue>({
   }, [error]);
 
   return (
-    <div>
-    <div className="border-b">
+    <div className="w-full">
+    <div className="border-b w-full">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

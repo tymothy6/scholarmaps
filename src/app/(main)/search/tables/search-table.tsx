@@ -41,7 +41,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { toast } from "sonner"
 
 import {
   ColumnDef,
@@ -314,12 +313,12 @@ export function SearchResultTable<TData extends SearchPaperResult, TValue>({
             </TableBody>
           </Table>
         </div>
-            <div className="flex items-center gap-4 p-4 w-full">
-              <DataTableViewOptions table={table} />
+            <div className="flex items-center gap-4 pl-6 pr-4 py-4 w-full">
               <BookmarkAction<TData> 
                 selectedRows={selectedRows}
                 data={data}
               />
+              <DataTableViewOptions table={table} />
               <DataTablePagination table={table} />
             </div>
         </div>

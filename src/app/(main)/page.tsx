@@ -42,6 +42,9 @@ export default async function Home() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ userId }),
+                next: {
+                    revalidate: 180 // 3 minutes
+                }
             });
 
             if (!response.ok) {
@@ -61,13 +64,15 @@ export default async function Home() {
     }
 
     async function DashboardBookmarksCard(){
-        
         const { data: bookmarks, error } = await fetchBookmarks(userId ?? '');
+
+        // Map across the data to get the papers for the table
+        const paperData = bookmarks.map((bookmark: BookmarkedPaperResult) => bookmark.paper);
 
         return (
             <Suspense fallback={<div>Loading...</div>}>
-                <Card>
-                    <DashboardResultTable columns={columns} data={bookmarks} error={error} />
+                <Card className="w-full">
+                    <DashboardResultTable columns={columns} data={paperData} error={error} />
                 </Card>
             </Suspense>
         )
@@ -79,10 +84,11 @@ export default async function Home() {
             <div className="grid gap-4 w-full">
                 <DashboardCards />
                 <LineChartCard />
-                <h2 className="hidden sm:block text-lg lg:text-xl font-semibold mt-2">Notes</h2>
-                <NovelTailwindEditor />
                 <h2 className="hidden sm:block text-lg lg:text-xl font-semibold mt-2">Bookmarks</h2>
                 <DashboardBookmarksCard />
+                <h2 className="hidden sm:block text-lg lg:text-xl font-semibold mt-2">Notes</h2>
+                <NovelTailwindEditor />
+            
             </div>
             <div className="p-4">
                 <LogoutAuth />
@@ -90,3 +96,6 @@ export default async function Home() {
         </section>
     )
 }
+
+export const revalidate = 180 // page level revalidation
+// see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate

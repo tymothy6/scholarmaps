@@ -6,6 +6,7 @@ import * as React from "react"
 
 import { ColumnDef } from "@tanstack/react-table"
 
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -20,31 +21,34 @@ import { DataTableColumnHeader } from "@/components/patterns/table-column-header
 // Components that rely on hooks
 import { AbstractCell, ActionsCell } from "./cells"
 
-// Shape of the data from /api/bookmarks/fetch
+// Shape of the data to render in the table
+export type BookmarkedPaper = {
+    id: string;
+    paperId: string;
+    title: string;
+    url: string;
+    abstract: string | null;
+    year: number;
+    referenceCount: number;
+    citationCount: number;
+    influentialCitationCount: number;
+    tldr: any | null;
+    journal: any | null;
+    authors: any;
+    publicationTypes: string[];
+    isOpenAccess: boolean;
+    openAccessPdf: any | null;
+    bookmarked: boolean;
+}
+
+// Shape of the data from /api/bookmarks/fetch with nested paper object
 export type BookmarkedPaperResult = {
     id: string;
     userId: string;
     paperId: string;
     searchPaperResultId: string;
     createdAt: Date;
-    searchPaperResult: {
-        id: string;
-        paperId: string;
-        title: string;
-        url: string;
-        abstract: string | null;
-        year: number;
-        referenceCount: number;
-        citationCount: number;
-        influentialCitationCount: number;
-        tldr: any | null;
-        journal: any | null;
-        authors: any;
-        publicationTypes: string[];
-        isOpenAccess: boolean;
-        openAccessPdf: any | null;
-        bookmarked: boolean;
-    };
+    paper: BookmarkedPaper;
 }
 
 // Type guard functions
@@ -67,7 +71,7 @@ function isTldrObject(value: unknown): value is { model: string; text: string } 
             'text' in obj && typeof obj.text === 'string';
   }
   
-export const columns: ColumnDef<BookmarkedPaperResult>[] = [
+export const columns: ColumnDef<BookmarkedPaper>[] = [
   {
     id: "select",
     header: ({ table }) => {
@@ -109,20 +113,41 @@ export const columns: ColumnDef<BookmarkedPaperResult>[] = [
     },
     cell: ({ row }) => {
         const title = row.getValue("title");
-        const publicationType = row.getValue("publicationTypes");
-        const tldr = row.getValue("tldr");
+        const result = row.original;
+
         return (
             <div className="font-medium p-2">
                 <HoverCard>
                     <HoverCardTrigger asChild>
-                        <Button variant="link">{typeof title === 'string' ? title : 'N/A'}</Button>
+                        <Button 
+                        variant="link"
+                        className="w-max whitespace-normal h-max focus-visible:ring-0"
+                        >
+                            <span className="w-72 text-left">
+                                {typeof title === 'string' ? title : 'N/A'}
+                            </span>
+                        </Button>
                     </HoverCardTrigger>
                     <HoverCardContent className="sm:w-40 lg:w-80">
-                        <div className="space-y-1">
-                            <h4 className="text-sm font-semibold">{typeof title === 'string' ? title : 'N/A'}</h4>
-                            <p className="text-sm">{isStringArray(publicationType) ? publicationType.join(", ") : 'N/A'}</p>
+                        <div className="space-y-2">
+                            <div className="flex gap-2 items-start">
+                                <h4 className="text-sm font-semibold">{typeof title === 'string' ? title : 'N/A'}</h4>
+                                {isTldrObject(result.tldr) && result.tldr.text ? <Badge variant="default" className="mr-2 font-hubotSans">tl;dr</Badge> : <div /> }
+                            </div>
+                            <div className="flex flex-wrap gap-2 items-center justify-start">
+                                {result.isOpenAccess && (
+                                    <a href={result.openAccessPdf?.url} rel="noreferrer" target="_blank">
+                                        <Badge variant="default" className="font-hubotSans">Open access</Badge>
+                                    </a>
+                                )}
+                                {result.publicationTypes && result.publicationTypes.map((publicationType, index) => (
+                                    <Badge key={publicationType} variant="secondary" className="font-hubotSans">
+                                    {publicationType.replace(/([A-Z])/g, ' $1').trim()}
+                                    </Badge>
+                                ))}
+                            </div>
                             <p className="text-sm">
-                                {isTldrObject(tldr) ? tldr.text : 'No tl;dr available :('}
+                                {isTldrObject(result.tldr) ? result.tldr.text : 'No tl;dr available :('}
                             </p>
                         </div>
                     </HoverCardContent>
@@ -175,12 +200,10 @@ export const columns: ColumnDef<BookmarkedPaperResult>[] = [
   {
     accessorKey: "abstract",
     header: () => <div className="p-2">Abstract</div>,
-    cell: ({ row }) => {
-        <AbstractCell row={row} />
-    }
+    cell: ({ row }) => <AbstractCell row={row} />
   },
   {
-    id: "references",
+    accessorKey: "referenceCount",
     header: () => <div className="p-2">References</div>,
     cell: ({ row }) => {
         const referenceCount = row.getValue("referenceCount");
@@ -190,7 +213,7 @@ export const columns: ColumnDef<BookmarkedPaperResult>[] = [
     }
   },
   {
-    id: "citations",
+    accessorKey: "citationCount",
     header: () => <div className="p-2">Citations</div>,
     cell: ({ row }) => {
         const citationCount = row.getValue("citationCount");
