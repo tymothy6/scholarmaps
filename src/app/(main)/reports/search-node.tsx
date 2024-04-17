@@ -4,11 +4,10 @@ import * as React from 'react';
 
 import { useQuery } from '@tanstack/react-query'; 
 
-import { SearchPaperResult, columns } from '../search/tables/search-columns'
-import { SearchResultTable } from '../search/tables/search-table'
+import { SearchPaperResult, columns } from './tables/reports-search-columns'
+import { ReportsSearchResultTable } from './tables/reports-search-table'
 
 import { useSession } from 'next-auth/react';
-import { ObjectId } from 'mongodb';
 
 import { Handle, Position } from 'reactflow';
 
@@ -123,7 +122,7 @@ function PaperSearchNode() {
                         <SheetDescription>
                             Search for <span className="font-mono">{paperId}</span>
                         </SheetDescription>
-                        <SearchResultTable columns={columns} data={searchResults} />
+                        <ReportsSearchResultTable columns={columns} data={searchResults} />
                     </SheetContent>
                 </Sheet>
             <Handle 
