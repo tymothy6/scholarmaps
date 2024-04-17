@@ -114,12 +114,11 @@ function PaperSearchNode() {
             {isError &&  (
                 <p className="text-xs text-destructive">An error occurred while fetching search results</p>
             )}
-            {isSheetOpen && (
                 <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                     <SheetTrigger asChild>
-                        <Button variant="default" size="sm">Results</Button>
+                        <Button variant="default" size="sm" className="mt-2">Results</Button>
                     </SheetTrigger>
-                    <SheetContent side="right" className="w-3/4">
+                    <SheetContent side="right">
                         <SheetTitle>Results</SheetTitle>
                         <SheetDescription>
                             Search for <span className="font-mono">{paperId}</span>
@@ -127,7 +126,6 @@ function PaperSearchNode() {
                         <SearchResultTable columns={columns} data={searchResults} />
                     </SheetContent>
                 </Sheet>
-            )}
             <Handle 
                 type="target" 
                 position={Position.Left} 
