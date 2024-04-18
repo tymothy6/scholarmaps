@@ -11,19 +11,19 @@ import { useSession } from 'next-auth/react';
 
 import { Handle, Position } from 'reactflow';
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import { 
     Sheet,
     SheetTitle,
     SheetContent,
     SheetTrigger,
     SheetDescription,
- } from "@/components/ui/sheet"
-import { Input } from "@/components/ui/input"
+ } from "@/components/ui/sheet";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -31,8 +31,10 @@ import {
   FormField,
   FormItem,
   FormMessage,
- } from "@/components/ui/form"
-import { Loader2Icon, SearchIcon } from "lucide-react"
+ } from "@/components/ui/form";
+import { Loader2Icon, SearchIcon } from "lucide-react";
+
+import { useFlowContext } from './context/flow-provider';
 
 const searchSchema = z.object({
     paperId: z.string().min(6, {
@@ -44,6 +46,7 @@ function PaperSearchNode() {
     const { data: session } = useSession();
     const [isSheetOpen, setIsSheetOpen] = React.useState(false);
     const [searchResults, setSearchResults] = React.useState<SearchPaperResult[]>([]);
+    const { setNodes } = useFlowContext();
 
     const searchForm = useForm<z.infer<typeof searchSchema>>({
         resolver: zodResolver(searchSchema),
@@ -69,24 +72,27 @@ function PaperSearchNode() {
 
             setSearchResults(results.data);
             setIsSheetOpen(true);
+
+            return results.data; // cache data
         } catch (error) {
             console.error('Failed to fetch search results during query:', error);
+            throw error; // re-throw the error to be caught by the query
         }
     }
 
-    const { isPending, isLoading, isError, refetch } = useQuery({
+    const { isPending, isLoading, isError, data, refetch } = useQuery({
         queryKey: ['search', paperId],
         queryFn: () => fetchSearchResults(paperId),
-        enabled: false,
+        enabled: false, // required to manually trigger the query
     });
 
     const onSubmit = (values: z.infer<typeof searchSchema>) => {
-        refetch(); // trigger the query manually
+        refetch(); // trigger the query on submit
     }
 
     return (
         <div className="shadow-md bg-background border-y px-4 py-2 flex flex-col items-center">
-            <h3 className="text-sm font-semibold">Semantic Scholar</h3>
+            <h3 className="text-sm font-semibold">Search</h3>
             <Form {...searchForm}>
               <form onSubmit={searchForm.handleSubmit(onSubmit)} className="flex flex-row space-x-2 items-end justify-center w-full">
                 <FormField
@@ -96,7 +102,7 @@ function PaperSearchNode() {
                     <FormItem>
                         <FormLabel className="sr-only">Paper identifier</FormLabel>
                         <FormControl>
-                            <Input placeholder="Enter Paper ID, DOI, URL..." type="search" disabled={isPending} {...field} className="w-56"/>
+                            <Input placeholder="Paper title, author, DOI..." type="search" disabled={isPending} {...field} className="w-56"/>
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -114,9 +120,11 @@ function PaperSearchNode() {
                 <p className="text-xs text-destructive">An error occurred while fetching search results</p>
             )}
                 <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                    {data && (
                     <SheetTrigger asChild>
                         <Button variant="default" size="sm" className="mt-2">Results</Button>
                     </SheetTrigger>
+                    )}
                     <SheetContent side="right">
                         <SheetTitle>Results</SheetTitle>
                         <SheetDescription>

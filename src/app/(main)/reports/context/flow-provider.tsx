@@ -16,6 +16,8 @@ import {
     exampleEdges,
  } from '../nodes-edges';
 
+import { type SearchPaperResult } from '../tables/reports-search-columns';
+
 export interface JobNodeData {
     name: string;
     emoji: string;
@@ -30,8 +32,20 @@ export interface ChatNodeData {
     }>;
 }
 
+export interface PaperResultNodeData {
+    title: string;
+    authors: { authorId: string; name: string }[];
+    journal: { name: string, pages: string, volume: string };
+    year: number;
+    publicationTypes: string[];
+    tldr: { model: string; text: string };
+    isOpenAccess: boolean;
+    openAccessPdf: { url: string; status: string };
+    abstract: string;
+  }
+
 // Define a union type for the node data
-export type NodeData = JobNodeData | ChatNodeData;
+export type NodeData = JobNodeData | ChatNodeData | PaperResultNodeData;
 
 export interface FlowNode extends Node {
     data: NodeData; // use the union type here
@@ -46,6 +60,7 @@ interface FlowContextTypes {
     setEdges: React.Dispatch<React.SetStateAction<Edge[]>>;
     onEdgesChange: (changes: any) => void;
     addNewNode: (newNodeData: FlowNode) => void;
+    onPaperSelect: (selectedPaper: SearchPaperResult) => void;
     onConnect: (connection: Edge | Connection) => void;
     updateNodeData: (id: string, newData: Partial<NodeData>) => void;
 }
@@ -90,6 +105,31 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
+    const onPaperSelect = (selectedPaper: SearchPaperResult) => {
+        const newNode = {
+            id: `paper-${selectedPaper.paperId}`,
+            type: 'paperResultNode',
+            position: { x: 0, y: 0 },
+            data: {
+                title: selectedPaper.title,
+                authors: selectedPaper.authors,
+                journal: {
+                  name: selectedPaper.journal?.name || '',
+                  pages: selectedPaper.journal?.pages || '',
+                  volume: selectedPaper.journal?.volume || '',
+                },
+                year: selectedPaper.year,
+                publicationTypes: selectedPaper.publicationTypes,
+                tldr: selectedPaper.tldr,
+                isOpenAccess: selectedPaper.isOpenAccess,
+                openAccessPdf: selectedPaper.openAccessPdf,
+                abstract: selectedPaper.abstract,
+              },
+        };
+
+        setNodes((nodes) => nodes.concat(newNode));
+    }
+
     return (
         <ReactFlowProvider>
             <FlowContext.Provider value={{ 
@@ -101,6 +141,7 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
                 setEdges, 
                 onEdgesChange, 
                 addNewNode, 
+                onPaperSelect,
                 onConnect, 
                 updateNodeData
                  }}>

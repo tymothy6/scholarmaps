@@ -278,23 +278,25 @@ export function PageHeader ({ isSidebarOpen }: { isSidebarOpen: boolean}) {
               </DropdownMenu>
               </Tooltip>
               </TooltipProvider>
-              <div className="flex gap-1 w-max items-center justify-end">
-              <Avatar className="h-6 w-6 mr-2">
-                <AvatarImage src={session?.data?.user?.image ?? ''} />
-                <AvatarFallback className="text-xs">
-                {session?.data?.user?.email ? session.data.user.email[0].toUpperCase(): '📖'}
-                </AvatarFallback>
-              </Avatar>
+              <div className="flex gap-4 w-max items-center justify-end">
               <Separator orientation="vertical" className="h-6"/>
+              { !session?.data?.user && (
+               <Button variant={session?.data?.user ? "ghost" : "default"} className="data-[state=open]:bg-accent px-3">
+                  <span className="text-sm font-medium">Login</span>
+                  {session?.data?.user ? <ChevronDownIcon className="ml-2 h-4 w-4" /> : <div /> }
+              </Button>
+              )}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                <Button variant={session?.data?.user ? "ghost" : "default"} className="data-[state=open]:bg-accent px-3">
-                  <span className="text-sm font-medium">{session?.data?.user?.email ? session.data.user.email : 'Login with Email'}</span>
-                  {session?.data?.user ? <ChevronDownIcon className="ml-2 h-4 w-4" /> : <div /> }
-                </Button>
+                <Avatar className="h-8 w-8 mr-2 hover:ring-1 hover:ring-primary hover:cursor-pointer">
+                <AvatarImage src={session?.data?.user?.image ?? ''} />
+                  <AvatarFallback className="text-sm">
+                  {session?.data?.user?.email ? session.data.user.email[0].toUpperCase(): 'S'}
+                  </AvatarFallback>
+                </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuLabel>Profile</DropdownMenuLabel>
+                  <DropdownMenuLabel>{session?.data?.user?.name ? session.data.user.name : 'Profile'}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
                     <SettingsIcon className="mr-2 h-4 w-4" />

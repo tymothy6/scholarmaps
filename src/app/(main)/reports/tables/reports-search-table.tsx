@@ -6,6 +6,8 @@ import { useMediaQuery } from "@/lib/use-media-query"
 
 import { type SearchPaperResult } from "./reports-search-columns"
 
+import { useFlowContext } from "../context/flow-provider"
+
 import { Button } from "@/components/ui/button" // add paper to graph
 import { 
   Card
@@ -52,8 +54,7 @@ export function ReportsSearchResultTable<TData extends SearchPaperResult, TValue
   )
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
-
-  const [open, setOpen] = React.useState(false);
+  const { onPaperSelect } = useFlowContext();
 
 
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -112,7 +113,14 @@ export function ReportsSearchResultTable<TData extends SearchPaperResult, TValue
 
   return (
     <div>
-      <div className="flex justify-end items-center py-4">
+      <div className="flex justify-between items-center py-4">
+        <Button
+            onClick={() => selectedRows.forEach((row) => onPaperSelect(row.original))}
+            variant="default"
+            disabled={!selectedRows.length}
+            >
+            Add {selectedRows.length === 0 ? '' : selectedRows.length} paper{selectedRows.length > 1 ? "s" : ""}
+        </Button>
         <DataTablePagination table={table} />
       </div>
       <Card className="overflow-hidden">
@@ -164,8 +172,7 @@ export function ReportsSearchResultTable<TData extends SearchPaperResult, TValue
             </TableBody>
           </Table>
         </div>
-            <div className="flex items-center gap-4 pl-6 pr-4 py-4 w-full">
-              <DataTableViewOptions table={table} />
+            <div className="flex items-center justify-end p-4 w-full">
               <DataTablePagination table={table} />
             </div>
         </div>

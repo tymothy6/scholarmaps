@@ -29,6 +29,7 @@ import JobNode from './job-node';
 import CompletionNode from './completion-node';
 import ChatNode from './chat-node';
 import PaperSearchNode from './search-node';
+import PaperResultNode from './paper-node';
 
 // Define nodeTypes outside of the component to avoid re-renders
 const nodeTypes = { 
@@ -36,6 +37,7 @@ const nodeTypes = {
     chatNode: ChatNode,
     completionNode: CompletionNode,
     searchNode: PaperSearchNode,
+    paperResultNode: PaperResultNode,
  }; 
 
 export type ChartVariant = 'default' | 'figma';
@@ -65,7 +67,7 @@ const chartVariants: Record<ChartVariant, ChartVariantProps> = {
 
 export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
     const { resolvedTheme } = useTheme();
-    const { nodes, edges, onConnect, onNodesChange, onEdgesChange, addNewNode } = useFlowContext();
+    const { nodes, edges, onConnect, onNodesChange, onEdgesChange } = useFlowContext();
     const variantProps = chartVariants[variant] || chartVariants.default;
 
     return (

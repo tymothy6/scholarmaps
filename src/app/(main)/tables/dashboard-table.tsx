@@ -67,7 +67,7 @@ export function DashboardResultTable<TData, TValue>({
   return (
     <div className="w-full">
     <div className="border-b w-full">
-      <Table className="h-[300px]">
+      <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
