@@ -32,9 +32,7 @@ import {
   FormItem,
   FormMessage,
  } from "@/components/ui/form";
-import { Loader2Icon, SearchIcon } from "lucide-react";
-
-import { useFlowContext } from './context/flow-provider';
+import { ArrowLeftFromLine, Loader2Icon, SearchIcon } from "lucide-react";
 
 const searchSchema = z.object({
     paperId: z.string().min(6, {
@@ -46,7 +44,6 @@ function PaperSearchNode() {
     const { data: session } = useSession();
     const [isSheetOpen, setIsSheetOpen] = React.useState(false);
     const [searchResults, setSearchResults] = React.useState<SearchPaperResult[]>([]);
-    const { setNodes } = useFlowContext();
 
     const searchForm = useForm<z.infer<typeof searchSchema>>({
         resolver: zodResolver(searchSchema),
@@ -92,7 +89,7 @@ function PaperSearchNode() {
 
     return (
         <div className="shadow-md bg-background border-y px-4 py-2 flex flex-col items-center">
-            <h3 className="text-sm font-semibold">Search</h3>
+            <div className="flex w-full"><h3 className="text-sm font-semibold">Search Semantic Scholar</h3></div>
             <Form {...searchForm}>
               <form onSubmit={searchForm.handleSubmit(onSubmit)} className="flex flex-row space-x-2 items-end justify-center w-full">
                 <FormField
@@ -122,7 +119,10 @@ function PaperSearchNode() {
                 <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                     {data && (
                     <SheetTrigger asChild>
-                        <Button variant="default" size="sm" className="mt-2">Results</Button>
+                        <Button variant="default" size="sm" className="mt-2">
+                            <ArrowLeftFromLine className="h-4 w-4 mr-2" />
+                            Results
+                        </Button>
                     </SheetTrigger>
                     )}
                     <SheetContent side="right">

@@ -41,6 +41,8 @@ import {
     TabsTrigger,
 } from '@/components/ui/tabs';
 
+import PaperSearchNode from './search-node';
+
 import { AreaChartIcon, ArrowDownUpIcon, BarChart3Icon, BookOpenIcon, ClipboardPasteIcon, CodeIcon, FileInputIcon, FilterIcon, PlusIcon, ScatterChartIcon, SparklesIcon } from 'lucide-react';
 
 export function ReportHeader () {
@@ -68,16 +70,22 @@ export function ReportHeader () {
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [isSheetOpen]);
 
-    const { addNewNode, nodes, loadData } = useFlowContext();
+    const { addNewNode, nodes, loadData, setSearchNodeIds } = useFlowContext();
 
     const handleAddNode = (variant: string) => {
         const newNodeData: FlowNode = {
-            id: `${nodes.length + 1}`,
+            id: `${variant}-${nodes.length + 1}`,
             type: variant,
             data: { name: 'New node', job: 'New job', emoji: '' },
             position: { x: Math.random() * window.innerWidth / 2, y: Math.random() * window.innerHeight / 2 },
         };
         addNewNode(newNodeData);
+
+        if (variant === 'searchNode') {
+            setSearchNodeIds((prevIds) => [...prevIds, newNodeData.id]);
+            setIsSheetOpen(false);
+        };
+
         setIsSheetOpen(false);
     }
 

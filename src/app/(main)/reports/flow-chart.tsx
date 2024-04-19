@@ -71,57 +71,57 @@ export function FlowChart({ variant = 'default' }: { variant?: ChartVariant }) {
     const variantProps = chartVariants[variant] || chartVariants.default;
 
     return (
-        <>
+        <div>
             <ResizablePanelGroup
             direction="vertical"
             className="w-full min-h-[100vh]"
             >
-            <ResizablePanel defaultSize={60}>
-                <div className="w-full h-full">
-                    <ReactFlow 
-                        nodes={nodes} 
-                        edges={edges}
-                        onNodesChange={onNodesChange}
-                        onEdgesChange={onEdgesChange}
-                        onConnect={onConnect}
-                        nodeTypes={nodeTypes}
-                        className="bg-background"
-                        {...variantProps}
-                    >
-                        <Controls />
-                        <MiniMap 
-                            pannable 
-                            zoomable
-                            style={{
-                                backgroundColor: resolvedTheme === 'dark' ? '#343435' : '#ffffff',
-                            }}
-                        />
-                        <Background />
-                    </ReactFlow>
-                </div>
-            </ResizablePanel>
-            <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={40} minSize={20} maxSize={80}>
-                <ResizablePanelGroup direction="horizontal">
-                    <ResizablePanel defaultSize={75}>
-                        <div className="flex w-full h-max items-center justify-start p-1 border-b">
-                            <span className="ml-2 font-mono text-xs uppercase font-semibold">Editor</span>
-                        </div>
-                        <NovelReportsEditor />
-                    </ResizablePanel>
-                    <ResizableHandle />
-                    <ResizablePanel defaultSize={25} minSize={10} className="flex flex-col">
-                        <div className="flex w-full h-max items-center justify-start p-1 border-b">
-                            <span className="ml-2 font-mono text-xs uppercase font-semibold">Output</span>
-                        </div>
-                        <div className="flex w-full h-full items-center justify-center p-1 border-b">
-                            {/* Render output here */}
-                        </div>
-                        <Input className="w-full rounded-none border-x-0 h-6 font-mono" />
-                    </ResizablePanel>
-                </ResizablePanelGroup>
-            </ResizablePanel>
-        </ResizablePanelGroup>
-        </>
+                <ResizablePanel defaultSize={60}>
+                    <div className="w-full h-full">
+                        <ReactFlow 
+                            nodes={nodes} 
+                            edges={edges}
+                            onNodesChange={onNodesChange}
+                            onEdgesChange={onEdgesChange}
+                            onConnect={onConnect}
+                            nodeTypes={nodeTypes}
+                            className="bg-background"
+                            {...variantProps}
+                        >
+                            <Controls />
+                            <MiniMap 
+                                pannable 
+                                zoomable
+                                style={{
+                                    backgroundColor: resolvedTheme === 'dark' ? '#343435' : '#ffffff',
+                                }}
+                            />
+                            <Background />
+                        </ReactFlow>
+                    </div>
+                </ResizablePanel>
+                <ResizableHandle withHandle />
+                <ResizablePanel defaultSize={40} minSize={20} maxSize={80}>
+                    <ResizablePanelGroup direction="horizontal">
+                        <ResizablePanel defaultSize={75}>
+                            <div className="flex w-full h-max items-center justify-start p-1 border-b">
+                                <span className="ml-2 font-mono text-xs uppercase font-semibold">Editor</span>
+                            </div>
+                            <NovelReportsEditor />
+                        </ResizablePanel>
+                        <ResizableHandle />
+                        <ResizablePanel defaultSize={25} minSize={10} className="flex flex-col">
+                            <div className="flex w-full h-max items-center justify-start p-1 border-b">
+                                <span className="ml-2 font-mono text-xs uppercase font-semibold">Output</span>
+                            </div>
+                            <div className="flex w-full h-full items-center justify-center p-1 border-b">
+                                {/* Render output here */}
+                            </div>
+                            <Input className="w-full rounded-none border-x-0 h-6 font-mono" />
+                        </ResizablePanel>
+                    </ResizablePanelGroup>
+                </ResizablePanel>
+            </ResizablePanelGroup>
+        </div>
     )
 }

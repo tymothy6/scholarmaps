@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
     ReactFlowProvider,
     Node, 
@@ -33,6 +34,7 @@ export interface ChatNodeData {
 }
 
 export interface PaperResultNodeData {
+    id: string;
     title: string;
     authors: { authorId: string; name: string }[];
     journal: { name: string, pages: string, volume: string };
@@ -42,6 +44,7 @@ export interface PaperResultNodeData {
     isOpenAccess: boolean;
     openAccessPdf: { url: string; status: string };
     abstract: string;
+    url: string;
   }
 
 // Define a union type for the node data
@@ -63,9 +66,36 @@ interface FlowContextTypes {
     onPaperSelect: (selectedPaper: SearchPaperResult) => void;
     onConnect: (connection: Edge | Connection) => void;
     updateNodeData: (id: string, newData: Partial<NodeData>) => void;
+    searchNodeIds: string[];
+    setSearchNodeIds: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const FlowContext = React.createContext<FlowContextTypes | undefined>(undefined);
+
+const loadReactFlowState = async (route: string) => {
+    const response = await fetch(`/api/reactflow/load?${route}`);
+
+    if(!response.ok) {
+        throw new Error(`Failed to load ReactFlow state: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+};
+
+const saveReactFlowState = async (nodes: FlowNode[], edges: Edge[], route: string) => {
+    const response = await fetch(`/api/reactflow/save`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nodes, edges, route }),
+    });
+
+    if(!response.ok) {
+        throw new Error(`Failed to save ReactFlow state: ${response.statusText}`);
+    }
+};
 
 export function useFlowContext() {
     const context = React.useContext(FlowContext);
@@ -78,6 +108,7 @@ export function useFlowContext() {
 export function FlowProvider({ children }: { children: React.ReactNode }) {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    const [searchNodeIds, setSearchNodeIds] = React.useState<string[]>([]);
 
     const onConnect = React.useCallback(
         (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -111,6 +142,7 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
             type: 'paperResultNode',
             position: { x: 0, y: 0 },
             data: {
+                id: selectedPaper.paperId,
                 title: selectedPaper.title,
                 authors: selectedPaper.authors,
                 journal: {
@@ -124,6 +156,7 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
                 isOpenAccess: selectedPaper.isOpenAccess,
                 openAccessPdf: selectedPaper.openAccessPdf,
                 abstract: selectedPaper.abstract,
+                url: selectedPaper.url,
               },
         };
 
@@ -143,7 +176,9 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
                 addNewNode, 
                 onPaperSelect,
                 onConnect, 
-                updateNodeData
+                updateNodeData,
+                searchNodeIds,
+                setSearchNodeIds,
                  }}>
                 {children}
             </FlowContext.Provider>

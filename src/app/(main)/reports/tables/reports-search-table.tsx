@@ -46,7 +46,7 @@ interface DataTableProps<TData, TValue> {
 
 export function ReportsSearchResultTable<TData extends SearchPaperResult, TValue>({
   columns,
-  data,
+  data
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -119,7 +119,7 @@ export function ReportsSearchResultTable<TData extends SearchPaperResult, TValue
             variant="default"
             disabled={!selectedRows.length}
             >
-            Add {selectedRows.length === 0 ? '' : selectedRows.length} paper{selectedRows.length > 1 ? "s" : ""}
+            {selectedRows.length === 0 ? "Add papers" : `Add ${selectedRows.length === 0 ? '' : selectedRows.length} paper${selectedRows.length > 1 ? "s" : ""}`}
         </Button>
         <DataTablePagination table={table} />
       </div>
