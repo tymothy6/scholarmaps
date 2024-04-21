@@ -83,13 +83,13 @@ const loadReactFlowState = async (route: string) => {
     return data;
 };
 
-const saveReactFlowState = async (nodes: FlowNode[], edges: Edge[], route: string) => {
+const saveReactFlowState = async (route: string, nodes: FlowNode[], edges: Edge[]) => {
     const response = await fetch(`/api/reactflow/save`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ nodes, edges, route }),
+        body: JSON.stringify({ route, nodes, edges }),
     });
 
     if(!response.ok) {
@@ -111,25 +111,25 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [searchNodeIds, setSearchNodeIds] = React.useState<string[]>([]);
 
-    const { data: flowState, isLoading, isError } = useQuery(
-        ['flowState', 'myRoute'], // Adjust the route as needed
-        () => loadFlowState('myRoute'),
-        {
-          onSuccess: (data) => {
-            setNodes(data.nodes);
-            setEdges(data.edges);
-          },
+    const { data: flowState } = useQuery({
+        queryKey: ['flowState', 'myRoute'],
+        queryFn: () => loadReactFlowState('myRoute')
+    });
+
+    React.useEffect(() => {
+        if (flowState) {
+          setNodes(flowState.nodes);
+          setEdges(flowState.edges);
         }
-      );
+    }, [flowState]);
     
-      const { mutate: saveState } = useMutation((data: { route: string; nodes: FlowNode[]; edges: Edge[] }) =>
-        saveFlowState(data.route, data.nodes, data.edges),
-        {
-          onSuccess: () => {
-            queryClient.invalidateQueries(['flowState', 'myRoute']); // Invalidate the query to refetch the updated state
-          },
-        }
-      );
+    const saveStateMutation = useMutation({
+        mutationFn: (data: { route: string; nodes: FlowNode[]; edges: Edge[] }) =>
+            saveReactFlowState(data.route, data.nodes, data.edges),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['flowState', 'myRoute'] });
+        },
+    });
 
     const onConnect = React.useCallback(
         (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -181,7 +181,7 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
               },
         };
 
-        setNodes((nodes) => nodes.concat(newNode));
+        setNodes((nodes) => [...nodes, newNode]);
     }
 
     return (
