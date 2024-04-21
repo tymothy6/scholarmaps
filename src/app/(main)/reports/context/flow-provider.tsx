@@ -106,9 +106,30 @@ export function useFlowContext() {
 }
 
 export function FlowProvider({ children }: { children: React.ReactNode }) {
+    const queryClient = useQueryClient();
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [searchNodeIds, setSearchNodeIds] = React.useState<string[]>([]);
+
+    const { data: flowState, isLoading, isError } = useQuery(
+        ['flowState', 'myRoute'], // Adjust the route as needed
+        () => loadFlowState('myRoute'),
+        {
+          onSuccess: (data) => {
+            setNodes(data.nodes);
+            setEdges(data.edges);
+          },
+        }
+      );
+    
+      const { mutate: saveState } = useMutation((data: { route: string; nodes: FlowNode[]; edges: Edge[] }) =>
+        saveFlowState(data.route, data.nodes, data.edges),
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries(['flowState', 'myRoute']); // Invalidate the query to refetch the updated state
+          },
+        }
+      );
 
     const onConnect = React.useCallback(
         (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
