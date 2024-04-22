@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { usePathname } from 'next/navigation';
+import { 
+    useQuery, 
+    useMutation, 
+    useQueryClient, 
+    type UseMutationResult
+ } from '@tanstack/react-query';
 import { 
     ReactFlowProvider,
     Node, 
@@ -68,12 +75,13 @@ interface FlowContextTypes {
     updateNodeData: (id: string, newData: Partial<NodeData>) => void;
     searchNodeIds: string[];
     setSearchNodeIds: React.Dispatch<React.SetStateAction<string[]>>;
+    saveStateMutation: UseMutationResult<void, unknown, { nodes: FlowNode[]; edges: Edge[] }, unknown>;
 }
 
 const FlowContext = React.createContext<FlowContextTypes | undefined>(undefined);
 
-const loadReactFlowState = async (route: string) => {
-    const response = await fetch(`/api/reactflow/load?${route}`);
+const loadReactFlowState = async () => {
+    const response = await fetch(`/api/reactflow/load`);
 
     if(!response.ok) {
         throw new Error(`Failed to load ReactFlow state: ${response.statusText}`);
@@ -83,13 +91,13 @@ const loadReactFlowState = async (route: string) => {
     return data;
 };
 
-const saveReactFlowState = async (route: string, nodes: FlowNode[], edges: Edge[]) => {
+const saveReactFlowState = async (nodes: FlowNode[], edges: Edge[]) => {
     const response = await fetch(`/api/reactflow/save`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ route, nodes, edges }),
+        body: JSON.stringify({ nodes, edges }),
     });
 
     if(!response.ok) {
@@ -106,28 +114,22 @@ export function useFlowContext() {
 }
 
 export function FlowProvider({ children }: { children: React.ReactNode }) {
+    const route = usePathname();
     const queryClient = useQueryClient();
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [searchNodeIds, setSearchNodeIds] = React.useState<string[]>([]);
 
     const { data: flowState } = useQuery({
-        queryKey: ['flowState', 'myRoute'],
-        queryFn: () => loadReactFlowState('myRoute')
+        queryKey: ['flowState', route],
+        queryFn: loadReactFlowState,
     });
-
-    React.useEffect(() => {
-        if (flowState) {
-          setNodes(flowState.nodes);
-          setEdges(flowState.edges);
-        }
-    }, [flowState]);
     
     const saveStateMutation = useMutation({
-        mutationFn: (data: { route: string; nodes: FlowNode[]; edges: Edge[] }) =>
-            saveReactFlowState(data.route, data.nodes, data.edges),
+        mutationFn: (data: { nodes: FlowNode[]; edges: Edge[] }) =>
+            saveReactFlowState(data.nodes, data.edges),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['flowState', 'myRoute'] });
+            queryClient.invalidateQueries({ queryKey: ['flowState'] });
         },
     });
 
@@ -200,6 +202,7 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
                 updateNodeData,
                 searchNodeIds,
                 setSearchNodeIds,
+                saveStateMutation,
                  }}>
                 {children}
             </FlowContext.Provider>

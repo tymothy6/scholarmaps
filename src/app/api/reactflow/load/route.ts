@@ -4,20 +4,13 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 
 export async function GET(req: NextRequest) {
+    const route = new URL(req.url).pathname;
     const session = await getServerSession(authOptions);
 
     if (!session) {
         return NextResponse.json({ message: 'User ID is required. Please authenticate before issuing your request.'}, { status: 401 })
     };
-
-    // Extract the route from the query
-    const { searchParams } = new URL(req.url);
-    const route = searchParams.get('route');
-
-    if (!route) {
-        return NextResponse.json({ message: 'Route is required to load ReactFlow state.' }, { status: 400 });
-    };
-
+    
     try {
         const state = await prisma.reactFlowState.findUnique({
             where: {
