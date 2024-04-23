@@ -15,6 +15,10 @@ import {
     useNodesState,
     useEdgesState,
     addEdge,
+    NodeChange,
+    EdgeChange,
+    applyNodeChanges,
+    applyEdgeChanges
  } from 'reactflow';
 
 import { 
@@ -62,7 +66,7 @@ export interface FlowNode extends Node {
 }
 
 interface FlowContextTypes {
-    loadData: (dataName: string) => void;
+    loadData: (dataName: string, name: string) => void;
     nodes: FlowNode[];
     setNodes: React.Dispatch<React.SetStateAction<FlowNode[]>>;
     onNodesChange: (changes: any) => void;
@@ -75,13 +79,14 @@ interface FlowContextTypes {
     updateNodeData: (id: string, newData: Partial<NodeData>) => void;
     searchNodeIds: string[];
     setSearchNodeIds: React.Dispatch<React.SetStateAction<string[]>>;
-    saveStateMutation: UseMutationResult<void, unknown, { nodes: FlowNode[]; edges: Edge[] }, unknown>;
+    saveStateMutation: UseMutationResult<void, unknown, { name: string; nodes: FlowNode[]; edges: Edge[] }, unknown>;
 }
 
 const FlowContext = React.createContext<FlowContextTypes | undefined>(undefined);
 
-const loadReactFlowState = async () => {
-    const response = await fetch(`/api/reactflow/load`);
+// Query functions
+const loadReactFlowState = async (name: string) => {
+    const response = await fetch(`/api/reactflow/load?name=${encodeURIComponent(name)}`);
 
     if(!response.ok) {
         throw new Error(`Failed to load ReactFlow state: ${response.statusText}`);
@@ -91,13 +96,13 @@ const loadReactFlowState = async () => {
     return data;
 };
 
-const saveReactFlowState = async (nodes: FlowNode[], edges: Edge[]) => {
+const saveReactFlowState = async (name: string, nodes: FlowNode[], edges: Edge[]) => {
     const response = await fetch(`/api/reactflow/save`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ nodes, edges }),
+        body: JSON.stringify({ name, nodes, edges }),
     });
 
     if(!response.ok) {
@@ -116,22 +121,39 @@ export function useFlowContext() {
 export function FlowProvider({ children }: { children: React.ReactNode }) {
     const route = usePathname();
     const queryClient = useQueryClient();
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-    const [searchNodeIds, setSearchNodeIds] = React.useState<string[]>([]);
+    const [flowName, setFlowName] = React.useState<string>('New Report'); // set a default name
 
     const { data: flowState } = useQuery({
-        queryKey: ['flowState', route],
-        queryFn: loadReactFlowState,
+        queryKey: ['flowState', route, flowName],
+        queryFn: () => loadReactFlowState(flowName),
     });
-    
+
+    const loadedNodes = flowState?.nodes || initialNodes;
+    const loadedEdges = flowState?.edges || initialEdges;
+
+    const [nodes, setNodes] = useNodesState(loadedNodes);
+    const [edges, setEdges] = useEdgesState(loadedEdges);
+    const [searchNodeIds, setSearchNodeIds] = React.useState<string[]>([]);
+
     const saveStateMutation = useMutation({
-        mutationFn: (data: { nodes: FlowNode[]; edges: Edge[] }) =>
-            saveReactFlowState(data.nodes, data.edges),
+        mutationFn: (data: { name: string; nodes: FlowNode[]; edges: Edge[] }) =>
+            saveReactFlowState(data.name, data.nodes, data.edges),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['flowState'] });
         },
     });
+
+    const onNodesChange = (changes: NodeChange[]) => {
+        setNodes((nds) => applyNodeChanges(changes, nds));
+        const updatedFlowState = { name: flowName, nodes, edges };
+        saveStateMutation.mutate(updatedFlowState);
+    };
+
+    const onEdgesChange = (changes: EdgeChange[]) => {
+        setEdges((eds) => applyEdgeChanges(changes, eds));
+        const updatedFlowState = { name: flowName, nodes, edges };
+        saveStateMutation.mutate(updatedFlowState);
+    };
 
     const onConnect = React.useCallback(
         (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -146,7 +168,8 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
         setNodes((prevNodes) => prevNodes.map(node => node.id === id ? { ...node, data: { ...node.data, ...newData } } : node));
     };
 
-    const loadData = (dataName: string) => {
+    const loadData = (dataName: string, name: string) => {
+        setFlowName(name); // name the flow state
         switch (dataName) {
             case 'example':
                 setNodes(exampleNodes);

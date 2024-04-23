@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma-db';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
+import { Prisma } from '@prisma/client'; // access the Prisma error types
 
 export async function POST (req: NextRequest) {
   const route = new URL(req.url).pathname;
@@ -11,19 +12,21 @@ export async function POST (req: NextRequest) {
     return NextResponse.json({ message: 'User ID is required. Please authenticate before issuing your request.'}, { status: 401 })
   };
 
-  const { nodes, edges } = await req.json();
+  const { nodes, edges, name } = await req.json();
 
   try {
     const state = await prisma.reactFlowState.upsert({
       where: { 
-          userId_route: {
+          userId_route_name: {
               userId: session.user.id,
               route: route,
+              name: name,
           },
       },
       create: {
         userId: session.user.id,
         route: route,
+        name: name,
         nodes: nodes,
         edges: edges,
       },
@@ -38,6 +41,15 @@ export async function POST (req: NextRequest) {
       state,
     }, { status: 200 });
   } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        // Unique constraint violation
+        return NextResponse.json(
+          { message: 'A React Flow state with the same name already exists.' },
+          { status: 409 } 
+        );
+      }
+    }
     console.error('Failed to save React Flow state:', error);
     return NextResponse.json({ message: 'Failed to save React Flow state.' }, { status: 500 });
   }

@@ -125,6 +125,7 @@ model ReactFlowState {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String   @db.ObjectId
   route     String
+  name      String  // flow/report name
   nodes     Json   
   edges     Json
   createdAt DateTime @default(now())
@@ -132,5 +133,6 @@ model ReactFlowState {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique ([userId, route])
+  @@index ([userId, route])
+  @@unique([userId, route, name]) // restriction on flow/report names
 }

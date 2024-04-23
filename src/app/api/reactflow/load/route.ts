@@ -7,22 +7,24 @@ export async function GET(req: NextRequest) {
     const route = new URL(req.url).pathname;
     const session = await getServerSession(authOptions);
 
+    const { searchParams } = new URL(req.url);
+    const flowName = searchParams.get('name');
+
     if (!session) {
         return NextResponse.json({ message: 'User ID is required. Please authenticate before issuing your request.'}, { status: 401 })
     };
     
     try {
-        const state = await prisma.reactFlowState.findUnique({
+        const state = await prisma.reactFlowState.findFirst({
             where: {
-                userId_route: {
-                    userId: session.user.id,
-                    route: route,
-                },
+                userId: session.user.id,
+                route: route,
+                name: flowName || undefined,
             },
         });
 
         if (!state) {
-            return NextResponse.json({ message: 'ReactFlow state not found for user in database.' }, { status: 404 });
+            return NextResponse.json({ message: 'Named ReactFlow state not found for user in database.' }, { status: 404 });
         }
 
         return NextResponse.json({

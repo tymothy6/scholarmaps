@@ -112,11 +112,11 @@ export function ReportHeader () {
                 New Block <MenubarShortcut>⌘B</MenubarShortcut>
             </MenubarItem>
             </SheetTrigger>
-            <MenubarItem onSelect={() => loadData('initial')}>
+            <MenubarItem onSelect={() => loadData('initial', 'New Report')}>
                 New Report <MenubarShortcut>⌘N</MenubarShortcut>
             </MenubarItem>
             <MenubarSeparator />
-            <MenubarItem onSelect={() => loadData('example')} >
+            <MenubarItem onSelect={() => loadData('example', 'Example Report')} >
                 Example flow
             </MenubarItem>
             <MenubarSeparator />
