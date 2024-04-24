@@ -80,11 +80,14 @@ interface FlowContextTypes {
     searchNodeIds: string[];
     setSearchNodeIds: React.Dispatch<React.SetStateAction<string[]>>;
     saveStateMutation: UseMutationResult<void, unknown, { name: string; nodes: FlowNode[]; edges: Edge[] }, unknown>;
+    flowName: string;
+    setFlowName: React.Dispatch<React.SetStateAction<string>>;
+    reports: { name: string }[];
 }
 
 const FlowContext = React.createContext<FlowContextTypes | undefined>(undefined);
 
-// Query functions
+// Query /api/reactflow/load
 const loadReactFlowState = async (name: string) => {
     const response = await fetch(`/api/reactflow/load?name=${encodeURIComponent(name)}`);
 
@@ -96,6 +99,19 @@ const loadReactFlowState = async (name: string) => {
     return data;
 };
 
+// Query /api/reactflow/fetch
+const fetchReactFlowStates = async () => {
+    const response = await fetch(`/api/reactflow/fetch`);
+
+    if(!response.ok) {
+        throw new Error(`Failed to fetch list of ReactFlow states: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+};
+
+// Mutate /api/reactflow/save
 const saveReactFlowState = async (name: string, nodes: FlowNode[], edges: Edge[]) => {
     const response = await fetch(`/api/reactflow/save`, {
         method: 'POST',
@@ -126,6 +142,11 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
     const { data: flowState } = useQuery({
         queryKey: ['flowState', route, flowName],
         queryFn: () => loadReactFlowState(flowName),
+    });
+    
+    const { data: reports } = useQuery({
+        queryKey: ['reports'],
+        queryFn: fetchReactFlowStates,
     });
 
     const loadedNodes = flowState?.nodes || initialNodes;
@@ -168,17 +189,28 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
         setNodes((prevNodes) => prevNodes.map(node => node.id === id ? { ...node, data: { ...node.data, ...newData } } : node));
     };
 
-    const loadData = (dataName: string, name: string) => {
-        setFlowName(name); // name the flow state
-        switch (dataName) {
-            case 'example':
-                setNodes(exampleNodes);
-                setEdges(exampleEdges);
-                break;
-            case 'initial':
-            default:
+    const loadData = async (dataName: string, name: string) => {
+        setFlowName(name); 
+
+        if (dataName === 'initial') {
+            try {
+                const response = await fetch(`/api/reactflow/load?name=${encodeURIComponent(name)}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setNodes(data.nodes || initialNodes);
+                    setEdges(data.edges || initialEdges);
+                } else {
+                    setNodes(initialNodes);
+                    setEdges(initialEdges);
+                }
+            } catch (error) {
+                console.error('Failed to load ReactFlow state:', error);
                 setNodes(initialNodes);
                 setEdges(initialEdges);
+            }
+        } else if (dataName === 'example') {
+            setNodes(exampleNodes);
+            setEdges(exampleEdges);
         }
     };
 
@@ -226,6 +258,9 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
                 searchNodeIds,
                 setSearchNodeIds,
                 saveStateMutation,
+                flowName,
+                setFlowName,
+                reports
                  }}>
                 {children}
             </FlowContext.Provider>

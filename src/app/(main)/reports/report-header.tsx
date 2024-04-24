@@ -33,6 +33,12 @@ import {
     MenubarSubContent,
     MenubarSubTrigger,
  } from '@/components/ui/menubar';
+import { 
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import {
     Tabs,
@@ -41,17 +47,14 @@ import {
     TabsTrigger,
 } from '@/components/ui/tabs';
 
-import PaperSearchNode from './search-node';
-
 import { AreaChartIcon, ArrowDownUpIcon, BarChart3Icon, BookOpenIcon, ClipboardPasteIcon, CodeIcon, FileInputIcon, FilterIcon, PlusIcon, ScatterChartIcon, SparklesIcon } from 'lucide-react';
 
 export function ReportHeader () {
     const [isEditing, setIsEditing] = React.useState(false);
-    const [reportName, setReportName] = React.useState('New Report');
     const [isSheetOpen, setIsSheetOpen] = React.useState(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setReportName(e.target.value);
+        setFlowName(e.target.value);
     };
 
     const handleBlur = () => {
@@ -70,7 +73,15 @@ export function ReportHeader () {
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [isSheetOpen]);
 
-    const { addNewNode, nodes, loadData, setSearchNodeIds } = useFlowContext();
+    const { 
+        addNewNode, 
+        nodes, 
+        loadData, 
+        setSearchNodeIds, 
+        flowName, 
+        setFlowName, 
+        reports
+     } = useFlowContext();
 
     const handleAddNode = (variant: string) => {
         const newNodeData: FlowNode = {
@@ -334,12 +345,33 @@ export function ReportHeader () {
         </SheetContent>
         </Sheet>
         <div className="flex items-center gap-4 px-2 w-full">
-            <h4 className="text-sm text-muted-foreground w-max">My Reports</h4>
+            <Popover>
+                <PopoverTrigger asChild>
+                <h4 className="text-sm text-muted-foreground w-max">My Reports</h4>
+                </PopoverTrigger>
+                <PopoverContent>
+                    <ScrollArea className="h-24">
+                    <div className="p-4">
+                        <h4 className="mb-4 text-sm font-medium leading-none">Reports</h4>
+                        {reports.map((report) => (
+                        <>
+                            <div key={report.name} 
+                            className="text-sm cursor-pointer"
+                            onClick={() => loadData('initial', report.name)}>
+                                {report.name}
+                            </div>
+                            <Separator className="my-2" />
+                        </>
+                        ))}
+                    </div>
+                    </ScrollArea>
+                </PopoverContent>
+            </Popover>
             <Separator orientation="vertical" className="h-4" />
             {isEditing ? (
                     <Input
                         type="text"
-                        value={reportName}
+                        value={flowName}
                         onChange={handleInputChange}
                         onBlur={handleBlur}
                         className="text-sm font-sans font-medium w-[100px] p-1 h-max"
@@ -350,7 +382,7 @@ export function ReportHeader () {
                         className="text-sm font-sans font-medium w-max cursor-pointer"
                         onClick={() => setIsEditing(true)}
                     >
-                        {reportName}
+                        {flowName}
                     </p>
                 )}
         </div>
