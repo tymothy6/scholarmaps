@@ -4,11 +4,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/prisma-db';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method !== 'GET') {
-        return res.status(405).json({ message: 'Method not allowed. Please try again.' });
-    }
-
+export async function GET(req: NextApiRequest, res: NextApiResponse) {
     const session = await getServerSession(authOptions);
 
     if (!session) {
