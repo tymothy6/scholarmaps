@@ -218,8 +218,9 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
                 const response = await fetch(`/api/reactflow/load?name=${encodeURIComponent(name)}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setNodes(data.nodes || initialNodes);
-                    setEdges(data.edges || initialEdges);
+                    setNodes(data.nodes);
+                    setEdges(data.edges);
+                    toast.success('Saved report loaded successfully.')
                 } else {
                     console.error('Failed to load ReactFlow state:', response.statusText)
                     setNodes(initialNodes);

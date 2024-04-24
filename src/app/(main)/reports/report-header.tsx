@@ -351,11 +351,11 @@ export function ReportHeader () {
                         My Reports
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-48">
+                <PopoverContent className="w-48 p-0">
                     { reports?.length > 0 ? (
-                    <ScrollArea className="h-24">
                     <div className="p-4">
                         <h4 className="mb-4 text-sm font-medium leading-none">Reports</h4>
+                        <ScrollArea className="h-24">
                         {reports.map((report) => (
                         <>
                             <div key={report.name} 
@@ -366,8 +366,8 @@ export function ReportHeader () {
                             <Separator className="my-2" />
                         </>
                         ))}
+                        </ScrollArea>
                     </div>
-                    </ScrollArea>
                     ) : (
                     <p className="text-sm">No reports found.</p>
                     )}

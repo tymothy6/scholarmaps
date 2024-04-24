@@ -1,4 +1,3 @@
-// /api/reactflow/list.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
@@ -21,10 +20,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
             },
         });
 
-        return NextResponse.json({
-            message: 'ReactFlow states fetched successfully.',
-            reports,
-        }, { status: 200 });
+        return NextResponse.json(reports, { status: 200 });
     } catch (error) {
         console.error('Failed to fetch ReactFlow states:', error);
         return NextResponse.json({ message: 'Failed to fetch ReactFlow states.' }, { status: 500 });
