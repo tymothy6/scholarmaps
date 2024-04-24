@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { usePathname } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
 import { 
     useQuery, 
     useMutation, 
@@ -27,6 +28,8 @@ import {
     exampleNodes,
     exampleEdges,
  } from '../nodes-edges';
+
+import { toast } from 'sonner';
 
 import { type SearchPaperResult } from '../tables/reports-search-columns';
 
@@ -144,7 +147,7 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
         queryFn: () => loadReactFlowState(flowName),
     });
     
-    const { data: reports } = useQuery({
+    const { data: reports = [] } = useQuery({ // initialize reports with an empty array
         queryKey: ['reports'],
         queryFn: fetchReactFlowStates,
     });
@@ -162,18 +165,33 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['flowState'] });
         },
+        onError: (error: any) => {
+            if (error.response && error.response.status === 409) {
+                toast.error('A report with the same name already exists. Please choose a different name.');
+            } else {
+                toast.error('Failed to save the report. Please try again later.');
+            }
+        }
     });
+
+    // Debounce mutations
+    const debouncedSaveState = useDebouncedCallback(
+        (updatedFlowState: { name: string; nodes: FlowNode[]; edges: Edge[] }) => {
+        saveStateMutation.mutate(updatedFlowState);
+        },
+        3000 // 3 seconds
+    );
 
     const onNodesChange = (changes: NodeChange[]) => {
         setNodes((nds) => applyNodeChanges(changes, nds));
         const updatedFlowState = { name: flowName, nodes, edges };
-        saveStateMutation.mutate(updatedFlowState);
+        debouncedSaveState(updatedFlowState);
     };
 
     const onEdgesChange = (changes: EdgeChange[]) => {
         setEdges((eds) => applyEdgeChanges(changes, eds));
         const updatedFlowState = { name: flowName, nodes, edges };
-        saveStateMutation.mutate(updatedFlowState);
+        debouncedSaveState(updatedFlowState);
     };
 
     const onConnect = React.useCallback(
@@ -193,6 +211,9 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
         setFlowName(name); 
 
         if (dataName === 'initial') {
+            setNodes(initialNodes);
+            setEdges(initialEdges);
+        } else if (dataName === 'saved') {
             try {
                 const response = await fetch(`/api/reactflow/load?name=${encodeURIComponent(name)}`);
                 if (response.ok) {
@@ -200,17 +221,21 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
                     setNodes(data.nodes || initialNodes);
                     setEdges(data.edges || initialEdges);
                 } else {
+                    console.error('Failed to load ReactFlow state:', response.statusText)
                     setNodes(initialNodes);
                     setEdges(initialEdges);
+                    toast.error('Failed to load saved report. Please try again later.')
                 }
             } catch (error) {
                 console.error('Failed to load ReactFlow state:', error);
                 setNodes(initialNodes);
                 setEdges(initialEdges);
+                toast.error('Failed to load saved report. Please try again later.')
             }
         } else if (dataName === 'example') {
             setNodes(exampleNodes);
             setEdges(exampleEdges);
+            toast.success('Example report loaded successfully. Changes will not be saved.')
         }
     };
 

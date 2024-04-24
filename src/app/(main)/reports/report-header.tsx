@@ -347,9 +347,12 @@ export function ReportHeader () {
         <div className="flex items-center gap-4 px-2 w-full">
             <Popover>
                 <PopoverTrigger asChild>
-                <h4 className="text-sm text-muted-foreground w-max">My Reports</h4>
+                    <Button variant="ghost" className="text-muted-foreground px-2">
+                        My Reports
+                    </Button>
                 </PopoverTrigger>
-                <PopoverContent>
+                <PopoverContent className="w-48">
+                    { reports?.length > 0 ? (
                     <ScrollArea className="h-24">
                     <div className="p-4">
                         <h4 className="mb-4 text-sm font-medium leading-none">Reports</h4>
@@ -357,7 +360,7 @@ export function ReportHeader () {
                         <>
                             <div key={report.name} 
                             className="text-sm cursor-pointer"
-                            onClick={() => loadData('initial', report.name)}>
+                            onClick={() => loadData('saved', report.name)}>
                                 {report.name}
                             </div>
                             <Separator className="my-2" />
@@ -365,6 +368,9 @@ export function ReportHeader () {
                         ))}
                     </div>
                     </ScrollArea>
+                    ) : (
+                    <p className="text-sm">No reports found.</p>
+                    )}
                 </PopoverContent>
             </Popover>
             <Separator orientation="vertical" className="h-4" />
