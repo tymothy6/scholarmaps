@@ -14,6 +14,8 @@ export async function POST (req: NextRequest) {
 
   const { nodes, edges, name } = await req.json();
 
+  // If the named ReactFlow state already exists, update it
+  // Otherwise, create a new one
   try {
     const state = await prisma.reactFlowState.upsert({
       where: { 
@@ -43,7 +45,7 @@ export async function POST (req: NextRequest) {
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
-        // Unique constraint violation
+        // If the named ReactFlow state already exists, return a message to the frontend
         return NextResponse.json(
           { message: 'A React Flow state with the same name already exists.' },
           { status: 409 } 

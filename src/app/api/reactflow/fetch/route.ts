@@ -10,6 +10,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
         return NextResponse.json({ message: 'User ID is required. Please authenticate before issuing your request.'}, { status: 401 })
     }
 
+    // Fetch all named ReactFlow states for the user
     try {
         const reports = await prisma.reactFlowState.findMany({
             where: {

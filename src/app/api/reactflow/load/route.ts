@@ -6,6 +6,7 @@ import { authOptions } from '@/lib/auth';
 export async function GET(req: NextRequest) {
     const session = await getServerSession(authOptions);
 
+    // Retrieve named ReactFlow state from database
     const { searchParams } = new URL(req.url);
     const flowName = searchParams.get('name');
 
@@ -25,6 +26,7 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ message: 'Named ReactFlow state not found for user in database.' }, { status: 404 });
         }
 
+        // Return the ReactFlow state
         return NextResponse.json(state, { status: 200 });
     } catch (error) {
         console.error('Failed to retrieve ReactFlow state:', error);
