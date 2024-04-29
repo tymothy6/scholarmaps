@@ -165,7 +165,8 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['flowState'] });
         },
-        onError: (error: any) => {
+        onError: (error: any) => { // handle errors, update UI accordingly 
+            // TODO: update header on duplicate reports
             if (error.response && error.response.status === 409) {
                 toast.error('A report with the same name already exists. Please choose a different name.');
             } else {
@@ -174,20 +175,22 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
         }
     });
 
-    // Debounce mutations
+    // Debounce mutations to avoid calling API too frequently
     const debouncedSaveState = useDebouncedCallback(
         (updatedFlowState: { name: string; nodes: FlowNode[]; edges: Edge[] }) => {
         saveStateMutation.mutate(updatedFlowState);
         },
-        3000 // 3 seconds
+        3000 // delay 3 seconds
     );
 
+    // Mutate nodes on change
     const onNodesChange = (changes: NodeChange[]) => {
         setNodes((nds) => applyNodeChanges(changes, nds));
         const updatedFlowState = { name: flowName, nodes, edges };
         debouncedSaveState(updatedFlowState);
     };
 
+    // Mutate edges on change
     const onEdgesChange = (changes: EdgeChange[]) => {
         setEdges((eds) => applyEdgeChanges(changes, eds));
         const updatedFlowState = { name: flowName, nodes, edges };
@@ -199,14 +202,17 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
         [setEdges]
     );
 
+    // Function to add a new node
     const addNewNode = (newNodeData: FlowNode) => {
         setNodes((nds) => [...nds, newNodeData]);
     };
 
+    // Function to update node data
     const updateNodeData = (id: string, newData: Partial<NodeData>) => {
         setNodes((prevNodes) => prevNodes.map(node => node.id === id ? { ...node, data: { ...node.data, ...newData } } : node));
     };
 
+    // Function to load data, accepts report name and data type
     const loadData = async (dataName: string, name: string) => {
         setFlowName(name); 
 
@@ -240,6 +246,7 @@ export function FlowProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
+    // Function to search for a node by ID
     const onPaperSelect = (selectedPaper: SearchPaperResult) => {
         const newNode = {
             id: `paper-${selectedPaper.paperId}`,
