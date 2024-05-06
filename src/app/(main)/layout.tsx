@@ -1,8 +1,9 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import { PageHeader } from "@/components/navigation/header"; 
 import { Sidebar } from "@/components/navigation/sidebar";
+import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
 
 import { FlowProvider } from './reports/context/flow-provider';
 
@@ -25,6 +26,12 @@ export default function DashboardLayout({
                 `}
               >
                 {children}
+                <ProgressBar 
+                  height="4px"
+                  color="#c1ecf9"
+                  options={{ showSpinner: false }}
+                  shallowRouting
+                />
               </div> 
           </FlowProvider>
         </main>
