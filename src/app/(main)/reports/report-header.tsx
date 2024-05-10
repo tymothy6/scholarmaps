@@ -46,8 +46,27 @@ import {
     TabsList,
     TabsTrigger,
 } from '@/components/ui/tabs';
+import {
+    Tooltip,
+    TooltipProvider,
+    TooltipTrigger,
+    TooltipContent
+} from '@/components/ui/tooltip';
 
-import { AreaChartIcon, ArrowDownUpIcon, BarChart3Icon, BookOpenIcon, ClipboardPasteIcon, CodeIcon, FileInputIcon, FilterIcon, PlusIcon, ScatterChartIcon, SparklesIcon } from 'lucide-react';
+import { 
+    AreaChartIcon, 
+    ArrowDownUpIcon, 
+    BarChart3Icon, 
+    BookOpenIcon, 
+    ClipboardPasteIcon, 
+    CodeIcon, 
+    FileInputIcon, 
+    FilterIcon, 
+    PlusIcon, 
+    ScatterChartIcon, 
+    SparklesIcon,
+    PencilIcon
+ } from 'lucide-react';
 
 export function ReportHeader () {
     const [isEditing, setIsEditing] = React.useState(false);
@@ -354,17 +373,16 @@ export function ReportHeader () {
                 <PopoverContent className="w-48 p-0">
                     { reports?.length > 0 ? (
                     <div className="p-4">
-                        <h4 className="mb-4 text-sm font-medium leading-none">Reports</h4>
+                        <h4 className="mb-4 text-sm font-semibold leading-none">Reports</h4>
                         <ScrollArea className="h-24">
                         {reports.map((report) => (
-                        <>
-                            <div key={report.name} 
-                            className="text-sm cursor-pointer"
-                            onClick={() => loadData('saved', report.name)}>
-                                {report.name}
+                            <div 
+                                key={report.name} 
+                                className="text-sm cursor-pointer first:rounded-t border-b px-1 py-2 hover:bg-muted"
+                                onClick={() => loadData('saved', report.name)}
+                                >
+                                    {report.name}
                             </div>
-                            <Separator className="my-2" />
-                        </>
                         ))}
                         </ScrollArea>
                     </div>
@@ -384,12 +402,19 @@ export function ReportHeader () {
                         autoFocus
                     />
                 ) : (
-                    <p
-                        className="text-sm font-sans font-medium w-max cursor-pointer"
-                        onClick={() => setIsEditing(true)}
-                    >
-                        {flowName}
-                    </p>
+                    <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                        <div onClick={() => setIsEditing(true)} className="flex items-center gap-2 p-1 cursor-pointer">
+                            <p className="text-sm font-sans font-medium w-max">
+                                {flowName}
+                            </p>
+                            <PencilIcon className="h-4 w-4 text-muted-foreground/80" />
+                        </div>
+                        </TooltipTrigger>
+                        <TooltipContent className="text-sm">Edit name</TooltipContent>
+                    </Tooltip>
+                    </TooltipProvider>
                 )}
         </div>
     </section>

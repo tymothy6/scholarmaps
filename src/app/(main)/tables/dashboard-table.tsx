@@ -13,6 +13,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 
+import { Card } from "@/components/ui/card"
 import {
   Table,
   TableBody,
@@ -65,6 +66,7 @@ export function DashboardResultTable<TData, TValue>({
   }, [error]);
 
   return (
+    <Card className="overflow-hidden">
     <div className="w-full">
     <div className="border-b w-full">
       <Table>
@@ -115,5 +117,6 @@ export function DashboardResultTable<TData, TValue>({
             <DataTablePagination table={table} />
         </div>
     </div>
+    </Card>
   )
 }

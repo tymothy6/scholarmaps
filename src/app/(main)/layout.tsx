@@ -28,7 +28,7 @@ export default function DashboardLayout({
                 {children}
                 <ProgressBar 
                   height="4px"
-                  color="#c1ecf9"
+                  color="#3DB9CF"
                   options={{ showSpinner: false }}
                   shallowRouting
                 />

@@ -6,8 +6,6 @@ import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
-import { Card } from '@/components/ui/card'
-
 import { LineChartCard } from '@/components/patterns/chart-card'
 import { DashboardCards } from '@/components/patterns/dashboard-card'
 import { 
@@ -58,7 +56,7 @@ export default async function Home() {
             if (error instanceof Error) {
                 return { data: [], error: error.message };
             } else {
-                return { data: [], error: 'An error occurred.' };
+                return { data: [], error: 'An error occurred while fetching bookmarks.' };
             }
         };
     }
@@ -71,9 +69,7 @@ export default async function Home() {
 
         return (
             <Suspense fallback={<div>Loading...</div>}>
-                <Card className="w-full">
-                    <DashboardResultTable columns={columns} data={paperData} error={error} />
-                </Card>
+                <DashboardResultTable columns={columns} data={paperData} error={error} />
             </Suspense>
         )
     }
@@ -88,7 +84,6 @@ export default async function Home() {
                 <DashboardBookmarksCard />
                 <h2 className="hidden sm:block text-lg lg:text-xl font-semibold mt-2">Notes</h2>
                 <NovelTailwindEditor />
-            
             </div>
             <div className="p-4">
                 <LogoutAuth />

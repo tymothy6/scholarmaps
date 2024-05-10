@@ -91,31 +91,49 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
         <nav className="mt-6">
           <ul className="space-y-2">
             <li>
-                <Link
-                  className={`group flex w-full items-center ${isSidebarOpen ? 'px-3 py-2 gap-3' : 'px-1 py-3 gap-0 justify-center'} rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
-                  href="/"
-                >
-                <HomeIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/') ? 'text-slate-200' : 'text-slate-400'}`} />
-                <span 
-                  className={`group-hover:text-gray-200 ${isActive('/') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 max-w-full" : "opacity-0 max-w-0"}`}
-                  >
-                  Dashboard
-                </span>
-              </Link>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      className={`group flex w-full items-center ${isSidebarOpen ? 'px-3 py-2 gap-3' : 'px-1 py-3 gap-0 justify-center'} rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
+                      href="/"
+                    >
+                      <HomeIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/') ? 'text-slate-200' : 'text-slate-400'}`} />
+                      <span 
+                        className={`group-hover:text-gray-200 ${isActive('/') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 max-w-full" : "opacity-0 max-w-0"}`}
+                        >
+                        Dashboard
+                      </span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" className={`${isSidebarOpen ? 'hidden': 'block'} text-sm`}>
+                    Dashboard
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </li>
             <li>
               <div className="flex flex-col items-start">
-                <Link
-                  className={`group flex w-full items-center ${isSidebarOpen ? 'px-3 py-2 gap-3' : 'px-1 py-3 gap-0 justify-center'} rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/search') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
-                  href="/search"
-                >
-                  <SearchIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/search') ? 'text-slate-200' : 'text-slate-400'}`} />
-                  <span 
-                  className={`group-hover:text-gray-200 ${isActive('/search') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 max-w-full" : "opacity-0 max-w-0"}`}
-                  >
-                    Search
-                  </span>
-                </Link>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link
+                        className={`group flex w-full items-center ${isSidebarOpen ? 'px-3 py-2 gap-3' : 'px-1 py-3 gap-0 justify-center'} rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/search') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
+                        href="/search"
+                      >
+                        <SearchIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/search') ? 'text-slate-200' : 'text-slate-400'}`} />
+                        <span 
+                        className={`group-hover:text-gray-200 ${isActive('/search') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 max-w-full" : "opacity-0 max-w-0"}`}
+                        >
+                          Search
+                        </span>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className={`${isSidebarOpen ? 'hidden': 'block'} text-sm`}>
+                      Search
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 { isLoading ? <RecentSearchesNavbarSkeleton /> :
                   <div
                   className={`${isSidebarOpen ? 'block' : 'hidden'} transition-all duration-300 mt-2 w-full`}
@@ -134,30 +152,48 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
               </div>
             </li>
             <li>
-                <Link
-                  className={`group flex w-full items-center ${isSidebarOpen ? 'px-3 py-2 gap-3' : 'px-1 py-3 gap-0 justify-center'} rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/map') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
-                  href="/map"
-                >
-                <RouteIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/map') ? 'text-slate-200' : 'text-slate-400'}`} />
-                <span 
-                  className={`group-hover:text-gray-200 ${isActive('/map') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 max-w-full" : "opacity-0 max-w-0"}`}
-                  >
-                    Map
-                </span>
-              </Link>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      className={`group flex w-full items-center ${isSidebarOpen ? 'px-3 py-2 gap-3' : 'px-1 py-3 gap-0 justify-center'} rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/map') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
+                      href="/map"
+                    >
+                    <RouteIcon className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/map') ? 'text-slate-200' : 'text-slate-400'}`} />
+                    <span 
+                      className={`group-hover:text-gray-200 ${isActive('/map') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 max-w-full" : "opacity-0 max-w-0"}`}
+                      >
+                        Map
+                    </span>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right" className={`${isSidebarOpen ? 'hidden': 'block'} text-sm`}>
+                  Map
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             </li>
             <li>
-                <Link
-                  className={`group flex w-full items-center ${isSidebarOpen ? 'px-3 py-2 gap-3' : 'px-1 py-3 gap-0 justify-center'} rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/reports') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
-                  href="/reports"
-                >
-                <FileBarChart className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/reports') ? 'text-slate-200' : 'text-slate-400'}`} />
-                <span 
-                  className={`group-hover:text-gray-200 ${isActive('/reports') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 max-w-full" : "opacity-0 max-w-0"}`}
-                  >
-                    Reports
-                  </span>
-              </Link>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      className={`group flex w-full items-center ${isSidebarOpen ? 'px-3 py-2 gap-3' : 'px-1 py-3 gap-0 justify-center'} rounded transition-colors duration-300 hover:bg-gray-900 ${isActive('/reports') ? 'bg-slate-900 hover:bg-slate-900 border border-slate-700/60' : ''}`}
+                      href="/reports"
+                    >
+                    <FileBarChart className={`w-5 h-5 group-hover:text-slate-200 ${isActive('/reports') ? 'text-slate-200' : 'text-slate-400'}`} />
+                    <span 
+                      className={`group-hover:text-gray-200 ${isActive('/reports') ? 'text-slate-200' : 'text-slate-400'} text-[15px] font-medium transition-all duration-300 ${isSidebarOpen ? "opacity-100 max-w-full" : "opacity-0 max-w-0"}`}
+                      >
+                        Reports
+                      </span>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right" className={`${isSidebarOpen ? 'hidden': 'block'} text-sm`}>
+                  Reports
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             </li>
           </ul>
         </nav>
@@ -205,15 +241,16 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
         </div>
         <div className="flex items-center justify-between gap-2 w-full">
         { isSidebarOpen && (
-        <DropdownMenu>
+        <TooltipProvider>
+          <Tooltip>
+          <DropdownMenu>
+            <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className={`w-full group flex justify-start items-center gap-3 py-2 px-3 rounded hover:bg-slate-900 data-[state=open]:bg-slate-900 data-[state=open]:text-slate-200 ${isSidebarOpen ? 'opacity-100 w-full' : 'opacity-0 w-0'}`}>
+          <Button variant="ghost" className={`group flex justify-start items-center gap-3 p-2 rounded hover:bg-slate-900 data-[state=open]:bg-slate-900 data-[state=open]:text-slate-200 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 w-0'}`}>
             <SettingsIcon className="w-5 h-5 text-slate-400 group-hover:text-slate-200" />
-            { isSidebarOpen && (
-            <span className="text-slate-400 group-hover:text-gray-200 font-medium">Settings</span>
-            )}
           </Button>
           </DropdownMenuTrigger>
+          </TooltipTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuLabel>Theme</DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -230,7 +267,10 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
               <span>System</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
+          <TooltipContent side="right" className="text-sm">Settings</TooltipContent>
         </DropdownMenu>
+        </Tooltip>
+        </TooltipProvider>
         )}
         <TooltipProvider>
           <Tooltip>
@@ -238,7 +278,7 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
               <Button 
               variant="ghost" 
               size="icon" 
-              className={`rounded-lg ${isSidebarOpen ? 'w-12' : 'w-10'} group hover:bg-slate-900`}
+              className={`rounded-lg group hover:bg-slate-900`}
               onClick={toggleSidebar}
               >
                 { isSidebarOpen ? 
@@ -248,8 +288,8 @@ export function Sidebar ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: bool
                 }
               </Button>
             </TooltipTrigger>
-            <TooltipContent align="end" className="text-sm">
-              { isSidebarOpen ? 'Collapse sidebar' : 'Expand' }
+            <TooltipContent side="right" className="text-sm">
+              { isSidebarOpen ? 'Collapse sidebar' : 'Expand sidebar' }
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
