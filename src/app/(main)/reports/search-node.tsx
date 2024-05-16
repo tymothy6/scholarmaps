@@ -8,7 +8,7 @@ import { SearchPaperResult, columns } from './tables/reports-search-columns'
 import { ReportsSearchResultTable } from './tables/reports-search-table'
 
 import { useSession } from 'next-auth/react';
-
+        
 import { Handle, Position } from 'reactflow';
 
 import { zodResolver } from "@hookform/resolvers/zod";
