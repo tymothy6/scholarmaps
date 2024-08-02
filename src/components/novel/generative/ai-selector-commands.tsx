@@ -1,6 +1,10 @@
 import React from "react";
 import { useCommandState } from "cmdk";
-import { CommandGroup, CommandItem, CommandSeparator } from "@/components/ui/command";
+import {
+  CommandGroup,
+  CommandItem,
+  CommandSeparator,
+} from "@/components/ui/command";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   ArrowDownWideNarrow,
@@ -54,26 +58,26 @@ const options = [
 ];
 
 const toneOptions = [
-    {
-      value: "professional",
-      label: "Professional",
-    },
-    {
-      value: "casual",
-      label: "Casual",
-    },
-    {
-      value: "straightforward",
-      label: "Straightforward",
-    },
-    {
-      value: "confident",
-      label: "Confident",
-    },
-    {
-      value: "friendly",
-      label: "Friendly",
-    },
+  {
+    value: "professional",
+    label: "Professional",
+  },
+  {
+    value: "casual",
+    label: "Casual",
+  },
+  {
+    value: "straightforward",
+    label: "Straightforward",
+  },
+  {
+    value: "confident",
+    label: "Confident",
+  },
+  {
+    value: "friendly",
+    label: "Friendly",
+  },
 ];
 
 const writeOptions = [
@@ -97,7 +101,7 @@ const writeOptions = [
     label: "List pros & cons...",
     icon: Pen,
   },
-]
+];
 
 interface AISelectorCommandsProps {
   onSelect: (value: string, option: string) => void;
@@ -106,7 +110,9 @@ interface AISelectorCommandsProps {
 const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
   const { editor } = useEditor();
   const state = useCommandState((state) => state);
-  const [selectedOption, setSelectedOption] = React.useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = React.useState<string | null>(
+    null,
+  );
 
   const handleSelection = (value: string) => {
     if (value === "tone") {
@@ -120,7 +126,7 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
         );
         onSelect(text, value);
       }
-    };
+    }
   };
 
   const handleNavigationBack = () => {
@@ -131,47 +137,50 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
 
   return (
     <>
-    {hasItems && (
-    <ScrollArea className="h-[150px] lg:h-[250px] border-t">
-      <CommandGroup heading="Edit or review selection">
-      {selectedOption !== "tone" && (
-          <>
-            {options.map((option) => (
-              <CommandItem
-                onSelect={() => handleSelection(option.value)}
-                className="flex gap-2 px-4"
-                key={option.value}
-                value={option.value}
-              >
-                <div className="flex items-center gap-2">
-                  <option.icon className="h-4 w-4 text-purple-500" />
-                  {option.label}
-                </div>
-              </CommandItem>
-            ))}
-          </>
-        )}
-        {selectedOption === "tone" && (
-            <>
-              <CommandItem
-                onSelect={handleNavigationBack}
-                className="flex items-center justify-between px-4"
-                value="tone"
-              >
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center gap-2">
-                    <Ear className="h-4 w-4 text-purple-500" />
-                    Change tone
-                  </div>
+      {hasItems && (
+        <ScrollArea className="h-[150px] lg:h-[250px] border-t">
+          <CommandGroup heading="Edit or review selection">
+            {selectedOption !== "tone" && (
+              <>
+                {options.map((option) => (
+                  <CommandItem
+                    onSelect={() => handleSelection(option.value)}
+                    className="flex gap-2 px-4"
+                    key={option.value}
+                    value={option.value}
+                  >
+                    <div className="flex items-center gap-2">
+                      <option.icon className="h-4 w-4 text-purple-500" />
+                      {option.label}
+                    </div>
+                  </CommandItem>
+                ))}
+              </>
+            )}
+            {selectedOption === "tone" && (
+              <>
+                <CommandItem
+                  onSelect={handleNavigationBack}
+                  className="flex items-center justify-between px-4"
+                  value="tone"
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center gap-2">
+                      <Ear className="h-4 w-4 text-purple-500" />
+                      Change tone
+                    </div>
                     <ChevronUp className="h-4 w-4 text-muted-foreground" />
-                </div>
-              </CommandItem>
+                  </div>
+                </CommandItem>
                 {toneOptions.map((option) => (
                   <CommandItem
                     onSelect={() => {
                       if (editor) {
                         const slice = editor.state.selection.content();
-                        const text = editor.storage.markdown.serializer.serialize(slice.content);
+                        const text =
+                          editor.storage.markdown.serializer.serialize(
+                            slice.content,
+                          );
                         onSelect(text, `tone.${option.value}`);
                       }
                     }}
@@ -182,84 +191,86 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
                     {option.label}
                   </CommandItem>
                 ))}
-            </>
-        )}
-      </CommandGroup>
-      <CommandSeparator />
-      <CommandGroup heading="Generate from selection">
-        <CommandItem
-          onSelect={() => {
-            if (editor) {
-              const slice = editor.state.selection.content();
-              const text = editor.storage.markdown.serializer.serialize(
-                slice.content,
-              );
-              onSelect(text, "summarize");
-            }
-          }}
-          className="gap-2 px-4"
-          value="summarize"
-        >
-          <Quote className="h-4 w-4 text-purple-500" />
-          Summarize
-        </CommandItem>
-        <CommandItem
-          onSelect={() => {
-            if (editor) {
-              const slice = editor.state.selection.content();
-              const text = editor.storage.markdown.serializer.serialize(
-                slice.content,
-              );
-              onSelect(text, "explain");
-            }
-          }}
-          className="gap-2 px-4"
-          value="explain"
-        >
-          <FileQuestion className="h-4 w-4 text-purple-500" />
-          Explain this
-        </CommandItem>
-        <CommandItem
-          onSelect={() => {
-            if (editor) {
-              const slice = editor.state.selection.content();
-              const text = editor.storage.markdown.serializer.serialize(
-                slice.content,
-              );
-              onSelect(text, "action");
-            }
-          }}
-          className="gap-2 px-4"
-          value="action"
-        >
-          <List className="h-4 w-4 text-purple-500" />
-          Find action items
-        </CommandItem>
-      </CommandGroup>
-      <CommandSeparator />
-      <CommandGroup heading="Use AI to do more">
-        <CommandItem
-          onSelect={() => {
-            if (editor) {
-              const text = getPrevText(editor, { chars: 5000 });
-              onSelect(text, "continue");
-            }
-          }}
-          value="continue"
-          className="gap-2 px-4"
-        >
-          <StepForward className="h-4 w-4 text-purple-500" />
-          Continue writing
-        </CommandItem>
-        {writeOptions.map((option) => (
-              <CommandItem
+              </>
+            )}
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Generate from selection">
+            <CommandItem
               onSelect={() => {
                 if (editor) {
                   const slice = editor.state.selection.content();
-                  const text = editor.storage.markdown.serializer.serialize(slice.content);
-                  onSelect(text, `write.${option.value}`);
+                  const text = editor.storage.markdown.serializer.serialize(
+                    slice.content,
+                  );
+                  onSelect(text, "summarize");
                 }
               }}
+              className="gap-2 px-4"
+              value="summarize"
+            >
+              <Quote className="h-4 w-4 text-purple-500" />
+              Summarize
+            </CommandItem>
+            <CommandItem
+              onSelect={() => {
+                if (editor) {
+                  const slice = editor.state.selection.content();
+                  const text = editor.storage.markdown.serializer.serialize(
+                    slice.content,
+                  );
+                  onSelect(text, "explain");
+                }
+              }}
+              className="gap-2 px-4"
+              value="explain"
+            >
+              <FileQuestion className="h-4 w-4 text-purple-500" />
+              Explain this
+            </CommandItem>
+            <CommandItem
+              onSelect={() => {
+                if (editor) {
+                  const slice = editor.state.selection.content();
+                  const text = editor.storage.markdown.serializer.serialize(
+                    slice.content,
+                  );
+                  onSelect(text, "action");
+                }
+              }}
+              className="gap-2 px-4"
+              value="action"
+            >
+              <List className="h-4 w-4 text-purple-500" />
+              Find action items
+            </CommandItem>
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Use AI to do more">
+            <CommandItem
+              onSelect={() => {
+                if (editor) {
+                  const text = getPrevText(editor, { chars: 5000 });
+                  onSelect(text, "continue");
+                }
+              }}
+              value="continue"
+              className="gap-2 px-4"
+            >
+              <StepForward className="h-4 w-4 text-purple-500" />
+              Continue writing
+            </CommandItem>
+            {writeOptions.map((option) => (
+              <CommandItem
+                onSelect={() => {
+                  if (editor) {
+                    const slice = editor.state.selection.content();
+                    const text = editor.storage.markdown.serializer.serialize(
+                      slice.content,
+                    );
+                    onSelect(text, `write.${option.value}`);
+                  }
+                }}
                 className="flex gap-2 px-4"
                 key={option.value}
                 value={option.value}
@@ -269,10 +280,10 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
                   {option.label}
                 </div>
               </CommandItem>
-        ))}
-      </CommandGroup>
-    </ScrollArea>
-    )}
+            ))}
+          </CommandGroup>
+        </ScrollArea>
+      )}
     </>
   );
 };

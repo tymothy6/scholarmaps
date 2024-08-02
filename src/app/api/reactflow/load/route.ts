@@ -1,35 +1,47 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma-db';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { NextRequest, NextResponse } from "next/server";
+import prisma from "@/lib/prisma-db";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
 
 export async function GET(req: NextRequest) {
-    const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
-    // Retrieve named ReactFlow state from database
-    const { searchParams } = new URL(req.url);
-    const flowName = searchParams.get('name');
+  // Retrieve named ReactFlow state from database
+  const { searchParams } = new URL(req.url);
+  const flowName = searchParams.get("name");
 
-    if (!session) {
-        return NextResponse.json({ message: 'User ID is required. Please authenticate before issuing your request.'}, { status: 401 })
-    };
-    
-    try {
-        const state = await prisma.reactFlowState.findFirst({
-            where: {
-                userId: session.user.id,
-                name: flowName || undefined,
-            },
-        });
+  if (!session) {
+    return NextResponse.json(
+      {
+        message:
+          "User ID is required. Please authenticate before issuing your request.",
+      },
+      { status: 401 },
+    );
+  }
 
-        if (!state) {
-            return NextResponse.json({ message: 'Named ReactFlow state not found for user in database.' }, { status: 404 });
-        }
+  try {
+    const state = await prisma.reactFlowState.findFirst({
+      where: {
+        userId: session.user.id,
+        name: flowName || undefined,
+      },
+    });
 
-        // Return the ReactFlow state
-        return NextResponse.json(state, { status: 200 });
-    } catch (error) {
-        console.error('Failed to retrieve ReactFlow state:', error);
-        return NextResponse.json({ message: 'Failed to retrieve ReactFlow state.' }, { status: 500 });
+    if (!state) {
+      return NextResponse.json(
+        { message: "Named ReactFlow state not found for user in database." },
+        { status: 404 },
+      );
     }
+
+    // Return the ReactFlow state
+    return NextResponse.json(state, { status: 200 });
+  } catch (error) {
+    console.error("Failed to retrieve ReactFlow state:", error);
+    return NextResponse.json(
+      { message: "Failed to retrieve ReactFlow state." },
+      { status: 500 },
+    );
+  }
 }

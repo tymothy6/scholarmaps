@@ -1,20 +1,20 @@
-import { Metadata } from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
+import { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 
-import AuthImage from '../../../../public/auth-image.jpg'
+import AuthImage from "../../../../public/auth-image.jpg";
 
-import { cn } from '@/lib/utils'
-import { buttonVariants } from '@/components/ui/button'
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
-import { LoginAuth } from '@/components/auth/login-auth'
-import { LoginTestimonialCarousel } from '@/components/patterns/login-carousel'
-import { BoxIcon } from 'lucide-react'
+import { LoginAuth } from "@/components/auth/login-auth";
+import { LoginTestimonialCarousel } from "@/components/patterns/login-carousel";
+import { BoxIcon } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Login",
   description: "Login to Scholar Maps",
-}
+};
 
 export default function Login() {
   return (
@@ -24,13 +24,13 @@ export default function Login() {
           href="/register"
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8"
+            "absolute right-4 top-4 md:right-8 md:top-8",
           )}
         >
           Register
         </Link>
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
-          <Image 
+          <Image
             src={AuthImage}
             alt="Scholar Maps auth image"
             fill
@@ -39,13 +39,11 @@ export default function Login() {
           />
           <div className="w-full h-full z-20 flex flex-col justify-between items-start text-2xl font-hubotSans font-medium">
             <div className="flex gap-4">
-              <BoxIcon className="h-8 w-8" /> 
+              <BoxIcon className="h-8 w-8" />
               Scholar Maps
             </div>
             <LoginTestimonialCarousel className="w-full flex items-center justify-center" />
           </div>
-
-
         </div>
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -80,5 +78,5 @@ export default function Login() {
         </div>
       </div>
     </main>
-  )
+  );
 }

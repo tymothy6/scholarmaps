@@ -9,7 +9,7 @@ export const ImageResizer: FC = () => {
 
   const updateMediaSize = () => {
     const imageInfo = document.querySelector(
-      ".ProseMirror-selectednode"
+      ".ProseMirror-selectednode",
     ) as HTMLImageElement;
     if (imageInfo) {
       const selection = editor.state.selection;

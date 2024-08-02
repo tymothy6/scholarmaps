@@ -1,46 +1,35 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { useMediaQuery } from "@/lib/use-media-query"
+import { useMediaQuery } from "@/lib/use-media-query";
 
-import { type SearchPaperResult } from "./search-columns"
+import { type SearchPaperResult } from "./search-columns";
 
-import { Button } from "@/components/ui/button"
-import { 
-  Card
- } from "@/components/ui/card"
-import { 
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
-import { 
-  Drawer,
-  DrawerContent,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
-import { 
+} from "@/components/ui/command";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Input } from "@/components/ui/input"
-import { 
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { 
+} from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 
 import {
   ColumnDef,
@@ -53,7 +42,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -62,25 +51,25 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
 // Components for pagination controls and toggling column visibility
-import { DataTablePagination } from "@/components/patterns/table-pagination"
-import { DataTableViewOptions } from "@/components/patterns/table-column-toggle"
+import { DataTablePagination } from "@/components/patterns/table-pagination";
+import { DataTableViewOptions } from "@/components/patterns/table-column-toggle";
 
-import { BookmarkAction } from "./select-actions"
+import { BookmarkAction } from "./select-actions";
 
-import { FilterIcon, RotateCcwIcon } from "lucide-react"
+import { FilterIcon, RotateCcwIcon } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
 }
 
 type Filter = {
-  value: string
-  label: string
-}
+  value: string;
+  label: string;
+};
 
 const filters: Filter[] = [
   {
@@ -98,25 +87,27 @@ const filters: Filter[] = [
   {
     value: "abstract",
     label: "Abstract",
-  }
-]
+  },
+];
 
 export function SearchResultTable<TData extends SearchPaperResult, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    [],
+  );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
 
   const [open, setOpen] = React.useState(false);
 
   const defaultFilter = filters[0];
-  const [selectedFilter, setSelectedFilter] = React.useState<Filter | null>(defaultFilter); // the default filter is the first one
-
+  const [selectedFilter, setSelectedFilter] = React.useState<Filter | null>(
+    defaultFilter,
+  ); // the default filter is the first one
 
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
@@ -131,14 +122,14 @@ export function SearchResultTable<TData extends SearchPaperResult, TValue>({
 
   React.useEffect(() => {
     setVisibleColumns({
-            select: isDesktop,
-            journal: isDesktop,
-            authors: isDesktop,
-            year: isDesktop,
-            abstract: isDesktop,
-            actions: isDesktop,
-        })
-  }, [isDesktop])
+      select: isDesktop,
+      journal: isDesktop,
+      authors: isDesktop,
+      year: isDesktop,
+      abstract: isDesktop,
+      actions: isDesktop,
+    });
+  }, [isDesktop]);
 
   const table = useReactTable({
     data,
@@ -156,25 +147,25 @@ export function SearchResultTable<TData extends SearchPaperResult, TValue>({
       columnFilters,
       columnVisibility,
       rowSelection,
-    }
-  })
+    },
+  });
 
   React.useEffect(() => {
     if (table) {
       let newVisibility: Record<string, boolean> = {};
       Object.entries(visibleColumns).forEach(([columnName, isVisible]) => {
         newVisibility[columnName] = isVisible;
-      }); 
+      });
 
       table.setColumnVisibility(newVisibility);
     }
-  }, [table, visibleColumns])
+  }, [table, visibleColumns]);
 
   const handleResetFilters = () => {
-    setColumnFilters([]); 
+    setColumnFilters([]);
     setSelectedFilter(defaultFilter);
     if (defaultFilter) {
-      table.getColumn(defaultFilter.value)?.setFilterValue('');
+      table.getColumn(defaultFilter.value)?.setFilterValue("");
     }
   };
 
@@ -185,157 +176,193 @@ export function SearchResultTable<TData extends SearchPaperResult, TValue>({
     <div>
       <div className="flex justify-between items-center py-4">
         <div className="flex gap-2 items-center">
-        <Input
-        placeholder={`Filter ${filteredResults} results`}
-        value={selectedFilter ? (table.getColumn(selectedFilter.value)?.getFilterValue() as string) ?? "" : ""}
-        onChange={(event) => {
-          if (selectedFilter) {
-            table.getColumn(selectedFilter.value)?.setFilterValue(event.target.value);
-          }
-        }}
-        className="w-full sm:max-w-sm h-8"
-        />
-        {isDesktop ? (
-          <div className="flex items-center gap-2">
+          <Input
+            placeholder={`Filter ${filteredResults} results`}
+            value={
+              selectedFilter
+                ? ((table
+                    .getColumn(selectedFilter.value)
+                    ?.getFilterValue() as string) ?? "")
+                : ""
+            }
+            onChange={(event) => {
+              if (selectedFilter) {
+                table
+                  .getColumn(selectedFilter.value)
+                  ?.setFilterValue(event.target.value);
+              }
+            }}
+            className="w-full sm:max-w-sm h-8"
+          />
+          {isDesktop ? (
+            <div className="flex items-center gap-2">
+              <TooltipProvider>
+                <Tooltip>
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <TooltipTrigger asChild>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="secondary"
+                          size={selectedFilter ? "sm" : "icon"}
+                          className="px-2"
+                        >
+                          {selectedFilter ? (
+                            <span>
+                              <FilterIcon className="inline mr-2 h-4 w-4" />
+                              {selectedFilter.label}
+                            </span>
+                          ) : (
+                            <FilterIcon className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                    </TooltipTrigger>
+                    <PopoverContent className="w-[150px] p-0" align="start">
+                      <FilterList
+                        setOpen={setOpen}
+                        setSelectedFilter={setSelectedFilter}
+                      />
+                    </PopoverContent>
+                    <TooltipContent className="text-sm">
+                      Filter results
+                    </TooltipContent>
+                  </Popover>
+                </Tooltip>
+              </TooltipProvider>
+              <BookmarkAction<TData> selectedRows={selectedRows} data={data} />
+            </div>
+          ) : (
+            <Drawer open={open} onOpenChange={setOpen}>
+              <DrawerTrigger asChild>
+                <Button variant="secondary" size="default" className="px-2">
+                  {selectedFilter ? (
+                    <span>{selectedFilter.label}</span>
+                  ) : (
+                    <FilterIcon className="h-4 w-4" />
+                  )}
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <Tabs defaultValue="filter" className="w-full p-4">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="filter">Filter</TabsTrigger>
+                    <TabsTrigger value="sort">Sort</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="filter">
+                    <Card className="overflow-hidden">
+                      <FilterList
+                        setOpen={setOpen}
+                        setSelectedFilter={setSelectedFilter}
+                      />
+                    </Card>
+                  </TabsContent>
+                  <TabsContent value="sort">
+                    <Card className="overflow-hidden">
+                      <SortList
+                        setOpen={setOpen}
+                        setSelectedFilter={setSelectedFilter}
+                      />
+                    </Card>
+                  </TabsContent>
+                </Tabs>
+              </DrawerContent>
+            </Drawer>
+          )}
           <TooltipProvider>
             <Tooltip>
-              <Popover open={open} onOpenChange={setOpen}>
-                <TooltipTrigger asChild>
-                <PopoverTrigger asChild>
-                  <Button variant="secondary" size={selectedFilter ? "sm" : "icon"} className="px-2">
-                    {selectedFilter ? <span><FilterIcon className="inline mr-2 h-4 w-4"/>{selectedFilter.label}</span> : <FilterIcon className="h-4 w-4"/>}
+              <TooltipTrigger asChild>
+                {table.getColumn("title")?.getFilterValue() ? (
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    className="px-2"
+                    onClick={() => handleResetFilters()}
+                  >
+                    <span className="sr-only">Reset filters</span>
+                    <RotateCcwIcon className="h-4 w-4" />
                   </Button>
-                </PopoverTrigger>
-                </TooltipTrigger>
-                <PopoverContent className="w-[150px] p-0" align="start">
-                  <FilterList setOpen={setOpen} setSelectedFilter={setSelectedFilter} />
-                </PopoverContent>
-                <TooltipContent className="text-sm">Filter results</TooltipContent>
-              </Popover>
+                ) : null}
+              </TooltipTrigger>
+              <TooltipContent className="text-sm">
+                Reset all filters
+              </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <BookmarkAction<TData> 
-          selectedRows={selectedRows}
-          data={data}
-           />
-          </div>
-        ) : 
-        (
-          <Drawer open={open} onOpenChange={setOpen}>
-            <DrawerTrigger asChild>
-              <Button variant="secondary" size="default" className="px-2">
-                {selectedFilter ? <span>{selectedFilter.label}</span> : <FilterIcon className="h-4 w-4"/> }
-              </Button>
-            </DrawerTrigger>
-            <DrawerContent>
-              <Tabs defaultValue="filter" className="w-full p-4">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="filter">
-                    Filter
-                  </TabsTrigger>
-                  <TabsTrigger value="sort">
-                    Sort
-                  </TabsTrigger>
-                </TabsList>
-                <TabsContent value="filter">
-                  <Card className="overflow-hidden">
-                      <FilterList setOpen={setOpen} setSelectedFilter={setSelectedFilter} />
-                  </Card>
-                </TabsContent>
-                <TabsContent value="sort">
-                <Card className="overflow-hidden">
-                    <SortList setOpen={setOpen} setSelectedFilter={setSelectedFilter} />
-                </Card>
-                </TabsContent>
-              </Tabs>
-            </DrawerContent>
-          </Drawer>
-        )}
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              { table.getColumn("title")?.getFilterValue() ?
-              <Button variant="destructive" size="icon" className="px-2" onClick={() => handleResetFilters()}>
-                <span className="sr-only">Reset filters</span>
-                <RotateCcwIcon className="h-4 w-4" />
-              </Button>
-              : null }
-            </TooltipTrigger>
-          <TooltipContent className="text-sm">Reset all filters</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
         </div>
         <DataTablePagination table={table} />
       </div>
       <Card className="overflow-hidden">
         <div className="w-full">
-        <div className="w-full border-b">
-          <Table className="h-[700px]">
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead 
-                      key={header.id}
-                      className="sticky top-0 bg-background z-[2]"
-                      >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    )
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
+          <div className="w-full border-b">
+            <Table className="h-[700px]">
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead
+                          key={header.id}
+                          className="sticky top-0 bg-background z-[2]"
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              )}
+                        </TableHead>
+                      );
+                    })}
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={columns.length} className="h-36 lg:h-72 text-center">
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-            <div className="flex items-center gap-4 pl-6 pr-4 py-4 w-full">
-              <BookmarkAction<TData> 
-                selectedRows={selectedRows}
-                data={data}
-              />
-              <DataTableViewOptions table={table} />
-              <DataTablePagination table={table} />
-            </div>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-36 lg:h-72 text-center"
+                    >
+                      No results.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          <div className="flex items-center gap-4 pl-6 pr-4 py-4 w-full">
+            <BookmarkAction<TData> selectedRows={selectedRows} data={data} />
+            <DataTableViewOptions table={table} />
+            <DataTablePagination table={table} />
+          </div>
         </div>
       </Card>
     </div>
-  )
+  );
 }
 
 function FilterList({
   setOpen,
   setSelectedFilter,
 }: {
-  setOpen: (open: boolean) => void
-  setSelectedFilter: (filter: Filter | null) => void
+  setOpen: (open: boolean) => void;
+  setSelectedFilter: (filter: Filter | null) => void;
 }) {
   return (
     <Command>
@@ -349,9 +376,9 @@ function FilterList({
               value={filter.value}
               onSelect={(value) => {
                 setSelectedFilter(
-                  filters.find((filter) => filter.value === value) || null
-                )
-                setOpen(false)
+                  filters.find((filter) => filter.value === value) || null,
+                );
+                setOpen(false);
               }}
             >
               {filter.label}
@@ -360,15 +387,15 @@ function FilterList({
         </CommandGroup>
       </CommandList>
     </Command>
-  )
+  );
 }
 
 function SortList({
   setOpen,
   setSelectedFilter,
 }: {
-  setOpen: (open: boolean) => void
-  setSelectedFilter: (filter: Filter | null) => void
+  setOpen: (open: boolean) => void;
+  setSelectedFilter: (filter: Filter | null) => void;
 }) {
   return (
     <Command>
@@ -382,9 +409,9 @@ function SortList({
               value={filter.value}
               onSelect={(value) => {
                 setSelectedFilter(
-                  filters.find((priority) => priority.value === value) || null
-                )
-                setOpen(false)
+                  filters.find((priority) => priority.value === value) || null,
+                );
+                setOpen(false);
               }}
             >
               {filter.label}
@@ -393,5 +420,5 @@ function SortList({
         </CommandGroup>
       </CommandList>
     </Command>
-  )
+  );
 }

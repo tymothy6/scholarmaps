@@ -1,18 +1,18 @@
-import { Metadata } from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
+import { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 
-import AuthImage from '../../../../public/auth-image.jpg'
+import AuthImage from "../../../../public/auth-image.jpg";
 
-import { cn } from '@/lib/utils'
-import { buttonVariants } from '@/components/ui/button'
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
-import { RegisterAuth } from '@/components/auth/login-auth'
+import { RegisterAuth } from "@/components/auth/login-auth";
 
 export const metadata: Metadata = {
   title: "Register",
   description: "Register for Scholar Maps",
-}
+};
 
 export default function Register() {
   return (
@@ -22,13 +22,13 @@ export default function Register() {
           href="/login"
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8"
+            "absolute right-4 top-4 md:right-8 md:top-8",
           )}
         >
           Login
         </Link>
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
-          <Image 
+          <Image
             src={AuthImage}
             alt="Scholar Maps auth image"
             fill
@@ -73,5 +73,5 @@ export default function Register() {
         </div>
       </div>
     </main>
-  )
+  );
 }

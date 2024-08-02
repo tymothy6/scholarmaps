@@ -1,11 +1,8 @@
-"use client"
+"use client";
 
-import { 
-    GitHubLogoIcon, 
-    TwitterLogoIcon,
- } from "@radix-ui/react-icons"
+import { GitHubLogoIcon, TwitterLogoIcon } from "@radix-ui/react-icons";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -13,9 +10,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "../ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function DemoCreateAccount() {
   return (
@@ -60,5 +57,5 @@ export function DemoCreateAccount() {
         <Button className="w-full">Create account</Button>
       </CardFooter>
     </Card>
-  )
+  );
 }

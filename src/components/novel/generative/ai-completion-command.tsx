@@ -1,5 +1,9 @@
 import React from "react";
-import { CommandGroup, CommandItem, CommandSeparator } from "@/components/ui/command";
+import {
+  CommandGroup,
+  CommandItem,
+  CommandSeparator,
+} from "@/components/ui/command";
 import { useEditor } from "novel";
 import { Check, TextQuote, TrashIcon } from "lucide-react";
 
@@ -21,15 +25,15 @@ const AICompletionCommands = ({
             const selection = editor?.view.state.selection;
 
             if (selection) {
-                editor
+              editor
                 ?.chain()
                 .focus()
                 .insertContentAt(
-                    {
+                  {
                     from: selection.from,
                     to: selection.to,
-                    },
-                    completion,
+                  },
+                  completion,
                 )
                 .run();
             }
@@ -45,7 +49,7 @@ const AICompletionCommands = ({
             const selection = editor?.view.state.selection;
 
             if (selection) {
-                editor
+              editor
                 ?.chain()
                 .focus()
                 .insertContentAt(selection.to + 1, completion)

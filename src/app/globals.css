@@ -34,7 +34,7 @@
     --novel-highlight-pink: #faf1f5;
     --novel-highlight-gray: #f1f1ef;
     /* Sonner rich colors */
-    --success-bg: 143 85% 96%; 
+    --success-bg: 143 85% 96%;
     --success-border: 145 92% 91%;
     --success-text: 140 100% 27%;
     --info-bg: 208 100% 97%;
@@ -54,7 +54,7 @@
     --content-left-open: 16.666%;
     --content-left-closed: 80px;
   }
- 
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -103,25 +103,25 @@
     scroll-behavior: smooth;
   }
 
-  h1 { 
+  h1 {
     @apply font-hubotSans;
     font-size: 1.75rem;
     font-weight: 700;
   }
 
-  h2 { 
+  h2 {
     @apply font-hubotSans;
     font-size: 1.5rem;
     font-weight: 700;
   }
 
-  h3 { 
+  h3 {
     @apply font-hubotSans;
     font-size: 1.25rem;
     font-weight: 700;
   }
 
-  p { 
+  p {
     font-size: 1rem;
     @apply text-foreground;
   }
@@ -129,10 +129,9 @@
   ::selection {
     @apply bg-novel-blue;
   }
-  
 }
 
-@media (min-width: 1024px) { 
+@media (min-width: 1024px) {
   .header-large-screen {
     width: calc(100% - 256px);
   }
@@ -156,7 +155,8 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
 }
-

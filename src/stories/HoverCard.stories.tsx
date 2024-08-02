@@ -1,24 +1,24 @@
-import { Meta, StoryObj } from "@storybook/react"
+import { Meta, StoryObj } from "@storybook/react";
 
-import { CalendarDays } from "lucide-react"
+import { CalendarDays } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/ui/hover-card"
+} from "@/components/ui/hover-card";
 
 const meta = {
   title: "ui/HoverCard",
   component: HoverCard,
   argTypes: {},
-} satisfies Meta<typeof HoverCard>
+} satisfies Meta<typeof HoverCard>;
 
 export default meta;
 
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: (args) => (
@@ -49,4 +49,4 @@ export const Default: Story = {
     </HoverCard>
   ),
   args: {},
-}
+};

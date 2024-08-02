@@ -44,15 +44,15 @@ function nodeDOMAtCoords(coords: { x: number; y: number }) {
             "pre",
             "blockquote",
             "h1, h2, h3, h4, h5, h6",
-          ].join(", ")
-        )
+          ].join(", "),
+        ),
     );
 }
 
 function nodePosAtDOM(
   node: Element,
   view: EditorView,
-  options: DragHandleOptions
+  options: DragHandleOptions,
 ) {
   const boundingRect = node.getBoundingClientRect();
 
@@ -79,7 +79,7 @@ function DragHandle(options: DragHandleOptions) {
     if (nodePos == null || nodePos < 0) return;
 
     view.dispatch(
-      view.state.tr.setSelection(NodeSelection.create(view.state.doc, nodePos))
+      view.state.tr.setSelection(NodeSelection.create(view.state.doc, nodePos)),
     );
 
     const slice = view.state.selection.content();
@@ -111,7 +111,7 @@ function DragHandle(options: DragHandleOptions) {
     if (!nodePos) return;
 
     view.dispatch(
-      view.state.tr.setSelection(NodeSelection.create(view.state.doc, nodePos))
+      view.state.tr.setSelection(NodeSelection.create(view.state.doc, nodePos)),
     );
   }
 

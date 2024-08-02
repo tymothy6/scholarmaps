@@ -23,7 +23,7 @@ const codeBlock = CodeBlockLowlight.configure({
 });
 
 const aiHighlight = AIHighlight;
-const placeholder = Placeholder; 
+const placeholder = Placeholder;
 
 const tiptapLink = TiptapLink.configure({
   HTMLAttributes: {
@@ -100,7 +100,9 @@ const starterKit = StarterKit.configure({
   codeBlock: false,
   code: {
     HTMLAttributes: {
-      class: cx("rounded-md bg-muted text-muted-foreground px-1.5 py-1 font-mono font-medium"),
+      class: cx(
+        "rounded-md bg-muted text-muted-foreground px-1.5 py-1 font-mono font-medium",
+      ),
       spellcheck: "false",
     },
   },

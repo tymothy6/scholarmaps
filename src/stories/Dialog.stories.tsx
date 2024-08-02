@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from "@storybook/react"
+import { Meta, StoryObj } from "@storybook/react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,10 +9,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 /**
  * A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.
@@ -21,11 +20,11 @@ const meta = {
   title: "ui/Dialog",
   component: Dialog,
   argTypes: {},
-} satisfies Meta<typeof Dialog>
+} satisfies Meta<typeof Dialog>;
 
 export default meta;
 
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: (args) => (
@@ -61,4 +60,4 @@ export const Default: Story = {
     </Dialog>
   ),
   args: {},
-}
+};

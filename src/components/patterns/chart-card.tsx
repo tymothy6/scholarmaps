@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useTheme } from "next-themes"
-import { Line, LineChart, ResponsiveContainer, Tooltip } from "recharts"
+import { useTheme } from "next-themes";
+import { Line, LineChart, ResponsiveContainer, Tooltip } from "recharts";
 
 import {
   Card,
@@ -9,7 +9,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
 const data = [
   {
@@ -40,10 +40,10 @@ const data = [
     average: 349,
     today: 430,
   },
-]
+];
 
 export function LineChartCard() {
-  const { theme } = useTheme()
+  const { theme } = useTheme();
 
   return (
     <Card>
@@ -89,10 +89,10 @@ export function LineChartCard() {
                           </div>
                         </div>
                       </div>
-                    )
+                    );
                   }
 
-                  return null
+                  return null;
                 }}
               />
               <Line
@@ -129,11 +129,11 @@ export function LineChartCard() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 export function AreaChartCard() {
-  const { theme } = useTheme()
+  const { theme } = useTheme();
 
   return (
     <Card>
@@ -179,10 +179,10 @@ export function AreaChartCard() {
                           </div>
                         </div>
                       </div>
-                    )
+                    );
                   }
 
-                  return null
+                  return null;
                 }}
               />
               <Line
@@ -219,5 +219,5 @@ export function AreaChartCard() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

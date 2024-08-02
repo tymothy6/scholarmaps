@@ -28,7 +28,7 @@ const GenerativeMenuSwitch = ({
         e.preventDefault();
         onOpenChange(!open);
       }
-    }
+    };
 
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
@@ -39,7 +39,7 @@ const GenerativeMenuSwitch = ({
       tippyOptions={{
         placement: open ? "bottom-start" : "top",
         onHidden: () => {
-          onOpenChange(false); 
+          onOpenChange(false);
           editor?.chain().unsetHighlight().run();
         },
       }}
@@ -56,7 +56,9 @@ const GenerativeMenuSwitch = ({
           >
             <SparklesIcon className="h-4 w-4" />
             Ask AI
-            <span className="ml-1 px-1 py-[1px] border rounded bg-muted text-[0.65rem] font-[300] tracking-widest text-muted-foreground ">⌘J</span>
+            <span className="ml-1 px-1 py-[1px] border rounded bg-muted text-[0.65rem] font-[300] tracking-widest text-muted-foreground ">
+              ⌘J
+            </span>
           </Button>
           {children}
         </Fragment>
